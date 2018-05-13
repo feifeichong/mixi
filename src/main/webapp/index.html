@@ -8,10 +8,12 @@
     <title>咪嘻后台</title>
     <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/fileinput.min.css">
     <script src="assets/jquery/jquery3.3.1.min.js"></script>
     <script src="assets/jquery/jquery.cookie.js"></script>
     <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script src="assets/bootstrap-3.3.7/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/fileinput.min.js"></script>
     <script src="assets/crypto/crypto-js.js"></script>
     <script src="assets/rsa/BigInt.js"></script>
     <script src="assets/rsa/Barrett.js"></script>
@@ -42,6 +44,7 @@
         .placeholder { margin-bottom: 20px; }
         .placeholder img { display: inline-block; border-radius: 50%; }
         .dropdown-menu { margin-left: 4em; }
+        .left {float: left;}
         .right {float: right;}
     </style>
 </head>
@@ -92,14 +95,13 @@
     var indexPage = {};
     (function (page) {
         var _subMenuIndex = -1;
-        var _contentBodyId = "contentBody";
 
         page.getSubMenuIndex = function () {
             return _subMenuIndex;
         };
 
-        page.getContentBody = function () {
-            return _contentBodyId;
+        page.setContentBody = function (url) {
+            $("#contentBody").load(url);
         };
 
         page.selectTopMenu = function (index) {

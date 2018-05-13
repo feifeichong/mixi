@@ -1,21 +1,27 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
         <div class="right">
-            <button id="addNewBtn" class="btn btn-success" type="button">添加新的科室信息</button>
+            <button id="addNewBtn" class="btn btn-success" onclick="indexPage.setContentBody('goodsAdd.html')" type="button">添加商品信息</button>
         </div>
-        <h1>科室信息查询</h1>
+        <h1>商品信息查询</h1>
     </div>
-    <div class="row placeholders">
+    <form class="row placeholders">
+        <div class="col-xs-6 col-sm-4 placeholder">
+            <ul class="nav nav-pills">
+                <li role="presentation" class="active"><a href="#">全部菜品</a></li>
+                <li role="presentation"><a href="#">上架菜品</a></li>
+                <li role="presentation"><a href="#">下架菜品</a></li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon">科室编码</span> <input
-                    id="deptCode" class="form-control"/>
+                <span class="input-group-addon">菜品名称</span><input class="form-control"/>
             </div>
         </div>
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">科室名称</span> <input
-                    id="deptName" class="form-control"/>
+                <span class="input-group-addon">菜品类型</span><input id="deptName" class="form-control"/>
             </div>
         </div>
         <div class="col-xs-6 col-sm-4 placeholder">
@@ -23,7 +29,7 @@
                 <button id="submitBtn" class="btn btn-primary" type="button">查询</button>
             </div>
         </div>
-    </div>
+    </form>
 
     <h2 class="sub-header">查询结果</h2>
     <div class="table-responsive">

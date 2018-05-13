@@ -42,8 +42,8 @@
             li_list.removeClass("active");
             li_list.eq(index).addClass("active");
 
-            var htmlUrl = _menus[indexPage.getSubMenuIndex()].subMenus[index][0];
-            $("#" + indexPage.getContentBody()).load(htmlUrl);
+            var defaultUrl = _menus[indexPage.getSubMenuIndex()].subMenus[index][0];
+            indexPage.setContentBody(defaultUrl);
         };
         $(page.initSubMenus());
     })(subMenuPage);
