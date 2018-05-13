@@ -68,14 +68,19 @@
                 <li><a href="javascript:indexPage.selectTopMenu(5)">系统设置</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">欢迎您</a></li>
-                <li><a href="javascript:void(0);">退出</a></li>
+                <li><a href="javascript:void(0)">欢迎您，
+                    <script>document.writeln($.cookie("MERCHANT_PHONE_NUMBER"));</script>
+                </a></li>
+                <li><a href="javascript:indexPage.logout();">退出</a></li>
             </ul>
         </div>
     </div>
 </nav>
 <div class="container-fluid">
     <div id="sideBarMenu" class="row col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+            <li><a style="color: #fff; background-color: #428bca;" href="javascript:void(0)">首页</a></li>
+        </ul>
     </div>
     <div id="contentBody" class="row">
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -97,203 +102,22 @@
             return _contentBodyId;
         };
 
-        indexPage.selectTopMenu = function (index) {
+        page.selectTopMenu = function (index) {
             var li_list = $("#navbarMenu ul li");
             li_list.removeClass("active");
             li_list.eq(index).addClass("active");
 
             _subMenuIndex = index;
             $("#sideBarMenu").load("subMenu.html");
-        }
+        };
 
-
-        var pageSize = 8;
-        var maxPageCount = 10;
-
-        $(document).ready(function () {
-            page.initHospitals();
-            page.initDepts();
-            $('#beginTime').datetimepicker({
-                format: 'yyyy-mm-dd',
-                minView: 2,
-                autoclose: true,
-                todayBtn: true,
-                language: "zh-CN"
-            });
-            $('#endTime').datetimepicker({
-                format: 'yyyy-mm-dd',
-                minView: 2,
-                autoclose: true,
-                todayBtn: true,
-                language: "zh-CN"
-            });
-            $('#saveRatio').keyup(function () {
-                var c = $(this);
-                if (/[^\d]/.test(c.val())) {
-                    var temp_amount = c.val().replace(/[^\d]/g, '');
-                    $(this).val(temp_amount);
-                }
-                if (c.val() > 100) {
-                    $(this).val(100);
-                }
-            });
-            $("#submitBtn").bind("click", submit);
-        });
-
-        page.submit = function () {
-            toPage(1);
-        }
-
-        page.toPage = function (index) {
-            search(index);
-            initPagger(index);
-        }
-
-        function initHospitals() {
-            $.ajax({
-                async: false,
-                type: "GET",
-                url: "GetAllHospitalsController",
-                data: {},
-                success: function (data) {
-                    var jsonData = tryGetJsonData(data);
-                    $("#hospitalList").empty();
-                    $("#hospitalList").append(generateOptions(jsonData.hospitals));
-                },
-                error: function () {
-                }
-            });
-        }
-
-        function generateOptions(valueTextArray) {
-            var options = "<option value=''>不限</option>";
-            if (valueTextArray && valueTextArray.length > 0) {
-                for (var i = 0; i < valueTextArray.length; i++) {
-                    var option = "<option value=\"" + valueTextArray[i].value + "\">"
-                        + valueTextArray[i].text + "</option>";
-                    options += option;
-                }
-            }
-            return options;
-        }
-
-        function initDepts() {
-            $.ajax({
-                async: false,
-                type: "POST",
-                url: "GetAllDeptsController",
-                data: {},
-                success: function (data) {
-                    var jsonData = tryGetJsonData(data);
-                    $("#deptList").empty();
-                    $("#deptList").append(generateOptions(jsonData.depts));
-                },
-                error: function () {
-                }
-            });
-        }
-
-        function search(pageIndex) {
-            var hospitalCode = $("#hospitalList").val();
-            var deptCode = $("#deptList").val();
-            var saveRatio = $("#saveRatio").val();
-            saveRatio = saveRatio ? saveRatio / 100 : saveRatio;
-            var beginTime = $("#beginTime").val();
-            var endTime = $("#endTime").val();
-
-            $.ajax({
-                async: true,
-                type: "POST",
-                url: "GetReportSaveStatisticsController",
-                data: {
-                    hospitalCode: hospitalCode,
-                    deptCode: deptCode,
-                    saveRatio: saveRatio,
-                    beginTime: beginTime,
-                    endTime: endTime,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
-                },
-                success: function (data) {
-                    var jsonData = tryGetJsonData(data);
-                    var header = ["医院名称", "科室名称", "存储比例", "收入情况", "结算时间"];
-                    showTableData(header, jsonData);
-                },
-                error: function () {
-                }
-            });
-        }
-
-        function initPagger(pageIndex) {
-            var hospitalCode = $("#hospitalList").val();
-            var deptCode = $("#deptList").val();
-            var saveRatio = $("#saveRatio").val();
-            saveRatio = saveRatio ? saveRatio / 100 : saveRatio;
-            var beginTime = $("#beginTime").val();
-            var endTime = $("#endTime").val();
-
-            $.ajax({
-                async: true,
-                type: "POST",
-                url: "GetReportSaveStatisticsCountController",
-                data: {
-                    hospitalCode: hospitalCode,
-                    deptCode: deptCode,
-                    saveRatio: saveRatio,
-                    beginTime: beginTime,
-                    endTime: endTime
-                },
-                success: function (data) {
-                    var count = parseInt(data);
-                    showPagger(count, pageIndex, pageSize, maxPageCount);
-                },
-                error: function () {
-                }
-            });
-        }
-
-        function showTableData(header, jsonData) {
-            if (!header || header.length == 0)
-                return;
-            if (!jsonData || jsonData.length == 0) {
-                $("#tableResult").html(NO_RESULT_MSG);
-                return;
-            }
-
-            var headerStr = generateTableHeader(header);
-            var dataStr = generateTableData(jsonData);
-            $("#tableResult").html(headerStr + dataStr);
-        }
-
-        function generateTableHeader(header) {
-            var headerStr = "<thead><tr>";
-            for (var i = 0; i < header.length; i++) {
-                headerStr += "<th>" + header[i] + "</th>";
-            }
-            headerStr += "</tr></thead>";
-            return headerStr;
-        }
-
-        function generateTableData(jsonData) {
-            var dataArray = ["<tbody>"];
-            for (var j = 0; j < jsonData.length; j++) {
-                dataArray.push("<tr><td>");
-                dataArray.push(jsonData[j].hospitalName);
-                dataArray.push("</td><td>")
-                dataArray.push(jsonData[j].deptName);
-                dataArray.push("</td><td>")
-                dataArray.push((jsonData[j].saveRatio * 100) + "%");
-                dataArray.push("</td><td>")
-                dataArray.push(jsonData[j].totalIncome);
-                dataArray.push("</td><td>")
-                dataArray.push(jsonData[j].statisticalTime);
-                dataArray.push("</td></tr>");
-            }
-            dataArray.push("</tbody>");
-
-            var dataStr = dataArray.join("");
-            return dataStr;
-        }
+        page.logout = function () {
+            $.removeCookie("MERCHANT_PHONE_NUMBER");
+            $.removeCookie("MERCHANT_TOKEN");
+            $.removeCookie("MERCHANT_USER_TYPE");
+            $.removeCookie("JSESSIONID");
+            window.location.href = "login.html";
+        };
     })(indexPage);
 </script>
 </body>

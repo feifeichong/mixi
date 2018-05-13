@@ -65,7 +65,7 @@
     var loginPage = {};
 
     (function (page) {
-        var publicKey = "";
+        var _publicKey = "";
 
         $(function () {
             page.initPublicKey();
@@ -77,7 +77,7 @@
 
             $.ajax({
                 type: "POST", url: "api/merchant/login/pwdLogin", contentType: "application/json",
-                data: JSON.stringify({phoneNumber: userName, password: rsaEncrypt(calcMD5_Bin16(password), publicKey)}),
+                data: JSON.stringify({phoneNumber: userName, password: rsaEncrypt(calcMD5_Bin16(password), _publicKey)}),
                 success: function (response) {
                     if (response.status === SUCCESS) {
                         window.location.href = "index.html";
@@ -94,7 +94,7 @@
                 type: "GET", url: "api/common/rsaPublicKey",
                 data: {},
                 success: function (response) {
-                    publicKey = response.data;
+                    _publicKey = response.data;
                 }
             });
         }

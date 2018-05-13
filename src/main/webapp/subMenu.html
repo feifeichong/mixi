@@ -34,6 +34,7 @@
                 var menu = subMenus[i];
                 $("#subMenuUL").append("<li><a href=\"javascript:subMenuPage.selectSubMenu(" + i + ")\">" + menu[1] + "</a></li>")
             }
+            page.selectSubMenu(0);
         };
 
         page.selectSubMenu = function (index) {
