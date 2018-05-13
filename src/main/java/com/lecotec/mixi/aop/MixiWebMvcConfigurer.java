@@ -9,6 +9,6 @@ public class MixiWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //registry.addInterceptor(new CustomerTokenCheckInterceptor()).addPathPatterns("/api/**").excludePathPatterns("/api/**/login/**");
-        registry.addInterceptor(new MerchantTokenCheckInterceptor()).addPathPatterns("/api/merchant/**").excludePathPatterns("/api/merchant/login/**");
+        //registry.addInterceptor(new MerchantTokenCheckInterceptor()).addPathPatterns("/api/merchant/**").excludePathPatterns("/api/merchant/login/**");
     }
 }

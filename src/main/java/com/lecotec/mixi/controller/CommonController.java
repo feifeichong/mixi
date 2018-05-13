@@ -33,8 +33,8 @@ import static com.lecotec.mixi.common.ConstString.RSA_PRIVATE_KEY;
 import static com.lecotec.mixi.common.ConstString.RSA_PUBLIC_KEY;
 
 @RestController
-@RequestMapping("/common")
-@Api(value = "/common", tags = "公共模块接口集合")
+@RequestMapping("/api/common")
+@Api(value = "/api/common", tags = "公共模块接口集合")
 public class CommonController {
 
     public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {

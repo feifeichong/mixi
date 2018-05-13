@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>咪嘻后台</title>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap-datetimepicker.min.css">
+    <script src="assets/jquery/jquery3.3.1.min.js"></script>
+    <script src="assets/jquery/jquery.cookie.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="assets/crypto/crypto-js.js"></script>
+    <script src="assets/rsa/BigInt.js"></script>
+    <script src="assets/rsa/Barrett.js"></script>
+    <script src="assets/rsa/RSA.js"></script>
+    <!-- 用户自定义的css和js放在下面（common.js放在最前面）！ -->
+    <script src="assets/public/common.js"></script>
+    <script src="assets/public/encrypt.js"></script>
+    <script src="assets/public/loginCheck.js"></script>
+
+    <style>
+        body { padding-top: 50px; }
+        .sub-header { padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .navbar-fixed-top { border: 0; }
+        .nav-topMenu > li:hover {background-color: #080808}
+        .sidebar { display: none; }
+        @media (min-width: 768px) {
+            .sidebar { position: fixed; top: 51px; bottom: 0; left: 0; z-index: 1000; display: block; padding: 20px; overflow-x: hidden;
+                overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */ background-color: #f5f5f5; border-right: 1px solid #eee;
+            }
+        }
+        .main { padding: 20px; }
+        @media (min-width: 768px) {
+            .main { padding-right: 40px; padding-left: 40px; }
+        }
+        .main .page-header { margin-top: 0; }
+        .placeholders { margin-bottom: 30px; text-align: center; }
+        .placeholders h4 { margin-bottom: 0; }
+        .placeholder { margin-bottom: 20px; }
+        .placeholder img { display: inline-block; border-radius: 50%; }
+        .dropdown-menu { margin-left: 4em; }
+        .right {float: right;}
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">咪嘻管理平台</a>
+        </div>
+        <div id="navbarMenu" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-left nav-topMenu">
+                <li><a href="javascript:indexPage.selectTopMenu(0)">营销中心</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(1)">订单管理</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(2)">运营中心</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(3)">审核管理</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(4)">财务中心</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(5)">系统设置</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">欢迎您</a></li>
+                <li><a href="javascript:void(0);">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div id="sideBarMenu" class="row col-sm-3 col-md-2 sidebar">
+    </div>
+    <div id="contentBody" class="row">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1>欢迎使用咪嘻管理平台</h1>
+        </div>
+    </div>
+</div>
+<script>
+    var indexPage = {};
+    (function (page) {
+        var _subMenuIndex = -1;
+        var _contentBodyId = "contentBody";
+
+        page.getSubMenuIndex = function () {
+            return _subMenuIndex;
+        };
+
+        page.getContentBody = function () {
+            return _contentBodyId;
+        };
+
+        indexPage.selectTopMenu = function (index) {
+            var li_list = $("#navbarMenu ul li");
+            li_list.removeClass("active");
+            li_list.eq(index).addClass("active");
+
+            _subMenuIndex = index;
+            $("#sideBarMenu").load("subMenu.html");
+        }
+
+
+        var pageSize = 8;
+        var maxPageCount = 10;
+
+        $(document).ready(function () {
+            page.initHospitals();
+            page.initDepts();
+            $('#beginTime').datetimepicker({
+                format: 'yyyy-mm-dd',
+                minView: 2,
+                autoclose: true,
+                todayBtn: true,
+                language: "zh-CN"
+            });
+            $('#endTime').datetimepicker({
+                format: 'yyyy-mm-dd',
+                minView: 2,
+                autoclose: true,
+                todayBtn: true,
+                language: "zh-CN"
+            });
+            $('#saveRatio').keyup(function () {
+                var c = $(this);
+                if (/[^\d]/.test(c.val())) {
+                    var temp_amount = c.val().replace(/[^\d]/g, '');
+                    $(this).val(temp_amount);
+                }
+                if (c.val() > 100) {
+                    $(this).val(100);
+                }
+            });
+            $("#submitBtn").bind("click", submit);
+        });
+
+        page.submit = function () {
+            toPage(1);
+        }
+
+        page.toPage = function (index) {
+            search(index);
+            initPagger(index);
+        }
+
+        function initHospitals() {
+            $.ajax({
+                async: false,
+                type: "GET",
+                url: "GetAllHospitalsController",
+                data: {},
+                success: function (data) {
+                    var jsonData = tryGetJsonData(data);
+                    $("#hospitalList").empty();
+                    $("#hospitalList").append(generateOptions(jsonData.hospitals));
+                },
+                error: function () {
+                }
+            });
+        }
+
+        function generateOptions(valueTextArray) {
+            var options = "<option value=''>不限</option>";
+            if (valueTextArray && valueTextArray.length > 0) {
+                for (var i = 0; i < valueTextArray.length; i++) {
+                    var option = "<option value=\"" + valueTextArray[i].value + "\">"
+                        + valueTextArray[i].text + "</option>";
+                    options += option;
+                }
+            }
+            return options;
+        }
+
+        function initDepts() {
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "GetAllDeptsController",
+                data: {},
+                success: function (data) {
+                    var jsonData = tryGetJsonData(data);
+                    $("#deptList").empty();
+                    $("#deptList").append(generateOptions(jsonData.depts));
+                },
+                error: function () {
+                }
+            });
+        }
+
+        function search(pageIndex) {
+            var hospitalCode = $("#hospitalList").val();
+            var deptCode = $("#deptList").val();
+            var saveRatio = $("#saveRatio").val();
+            saveRatio = saveRatio ? saveRatio / 100 : saveRatio;
+            var beginTime = $("#beginTime").val();
+            var endTime = $("#endTime").val();
+
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: "GetReportSaveStatisticsController",
+                data: {
+                    hospitalCode: hospitalCode,
+                    deptCode: deptCode,
+                    saveRatio: saveRatio,
+                    beginTime: beginTime,
+                    endTime: endTime,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                },
+                success: function (data) {
+                    var jsonData = tryGetJsonData(data);
+                    var header = ["医院名称", "科室名称", "存储比例", "收入情况", "结算时间"];
+                    showTableData(header, jsonData);
+                },
+                error: function () {
+                }
+            });
+        }
+
+        function initPagger(pageIndex) {
+            var hospitalCode = $("#hospitalList").val();
+            var deptCode = $("#deptList").val();
+            var saveRatio = $("#saveRatio").val();
+            saveRatio = saveRatio ? saveRatio / 100 : saveRatio;
+            var beginTime = $("#beginTime").val();
+            var endTime = $("#endTime").val();
+
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: "GetReportSaveStatisticsCountController",
+                data: {
+                    hospitalCode: hospitalCode,
+                    deptCode: deptCode,
+                    saveRatio: saveRatio,
+                    beginTime: beginTime,
+                    endTime: endTime
+                },
+                success: function (data) {
+                    var count = parseInt(data);
+                    showPagger(count, pageIndex, pageSize, maxPageCount);
+                },
+                error: function () {
+                }
+            });
+        }
+
+        function showTableData(header, jsonData) {
+            if (!header || header.length == 0)
+                return;
+            if (!jsonData || jsonData.length == 0) {
+                $("#tableResult").html(NO_RESULT_MSG);
+                return;
+            }
+
+            var headerStr = generateTableHeader(header);
+            var dataStr = generateTableData(jsonData);
+            $("#tableResult").html(headerStr + dataStr);
+        }
+
+        function generateTableHeader(header) {
+            var headerStr = "<thead><tr>";
+            for (var i = 0; i < header.length; i++) {
+                headerStr += "<th>" + header[i] + "</th>";
+            }
+            headerStr += "</tr></thead>";
+            return headerStr;
+        }
+
+        function generateTableData(jsonData) {
+            var dataArray = ["<tbody>"];
+            for (var j = 0; j < jsonData.length; j++) {
+                dataArray.push("<tr><td>");
+                dataArray.push(jsonData[j].hospitalName);
+                dataArray.push("</td><td>")
+                dataArray.push(jsonData[j].deptName);
+                dataArray.push("</td><td>")
+                dataArray.push((jsonData[j].saveRatio * 100) + "%");
+                dataArray.push("</td><td>")
+                dataArray.push(jsonData[j].totalIncome);
+                dataArray.push("</td><td>")
+                dataArray.push(jsonData[j].statisticalTime);
+                dataArray.push("</td></tr>");
+            }
+            dataArray.push("</tbody>");
+
+            var dataStr = dataArray.join("");
+            return dataStr;
+        }
+    })(indexPage);
+</script>
+</body>
+</html>

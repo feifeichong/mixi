@@ -1,0 +1,49 @@
+<style>
+    .nav-sidebar { margin-right: -21px; /* 20px padding + 1px border */ margin-bottom: 20px; margin-left: 0px; }
+    .nav-sidebar > li > a { padding-right: 20px; padding-left: 20px; }
+    .nav-sidebar > .active > a,
+    .nav-sidebar > .active > a:hover,
+    .nav-sidebar > .active > a:focus { color: #fff; background-color: #428bca; }
+</style>
+
+<ul id="subMenuUL" class="nav nav-sidebar">
+</ul>
+<script>
+    var subMenuPage = {};
+    (function (page) {
+        var _menus = [
+            {
+                "title": "营销中心", "subMenus": [["goods.html", "商品管理"], ["goodsType.html", "商品分类管理"],
+                    ["goodsTag.html", "商品标签管理"], ["station.html", "站点管理"], ["menu.html", "菜单管理"],
+                    ["comment.html", "评价管理"]]
+            },
+            {"title": "订单中心", "subMenus": [["order.html", "订单管理"], ["bwcOrder.html", "霸王餐订单管理"]]},
+            {
+                "title": "运营中心", "subMenus": [["onSales.html", "活动管理"], ["coupon.html", "优惠券管理"],
+                    ["carouselAdvertise.html", "轮播广告管理"], ["rider.html", "骑手管理"], ["customer.html", "顾客管理"],
+                    ["messagePush.html", "系统推送管理"]]
+            },
+            {"title": "审核中心", "subMenus": [["riderCheck.html", "骑手审核"]]},
+            {"title": "财务中心", "subMenus": [["financeStatistics.html", "自营财务统计"], ["bwcStatistics.html", "霸王餐数据统计"]]},
+            {"title": "系统设置", "subMenus": [["merchant.html", "系统用户管理"], ["sendRuleSettings.html", "配送设置"], ["riderExam.html", "骑手考试管理"]]},
+        ];
+
+        page.initSubMenus = function () {
+            var subMenus = _menus[indexPage.getSubMenuIndex()].subMenus;
+            for (var i = 0; i < subMenus.length; i++) {
+                var menu = subMenus[i];
+                $("#subMenuUL").append("<li><a href=\"javascript:subMenuPage.selectSubMenu(" + i + ")\">" + menu[1] + "</a></li>")
+            }
+        };
+
+        page.selectSubMenu = function (index) {
+            var li_list = $("#subMenuUL li");
+            li_list.removeClass("active");
+            li_list.eq(index).addClass("active");
+
+            var htmlUrl = _menus[indexPage.getSubMenuIndex()].subMenus[index][0];
+            $("#" + indexPage.getContentBody()).load(htmlUrl);
+        };
+        $(page.initSubMenus());
+    })(subMenuPage);
+</script>
