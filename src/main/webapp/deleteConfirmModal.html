@@ -1,0 +1,38 @@
+<!-- Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">确认删除当前数据？</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="goDeleting" class="btn btn-primary" data-dismiss="modal">是</button>
+                <button type="button" id="cancelDeleting" class="btn btn-default" data-dismiss="modal">否</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var deleteConfirmModal = {};
+    (function (modal) {
+        var _action = null;
+        var _arg = null;
+
+        modal.showModal = function () {
+            $("#deleteConfirmModal").modal("show");
+        };
+
+        modal.bindDeleteAction = function (action, arg) {
+            _action = action;
+            _arg = arg;
+        };
+
+        $(function () {
+            $("#goDeleting").click(function () {
+                _action(_arg);
+            });
+        });
+    })(deleteConfirmModal);
+</script>

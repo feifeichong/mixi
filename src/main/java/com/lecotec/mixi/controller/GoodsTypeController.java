@@ -1,10 +1,12 @@
 package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.GoodsType;
+import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
 import com.lecotec.mixi.service.GoodsTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,9 +23,10 @@ public class GoodsTypeController {
         return new SuccessResponse(goodsTypeService.getGoodsTypeById(id));
     }
 
-    @GetMapping("getAll")
-    public ResponseObject getGoodsTypes(int pageNumber, int pageSize) {
-        return new SuccessResponse(goodsTypeService.getGoodsTypes(pageNumber, pageSize));
+    @GetMapping("all")
+    public BootstrapTableResult<GoodsType> getGoodsTypes(int pageNumber, int pageSize) {
+        Page<GoodsType> goodsTypes = goodsTypeService.getGoodsTypes(pageNumber, pageSize);
+        return new BootstrapTableResult<>(goodsTypes.getTotalElements(), goodsTypes.getContent());
     }
 
     @PostMapping
@@ -41,7 +44,7 @@ public class GoodsTypeController {
         return new SuccessResponse(goodsTypeService.changeActiveStatus(id, isActive));
     }
 
-    @DeleteMapping("deleteGoodsType/{id}")
+    @DeleteMapping("/{id}")
     public ResponseObject deleteGoodsType(@PathVariable("id") long id) {
         return new SuccessResponse(goodsTypeService.deleteGoodsType(id));
     }

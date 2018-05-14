@@ -19,6 +19,6 @@ public interface GoodsTypeRepository extends JpaRepository<GoodsType, Long> {
 
     @Transactional
     @Modifying
-    @Query("update GoodsType set name=:name, imagePath=:imagePath, modifyTime=:modifyTime where id=:id")
-    int updateGoodsType(@Param("name") String name, @Param("imagePath") String imagePath, @Param("modifyTime") Date modifyTime, @Param("id") long id);
+    @Query("update GoodsType set name=:#{#goodsType.name}, imagePath=:#{#goodsType.imagePath}, isActive=:#{#goodsType.isActive}, modifyTime=:#{#goodsType.modifyTime} where id=:#{#goodsType.id}")
+    int updateGoodsType(@Param("goodsType") GoodsType goodsType);
 }

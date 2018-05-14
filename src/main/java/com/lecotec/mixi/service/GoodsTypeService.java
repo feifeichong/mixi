@@ -36,6 +36,6 @@ public class GoodsTypeService {
     }
 
     public boolean updateGoodsType(GoodsType goodsType) {
-        return goodsTypeRepository.updateGoodsType(goodsType.getName(), goodsType.getImagePath(), new Date(), goodsType.getId()) > 0;
+        return goodsTypeRepository.updateGoodsType(goodsType) > 0;
     }
 }

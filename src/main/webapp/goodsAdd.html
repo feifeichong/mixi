@@ -184,9 +184,9 @@
                 allowedFileExtensions: ['jpg', 'png', 'gif'],
                 maxFileSize: 2000,
                 maxFileCount: 1
-            }).on("fileuploaded", function (event, result) {
-                if (result.response.status === SUCCESS)
-                    var uploadedFilePath = result.response.data;
+            }).on("fileuploaded", function (event, tableJsonResult) {
+                if (tableJsonResult.response.status === SUCCESS)
+                    var uploadedFilePath = tableJsonResult.response.data;
             });
         });
     })(goodsAddPage);

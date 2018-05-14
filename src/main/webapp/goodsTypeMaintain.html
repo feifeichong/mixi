@@ -1,0 +1,104 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1 id="goodsTypeTitle">新增菜品类型</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:goodsTypeMaintainPage.saveOrUpdate();">
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">类型名称</span>
+                <input id="goodsTypeName" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">类型状态</span>
+                <input id="isActiveChk" value="" type="checkbox" data-on-color="success" data-off-color="danger"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">类型图片</span>
+                <input id="goodsImageUpload" name="file" type="file" class="form-control"/>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <input id="submitBtn" class="btn btn-primary" type="submit" value="提交"/>
+                &nbsp;&nbsp;
+                <input id="cancelBtn" class="btn btn-default" type="reset" value="重置"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var goodsTypeMaintainPage = {};
+    (function (page) {
+        var _isEdit = false;
+        var _data = {};
+
+        page.setEditStatus = function (status) {
+            _isEdit = status;
+        };
+
+        page.setData = function (data) {
+            _data = data;
+        };
+
+        $(function () {
+            var option = {
+                language: 'zh', uploadUrl: "api/common/fileUpload", showUpload: true,
+                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
+                allowedFileExtensions: ['jpg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1
+            };
+
+            if (_isEdit) {
+                $("#goodsTypeTitle").html("更新菜品类型");
+                $("#goodsTypeName").val(_data.name);
+                $("#isActiveChk").bootstrapSwitch('state', _data.isActive).on("switchChange.bootstrapSwitch", function (event, status) {
+                    _data.isActive = status;
+                });
+                option.initialPreview = [_data.imagePath];
+                option.initialPreviewAsData = true;
+                $("#submitBtn").val("更新");
+                $("#cancelBtn").hide();
+            } else {
+                _data.isActive = true;
+            }
+
+            $("#isActiveChk").bootstrapSwitch('state', _data.isActive).on("switchChange.bootstrapSwitch", function (event, status) {
+                _data.isActive = status;
+            });
+
+            $("#goodsImageUpload").fileinput(option).on("fileuploaded", function (event, tableJsonResult) {
+                if (tableJsonResult.response.status === SUCCESS)
+                    _data.imagePath = tableJsonResult.response.data;
+            });
+
+            page.saveOrUpdate = function () {
+                _data.name = $("#goodsTypeName").val();
+                if (_isEdit) {
+                    $.ajax({
+                        type: "PUT", url: "api/merchant/goodsType",
+                        contentType: "application/json",
+                        data: JSON.stringify(_data),
+                        success: function (result) {
+                            indexPage.setContentBody("goodsType.html");
+                        }
+                    });
+                    return;
+                }
+                $.ajax({
+                    type: "POST", url: "api/merchant/goodsType",
+                    contentType: "application/json",
+                    data: JSON.stringify(_data),
+                    success: function (result) {
+                        indexPage.setContentBody("goodsType.html");
+                    }
+                });
+            };
+        });
+    })(goodsTypeMaintainPage);
+</script>
