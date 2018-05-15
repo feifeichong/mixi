@@ -5,7 +5,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
         <div class="right">
-            <button id="addNewBtn" class="btn btn-success" onclick="indexPage.setContentBody('goodsTypeMaintain.html')" type="button">添加商品类型</button>
+            <button class="btn btn-success" onclick="indexPage.setContentBody('goodsTypeAdd.html')" type="button">添加商品类型</button>
         </div>
         <h1>商品类型查询</h1>
     </div>
@@ -29,7 +29,7 @@
                 },
                 columns: [
                     {
-                        title: '序号', width: 50, align: "center",
+                        title: '序号', align: "center",
                         formatter: function (value, row, index) {
                             return index + 1;
                         }
@@ -68,9 +68,8 @@
 
         page.edit = function (id) {
             var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
-            indexPage.setContentBody("goodsTypeMaintain.html", function (response, status, xhr) {
-                goodsTypeMaintainPage.setEditStatus(true);
-                goodsTypeMaintainPage.setData(currentData);
+            indexPage.setContentBody("goodsTypeUpdate.html", function (response, status, xhr) {
+                goodsTypeUpdatePage.setData(currentData);
             });
         };
 

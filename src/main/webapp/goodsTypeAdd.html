@@ -2,7 +2,7 @@
     <div class="title page-header">
         <h1 id="goodsTypeTitle">新增菜品类型</h1>
     </div>
-    <form class="form-horizontal" action="javascript:goodsTypeMaintainPage.saveOrUpdate();">
+    <form class="form-horizontal" action="javascript:goodsTypeAddPage.save();">
         <div class="form-group">
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">类型名称</span>
@@ -31,65 +31,38 @@
             </div>
         </div>
     </form>
+    <div id="cmModal"></div>
 </div>
 <script>
-    var goodsTypeMaintainPage = {};
+    var goodsTypeAddPage = {};
     (function (page) {
-        var _isEdit = false;
         var _data = {};
 
-        page.setEditStatus = function (status) {
-            _isEdit = status;
-        };
-
-        page.setData = function (data) {
-            _data = data;
-        };
-
         $(function () {
+            $("#isActiveChk").bootstrapSwitch("state", true).on("switchChange.bootstrapSwitch", function (event, status) {
+                _data.isActive = status;
+            });
+
             var option = {
                 language: 'zh', uploadUrl: "api/common/fileUpload", showUpload: true,
                 showRemove: true, showPreview: true, dropZoneEnabled: false,
                 showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
-                allowedFileExtensions: ['jpg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1
+                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1
             };
-
-            if (_isEdit) {
-                $("#goodsTypeTitle").html("更新菜品类型");
-                $("#goodsTypeName").val(_data.name);
-                $("#isActiveChk").bootstrapSwitch('state', _data.isActive).on("switchChange.bootstrapSwitch", function (event, status) {
-                    _data.isActive = status;
-                });
-                option.initialPreview = [_data.imagePath];
-                option.initialPreviewAsData = true;
-                $("#submitBtn").val("更新");
-                $("#cancelBtn").hide();
-            } else {
-                _data.isActive = true;
-            }
-
-            $("#isActiveChk").bootstrapSwitch('state', _data.isActive).on("switchChange.bootstrapSwitch", function (event, status) {
-                _data.isActive = status;
-            });
-
             $("#goodsImageUpload").fileinput(option).on("fileuploaded", function (event, tableJsonResult) {
                 if (tableJsonResult.response.status === SUCCESS)
                     _data.imagePath = tableJsonResult.response.data;
             });
 
-            page.saveOrUpdate = function () {
+            $("#cmModal").load("commonModal.html");
+
+            page.save = function () {
                 _data.name = $("#goodsTypeName").val();
-                if (_isEdit) {
-                    $.ajax({
-                        type: "PUT", url: "api/merchant/goodsType",
-                        contentType: "application/json",
-                        data: JSON.stringify(_data),
-                        success: function (result) {
-                            indexPage.setContentBody("goodsType.html");
-                        }
-                    });
-                    return;
+                if(!_data.imagePath){
+                    commonModal.showModal("请选择图片并上传");
+                    return false;
                 }
+
                 $.ajax({
                     type: "POST", url: "api/merchant/goodsType",
                     contentType: "application/json",
@@ -100,5 +73,5 @@
                 });
             };
         });
-    })(goodsTypeMaintainPage);
+    })(goodsTypeAddPage);
 </script>

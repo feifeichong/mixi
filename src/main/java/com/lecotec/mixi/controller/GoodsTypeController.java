@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/merchant/goodsType")
@@ -36,6 +37,7 @@ public class GoodsTypeController {
 
     @PutMapping
     public ResponseObject updateGoodsType(@Valid @RequestBody GoodsType goodsType) {
+        goodsType.setModifyTime(new Date());
         return new SuccessResponse(goodsTypeService.updateGoodsType(goodsType));
     }
 

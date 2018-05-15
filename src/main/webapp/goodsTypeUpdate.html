@@ -1,0 +1,79 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1 id="goodsTypeTitle">更新菜品类型</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:goodsTypeUpdatePage.update();">
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">类型名称</span>
+                <input id="goodsTypeName" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">类型状态</span>
+                <input id="isActiveChk" value="" type="checkbox" data-on-color="success" data-off-color="danger"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">类型图片</span>
+                <input id="goodsImageUpload" name="file" type="file" class="form-control"/>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <input id="submitBtn" class="btn btn-primary" type="submit" value="更新"/>
+                &nbsp;&nbsp;
+                <input id="cancelBtn" class="btn btn-default" type="button" value="返回"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var goodsTypeUpdatePage = {};
+    (function (page) {
+        var _data = {};
+
+        page.setData = function (data) {
+            _data = data;
+        };
+
+        page.update = function () {
+            _data.name = $("#goodsTypeName").val();
+            $.ajax({
+                type: "PUT", url: "api/merchant/goodsType",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    indexPage.setContentBody("goodsType.html");
+                }
+            });
+        };
+
+        $(function () {
+            $("#goodsTypeName").val(_data.name);
+
+            $("#isActiveChk").bootstrapSwitch('state', _data.isActive).on("switchChange.bootstrapSwitch", function (event, status) {
+                _data.isActive = status;
+            });
+
+            var option = {
+                language: 'zh', uploadUrl: "api/common/fileUpload", showUpload: true,
+                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
+                allowedFileExtensions: ['jpg','jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1,
+                initialPreview: [_data.imagePath], initialPreviewAsData: true
+            };
+            $("#goodsImageUpload").fileinput(option).on("fileuploaded", function (event, tableJsonResult) {
+                if (tableJsonResult.response.status === SUCCESS)
+                    _data.imagePath = tableJsonResult.response.data;
+            });
+            $("#cancelBtn").click(function () {
+                indexPage.setContentBody("goodsType.html");
+            });
+        });
+    })(goodsTypeUpdatePage);
+</script>
