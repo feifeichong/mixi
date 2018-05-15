@@ -115,6 +115,6 @@ public class CommonController {
                 String.valueOf(System.currentTimeMillis()) + suffix;
 
         uploadFile(file.getBytes(), env.getProperty("upload.dir"), newFileName);
-        return new SuccessResponse(env.getProperty("upload.server") + "/uploadFiles/" + newFileName);
+        return new SuccessResponse(env.getProperty("upload.server") + "/" + newFileName);
     }
 }
