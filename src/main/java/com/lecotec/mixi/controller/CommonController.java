@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +38,9 @@ import static com.lecotec.mixi.common.ConstString.RSA_PUBLIC_KEY;
 @RequestMapping("/api/common")
 @Api(value = "/api/common", tags = "公共模块接口集合")
 public class CommonController {
+
+    @Autowired
+    private Environment env;
 
     public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
         File targetFile = new File(filePath);
@@ -109,10 +114,7 @@ public class CommonController {
         String newFileName = fileName.substring(0, fileName.lastIndexOf('.') - 1) +
                 String.valueOf(System.currentTimeMillis()) + suffix;
 
-        String filePath = request.getServletContext().getRealPath("uploadFiles/");
-        uploadFile(file.getBytes(), filePath, newFileName);
-        String result = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath()
-                + "/uploadFiles/" + newFileName;
-        return new SuccessResponse(result);
+        uploadFile(file.getBytes(), env.getProperty("upload.dir"), newFileName);
+        return new SuccessResponse(env.getProperty("upload.server") + "/uploadFiles/" + newFileName);
     }
 }
