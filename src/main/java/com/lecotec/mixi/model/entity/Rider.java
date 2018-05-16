@@ -49,6 +49,9 @@ public class Rider {
     @Column(name = "deposit_amount", columnDefinition = "double DEFAULT NULL COMMENT '缴纳的保证金金额'")
     private double depositAmount;
 
+    @Column(name = "exam_score")
+    private int examScore;
+
     @Column(name = "is_start_working")
     private boolean isStartWorking;
 
@@ -113,6 +116,14 @@ public class Rider {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public int getExamScore() {
+        return examScore;
+    }
+
+    public void setExamScore(int examScore) {
+        this.examScore = examScore;
     }
 
     public String getIdentityCard() {
