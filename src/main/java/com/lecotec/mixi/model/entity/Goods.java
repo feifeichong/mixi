@@ -3,6 +3,8 @@ package com.lecotec.mixi.model.entity;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.Date;
 
 @Entity
@@ -13,52 +15,44 @@ public class Goods {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    @Column(name = "goods_name")
-    private String goodsName;
+    @Column(name = "goods_type_id")
+    private long goodsTypeId;
 
-    @Column(name = "goods_type")
-    private String goodsType;
+    @NotBlank
+    private String name;
 
-    @Column(name = "goods_tag")
-    private String goodsTag;
-
-    @Column(name = "goods_price")
-    private double goodsPrice;
-
-    @Column(name = "image_address")
-    private String imageAddress;
-
-    @Column(name = "is_active")
-    private boolean isActive;
-
+    @NotBlank
     private String description;
 
-    @Column(name = "max_stock", columnDefinition = "int(11) DEFAULT NULL COMMENT '最大库存'")
-    private int maxStock;
+    @Column(name = "image_path")
+    @NotBlank
+    private String imagePath;
 
-    @Column(name = "currentStock", columnDefinition = "int(11) DEFAULT NULL COMMENT '当前库存'")
-    private int currentStock;
+    @Column(name = "min_purchase_count")
+    @Positive
+    private int minPurchaseCount;
 
-    @Column(name = "min_buy_number")
-    private int minBuyNumber;
+    @Column(name = "set_meal_detail")
+    @NotBlank
+    private String setMealDetail;
 
-    @Column(name = "is_set_meal", columnDefinition = "BIT(1) DEFAULT NULL COMMENT '是否是套餐'")
-    private boolean isSetMeal;
+    @NotBlank
+    private String tag;
 
-    @Column(name = "goods_standard", columnDefinition = "VARCHAR(255) DEFAULT NULL COMMENT '商品规格'")
-    private String goodsStandard;
+    @Column(columnDefinition = "TEXT NULL")
+    private String specs;
 
-    @Column(name = "meal_box_price")
-    private double mealBoxPrice;
+    @Column(columnDefinition = "TEXT NULL")
+    private String properties;
 
-    @Column(name = "goods_attribute")
-    private String goodsAttribute;
+    private String material;
 
-    @Column(name = "goods_material")
-    private String goodsMaterial;
+    @Column(name = "selling_config")
+    private String sellingConfig;
 
-    @Column(name = "selling_time")
-    private Date sellingTime;
+    @Column(name = "is_active")
+    @ApiModelProperty(hidden = true)
+    private boolean isActive = true;
 
     @ApiModelProperty(hidden = true)
     @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
@@ -72,52 +66,20 @@ public class Goods {
         this.id = id;
     }
 
-    public String getGoodsName() {
-        return goodsName;
+    public long getGoodsTypeId() {
+        return goodsTypeId;
     }
 
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
+    public void setGoodsTypeId(long goodsTypeId) {
+        this.goodsTypeId = goodsTypeId;
     }
 
-    public String getGoodsType() {
-        return goodsType;
+    public String getName() {
+        return name;
     }
 
-    public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
-    }
-
-    public String getGoodsTag() {
-        return goodsTag;
-    }
-
-    public void setGoodsTag(String goodsTag) {
-        this.goodsTag = goodsTag;
-    }
-
-    public double getGoodsPrice() {
-        return goodsPrice;
-    }
-
-    public void setGoodsPrice(double goodsPrice) {
-        this.goodsPrice = goodsPrice;
-    }
-
-    public String getImageAddress() {
-        return imageAddress;
-    }
-
-    public void setImageAddress(String imageAddress) {
-        this.imageAddress = imageAddress;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -128,83 +90,83 @@ public class Goods {
         this.description = description;
     }
 
-    public int getMaxStock() {
-        return maxStock;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setMaxStock(int maxStock) {
-        this.maxStock = maxStock;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
-    public int getCurrentStock() {
-        return currentStock;
+    public int getMinPurchaseCount() {
+        return minPurchaseCount;
     }
 
-    public void setCurrentStock(int currentStock) {
-        this.currentStock = currentStock;
+    public void setMinPurchaseCount(int minPurchaseCount) {
+        this.minPurchaseCount = minPurchaseCount;
     }
 
-    public int getMinBuyNumber() {
-        return minBuyNumber;
+    public String getSetMealDetail() {
+        return setMealDetail;
     }
 
-    public void setMinBuyNumber(int minBuyNumber) {
-        this.minBuyNumber = minBuyNumber;
+    public void setSetMealDetail(String setMealDetail) {
+        this.setMealDetail = setMealDetail;
     }
 
-    public boolean isSetMeal() {
-        return isSetMeal;
+    public String getTag() {
+        return tag;
     }
 
-    public void setSetMeal(boolean setMeal) {
-        isSetMeal = setMeal;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
-    public String getGoodsStandard() {
-        return goodsStandard;
+    public String getSpecs() {
+        return specs;
     }
 
-    public void setGoodsStandard(String goodsStandard) {
-        this.goodsStandard = goodsStandard;
+    public void setSpecs(String specs) {
+        this.specs = specs;
     }
 
-    public double getMealBoxPrice() {
-        return mealBoxPrice;
+    public String getProperties() {
+        return properties;
     }
 
-    public void setMealBoxPrice(double mealBoxPrice) {
-        this.mealBoxPrice = mealBoxPrice;
+    public void setProperties(String properties) {
+        this.properties = properties;
     }
 
-    public String getGoodsAttribute() {
-        return goodsAttribute;
+    public String getMaterial() {
+        return material;
     }
 
-    public void setGoodsAttribute(String goodsAttribute) {
-        this.goodsAttribute = goodsAttribute;
+    public void setMaterial(String material) {
+        this.material = material;
     }
 
-    public String getGoodsMaterial() {
-        return goodsMaterial;
+    public String getSellingConfig() {
+        return sellingConfig;
     }
 
-    public void setGoodsMaterial(String goodsMaterial) {
-        this.goodsMaterial = goodsMaterial;
+    public void setSellingConfig(String sellingConfig) {
+        this.sellingConfig = sellingConfig;
     }
 
-    public Date getSellingTime() {
-        return sellingTime;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setSellingTime(Date sellingTime) {
-        this.sellingTime = sellingTime;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public Date getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(Date creation_time) {
-        this.creationTime = creation_time;
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 }

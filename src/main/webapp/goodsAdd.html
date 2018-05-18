@@ -7,57 +7,54 @@
         <h1>新增菜品</h1>
     </div>
 
-    <form class="form-horizontal">
+    <form class="form-horizontal" action="javascript:goodsAddPage.save();">
         <div class="form-group">
             <label class="col-sm-1 control-label goodsAddLabel">基本信息</label>
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">商品分类</span>
-                <select class="form-control"/>
+                <select id="goodsTypeSelect" class="form-control"/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">商品名称</span>
-                <input type="text" class="form-control"/>
+                <input id="goodsName" type="text" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">商品描述</span>
-                <textarea class="form-control"/>
+                <textarea id="goodsDescription" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">商品图片</span>
-                <input id="goodsImageUpload" type="file" class="form-control"/>
+                <input id="goodsImageUpload" name="file" type="file" class="form-control"/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">最小购买量</span>
-                <input type="number" class="form-control"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-4 input-group">
-                <span class="input-group-addon">商品单位</span>
-                <input type="text" class="form-control"/>
+                <input id="minPurchaseCountTxt" type="number" class="form-control" required/>
             </div>
         </div>
         <hr>
         <div class="form-group">
             <label class="col-sm-1 control-label goodsAddLabel">套餐设置</label>
-            <div class="col-sm-4">
+            <div class="col-sm-1" style="width: 11%;">
                 <div class="radio">
-                    <label><input type="radio" name="isSetMeal" checked>非套餐</label> &nbsp;&nbsp;
-                    <label><input type="radio" name="isSetMeal">套餐</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="isSetMeal" data-text="非套餐" checked>非套餐</label> &nbsp;&nbsp;
+                    <label><input type="radio" data-text="套餐" name="isSetMeal">套餐</label>&nbsp;&nbsp;
                 </div>
+            </div>
+            <div id="setMealPersonCount" class="col-sm-1 input-group" style="display:none;">
+                <input id="setMealPersonCountTxt" type="number" class="form-control"/>
+                <span class="input-group-addon">人套餐</span>
             </div>
         </div>
         <hr>
@@ -65,9 +62,10 @@
             <label class="col-sm-1 control-label goodsAddLabel">特色标签</label>
             <div class="col-sm-4">
                 <div class="checkbox">
-                    <label><input type="checkbox">招牌菜</label> &nbsp;&nbsp;
-                    <label><input type="checkbox">新菜</label>&nbsp;&nbsp;
-                    <label><input type="checkbox">辣</label>&nbsp;&nbsp;
+                    <label><input name="specialTag" type="checkbox" data-text="咪嘻推荐" checked>咪嘻推荐</label> &nbsp;&nbsp;&nbsp;
+                    <label><input name="specialTag" type="checkbox" data-text="新品上新">新品上新</label>&nbsp;&nbsp;&nbsp;
+                    <label><input name="specialTag" type="checkbox" data-text="销量第一">销量第一</label>&nbsp;&nbsp;&nbsp;
+                    <label><input name="specialTag" type="checkbox" data-text="招牌菜">招牌菜</label>&nbsp;&nbsp;&nbsp;
                 </div>
             </div>
         </div>
@@ -78,33 +76,40 @@
                 <div class="col-sm-12"><h6>为您的商品添加不同的规格，如：大杯、小杯等 <span style="color:red;">至少要留一个规格，不能全部移除</span></h6></div>
                 <div class="col-sm-12">
                     <div class="col-sm-1" style="padding-left: 0;">规格名</div>
-                    <div class="col-sm-1">价格</div>
-                    <div class="col-sm-1">餐盒费</div>
-                    <div class="col-sm-2">当前库存/最大库存</div>
+                    <div class="col-sm-2">价格</div>
+                    <div class="col-sm-2">餐盒费</div>
+                    <div class="col-sm-3">当前库存/最大库存</div>
                     <div class="col-sm-1">重量</div>
-                    <div class="col-sm-2">条形码</div>
-                    <div class="col-sm-2">SKU码</div>
+                    <div class="col-sm-1">条形码</div>
+                    <div class="col-sm-1">SKU码</div>
                 </div>
-                <div class="col-sm-12">
-                    <div class="col-sm-1" style="padding-left: 0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
-                    <div class="col-sm-1 input-group" style="padding-right: 15px; float:left;">
-                        <input class="form-control" type="text">
-                        <div class="input-group-addon">元</div>
+                <div data-repeat="goodsSpecs" class="col-sm-12" style="margin-top: 15px;">
+                    <div class="col-sm-1" style="padding-left: 0;">
+                        <input class="form-control" type="text" style="border-radius: 5px;">
                     </div>
-                    <div class="col-sm-1 input-group" style="padding-right: 15px; float:left;">
-                        <input class="form-control" type="text">
+                    <div class="col-sm-2 input-group" style="padding-right: 15px; float:left;">
+                        <input class="form-control" type="number">
                         <div class="input-group-addon">元</div>
                     </div>
                     <div class="col-sm-2 input-group" style="padding-right: 15px; float:left;">
-                        <select name="" id="" class="form-control" style="width:50%">
-                            <option value="andy">andy</option>
-                            <option value="bell">bell</option>
+                        <input class="form-control" type="number">
+                        <div class="input-group-addon">元</div>
+                    </div>
+                    <div class="col-sm-3 input-group" style="padding-right: 15px; float:left;">
+                        <select name="" class="form-control" style="width:30%">
+                            <option value="有限">有限</option>
+                            <option value="无限">无限</option>
                         </select>
-                        <input class="form-control" type="text" style="width:50%">
+                        <input class="form-control" type="number" placeholder="当前库存" style="width:35%">
+                        <input class="form-control" type="number" placeholder="最大库存" style="width:35%">
                     </div>
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
-                    <div class="col-sm-2"><input class="form-control" type="text" style="border-radius: 5px;"></div>
-                    <div class="col-sm-2"><input class="form-control" type="text" style="border-radius: 5px;"></div>
+                    <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
+                    <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
+                    <div class="col-sm-1 input-group">
+                        <input class="btn btn-warning" onclick="goodsAddPage.addSpecs();" type="button" value="添加"/>
+                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsAddPage.deleteSpecs();" type="button" value="删除"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,18 +122,22 @@
                     <div class="col-sm-1">属性名称</div>
                     <div class="col-sm-4">属性细分</div>
                 </div>
-                <div class="col-sm-12">
+                <div data-repeat="goodsProp" class="col-sm-12" style="margin-top: 15px;">
                     <div class="col-sm-1" style="padding-left: 0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
+                    <div class="col-sm-2 input-group">
+                        <input class="btn btn-warning" style="margin-left: 5px;" onclick="goodsAddPage.addProp();" type="button" value="添加"/>
+                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsAddPage.deleteProp();" type="button" value="删除"/>
+                    </div>
                 </div>
             </div>
         </div>
         <hr>
-        <div class="form-group">
+        <div id="goodsMertial" class="form-group">
             <label class="col-sm-1 control-label goodsAddLabel">商品原料</label>
             <div class="col-sm-11 input-group">
                 <div class="col-sm-12"><h6>为您的商品添加不同的原料，如：土豆、白菜等。</h6></div>
@@ -151,8 +160,33 @@
             <label class="col-sm-1 control-label goodsAddLabel">售卖时间</label>
             <div class="col-sm-4">
                 <div class="radio">
-                    <label><input type="radio" name="sellingTimeRadio" checked>全时段售卖</label> &nbsp;&nbsp;
-                    <label><input type="radio" name="sellingTimeRadio">自定义时间</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="sellingTimeRadio" data-text="全时段售卖" checked>全时段售卖</label> &nbsp;&nbsp;
+                    <label><input type="radio" name="sellingTimeRadio" data-text="自定义时间">自定义时间</label>&nbsp;&nbsp;
+                </div>
+            </div>
+        </div>
+        <div id="sellingTime" class="form-group" style="display: none;">
+            <label class="col-sm-1 control-label goodsAddLabel"></label>
+            <div class="col-sm-2 input-group" style="float:left;margin-left: 15px;">
+                <span class="input-group-addon">开始时间</span>
+                <input id="beginTime" type="text" class="form-control"/>
+            </div>
+            <div class="col-sm-2 input-group" style="float:left; margin-left: 15px;">
+                <span class="input-group-addon">结束时间</span>
+                <input id="endTime" type="text" class="form-control"/>
+            </div>
+        </div>
+        <div id="sellingFrequency" class="form-group" style="display: none;">
+            <label class="col-sm-1 control-label goodsAddLabel"></label>
+            <div class="col-sm-4 input-group" style="float:left;margin-left: 15px;">
+                <div class="checkbox">
+                    <label><input name="sellingDay" type="checkbox" data-text="周一">周一</label> &nbsp;&nbsp;&nbsp;
+                    <label><input name="sellingDay" type="checkbox" data-text="周二">周二</label>&nbsp;&nbsp;&nbsp;
+                    <label><input name="sellingDay" type="checkbox" data-text="周三">周三</label>&nbsp;&nbsp;&nbsp;
+                    <label><input name="sellingDay" type="checkbox" data-text="周四">周四</label>&nbsp;&nbsp;&nbsp;
+                    <label><input name="sellingDay" type="checkbox" data-text="周五">周五</label>&nbsp;&nbsp;&nbsp;
+                    <label><input name="sellingDay" type="checkbox" data-text="周六">周六</label>&nbsp;&nbsp;&nbsp;
+                    <label><input name="sellingDay" type="checkbox" data-text="周日">周日</label>&nbsp;&nbsp;&nbsp;
                 </div>
             </div>
         </div>
@@ -166,28 +200,200 @@
             </div>
         </div>
     </form>
+    <div id="cmModal"></div>
 </div>
 <script>
     var goodsAddPage = {};
     (function (page) {
-        $(function () {
-            $("#goodsImageUpload").fileinput({
-                language: 'zh', //设置语言
-                uploadUrl: "",
-                showUpload: true, //是否显示上传按钮
-                showRemove: true,
-                showPreview: true,
-                dropZoneEnabled: false,
-                showCaption: true,//是否显示标题
-                allowedPreviewTypes: ['image'],
-                allowedFileTypes: ['image'],
-                allowedFileExtensions: ['jpg', 'png', 'gif'],
-                maxFileSize: 2000,
-                maxFileCount: 1
-            }).on("fileuploaded", function (event, tableJsonResult) {
-                if (tableJsonResult.response.status === SUCCESS)
-                    var uploadedFilePath = tableJsonResult.response.data;
+        var _data = {};
+
+        page.save = function () {
+            debugger;
+            _data.goodsTypeId = parseInt($("#goodsTypeSelect").val());
+            _data.name = $("#goodsName").val();
+            _data.description = $("#goodsDescription").val();
+            _data.minPurchaseCount = parseInt($("#minPurchaseCountTxt").val());
+
+            var arr = [];
+            $.each($("input[name='isSetMeal']"), function () {
+                if (this.checked) {
+                    arr.push(this.getAttribute("data-text"));
+                    if (this.getAttribute("data-text") === "套餐") {
+                        arr.push($("#setMealPersonCountTxt").val() + "人套餐");
+                    }
+                }
             });
+            _data.setMealDetail = JSON.stringify(arr);
+
+            var tags = [];
+            $.each($("input[name='specialTag']"), function () {
+                if (this.checked) {
+                    tags.push(this.getAttribute("data-text"));
+                }
+            });
+            _data.tag = JSON.stringify(tags);
+
+            if (!_data.imagePath) {
+                commonModal.showModal("请选择图片并上传");
+                return false;
+            }
+
+            var specs = [];
+            $("div[data-repeat='goodsSpecs']").each(function (i, dom) {
+                var select = $(dom).find("select");
+                var inputs = $(dom).find("input");
+                specs.push({
+                    name: inputs[0].value,
+                    price: inputs[1].value,
+                    mealBoxPrice: inputs[2].value,
+                    repertoryType: select.val(),
+                    currentRepertory: inputs[3].value,
+                    maxRepertory: inputs[4].value,
+                    weight: inputs[5].value,
+                    barCode: inputs[6].value,
+                    SKUCode: inputs[7].value
+                });
+            });
+            _data.specs = JSON.stringify(specs);
+
+            var properties = [];
+            $("div[data-repeat='goodsProp']").each(function (i, dom) {
+                var inputs = $(dom).find("input");
+                properties.push({
+                    name: inputs[0].value,
+                    subdivision: [inputs[1].value, inputs[2].value,
+                        inputs[3].value, inputs[4].value, inputs[5].value]
+                });
+            });
+            _data.properties = JSON.stringify(properties);
+
+            var inputs = $("#goodsMertial input");
+            _data.material = JSON.stringify([inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value,
+                inputs[5].value, inputs[6].value, inputs[7].value, inputs[8].value, inputs[9].value]);
+
+            var weekDays = [];
+            $("#sellingFrequency input:checked").each(function (index, dom) {
+                    weekDays.push(dom.getAttribute("data-text"));
+                }
+            );
+            _data.sellingConfig = JSON.stringify({
+                sellingConfigType: $("input[name=sellingTimeRadio]:checked").attr("data-text"),
+                beginTime: $("#beginTime").val(),
+                endTime: $("#endTime").val(),
+                sellingFrequency: weekDays
+            });
+
+            $.ajax({
+                type: "POST", url: "/api/merchant/goods",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("goods.html");
+                    else
+                        commonModal.showModal(result.data);
+                }
+            });
+        };
+
+        goodsAddPage.addSpecs = function () {
+            if ($("div[data-repeat='goodsSpecs']").length >= 6) {
+                commonModal.showModal("至多6种商品规格");
+                return;
+            }
+            var copyDom = $(event.target).parent().parent();
+            var container = copyDom.parent();
+            container.append(copyDom.clone());
+        };
+
+        goodsAddPage.deleteSpecs = function () {
+            if ($("div[data-repeat='goodsSpecs']").length <= 1) {
+                commonModal.showModal("至少1种商品规格");
+                return;
+            }
+            $(event.target).parent().parent().remove();
+        };
+
+        goodsAddPage.addProp = function () {
+            if ($("div[data-repeat='goodsProp']").length >= 5) {
+                commonModal.showModal("至多5种商品属性");
+                return;
+            }
+            var copyDom = $(event.target).parent().parent();
+            var container = copyDom.parent();
+            container.append(copyDom.clone());
+        };
+
+        goodsAddPage.deleteProp = function () {
+            if ($("div[data-repeat='goodsProp']").length <= 1) {
+                commonModal.showModal("至少1种商品属性");
+                return;
+            }
+            $(event.target).parent().parent().remove();
+        };
+
+        function initGoodsType() {
+            $.ajax({
+                type: "get", url: "api/merchant/goodsType/all",
+                data: {pageNumber: 0, pageSize: 100},
+                success: function (result) {
+                    for (var i = 0; i < result.rows.length; i++) {
+                        $("#goodsTypeSelect").append('<option value="' + result.rows[i].id + '">' + result.rows[i].name + '</option>');
+                    }
+                }
+            });
+        }
+
+        function initFileUploadControl() {
+            var option = {
+                language: 'zh', uploadUrl: "api/common/fileUpload", showUpload: true,
+                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
+                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1
+            };
+            $("#goodsImageUpload").fileinput(option).on("fileuploaded", function (event, tableJsonResult) {
+                if (tableJsonResult.response.status === SUCCESS) {
+                    _data.imagePath = tableJsonResult.response.data;
+                }
+            });
+        }
+
+        function initSetMealControl() {
+            $("input[name='isSetMeal']").click(function (e) {
+                if (e.target.getAttribute("data-text") === "套餐") {
+                    $("#setMealPersonCount").show();
+                    $("#setMealPersonCountTxt").attr("required", "required");
+                } else {
+                    $("#setMealPersonCount").hide();
+                    $("#setMealPersonCountTxt").removeAttr("required");
+                }
+            });
+        }
+
+        function initSellingTimerPicker() {
+            $('#beginTime').datetimepicker({
+                format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
+            });
+            $('#endTime').datetimepicker({
+                format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
+            });
+            $("input[name='sellingTimeRadio']").click(function (e) {
+                if (e.target.getAttribute("data-text") === "自定义时间") {
+                    $("#sellingTime").show();
+                    $("#sellingFrequency").show();
+                } else {
+                    $("#sellingTime").hide();
+                    $("#sellingFrequency").hide();
+                }
+            });
+        }
+
+        $(function () {
+            initGoodsType();
+            initFileUploadControl();
+            initSetMealControl();
+            initSellingTimerPicker();
+            $("#cmModal").load("commonModal.html");
         });
     })(goodsAddPage);
 </script>
