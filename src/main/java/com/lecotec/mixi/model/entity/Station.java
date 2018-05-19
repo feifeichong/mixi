@@ -3,6 +3,7 @@ package com.lecotec.mixi.model.entity;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -13,14 +14,17 @@ public class Station {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    @Column(name = "station_name")
-    private String stationName;
+    @NotBlank
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "is_active")
-    private boolean isActive;
+    @ApiModelProperty(hidden = true)
+    @Column(name = "is_active", columnDefinition = "BIT(1) DEFAULT true")
+    private boolean isActive = true;
 
-    @Column(name = "last_updated_time")
-    private Date lastUpdatedTime;
+    @ApiModelProperty(hidden = true)
+    @Column(name = "modify_time")
+    private Date modifyTime;
 
     @ApiModelProperty(hidden = true)
     @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
@@ -34,28 +38,28 @@ public class Station {
         this.id = id;
     }
 
-    public String getStationName() {
-        return stationName;
+    public String getName() {
+        return name;
     }
 
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
-    public Date getLastUpdatedTime() {
-        return lastUpdatedTime;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setLastUpdatedTime(Date lastUpdatedTime) {
-        this.lastUpdatedTime = lastUpdatedTime;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     public Date getCreationTime() {

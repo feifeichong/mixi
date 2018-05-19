@@ -13,14 +13,15 @@ public class Menu {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    @Column(name = "menu_name")
-    private String menuName;
+    private String name;
 
-    @Column(name = "is_active")
-    private boolean isActive;
+    @Column(name = "is_active",columnDefinition = "BIT(1) DEFAULT true")
+    @ApiModelProperty(hidden = true)
+    private boolean isActive = true;
 
-    @Column(name = "last_updated_time")
-    private Date lastUpdatedTime;
+    @Column(name = "modify_time")
+    @ApiModelProperty(hidden = true)
+    private Date modifyTime;
 
     @Column(name = "station_id")
     private long stationId;
@@ -37,28 +38,28 @@ public class Menu {
         this.id = id;
     }
 
-    public String getMenuName() {
-        return menuName;
+    public String getName() {
+        return name;
     }
 
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 
-    public Date getLastUpdatedTime() {
-        return lastUpdatedTime;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setLastUpdatedTime(Date lastUpdatedTime) {
-        this.lastUpdatedTime = lastUpdatedTime;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     public long getStationId() {
