@@ -15,13 +15,17 @@ public class Menu {
 
     private String name;
 
-    @Column(name = "is_active",columnDefinition = "BIT(1) DEFAULT true")
+    @Column(name = "is_active", columnDefinition = "BIT(1) DEFAULT true")
     @ApiModelProperty(hidden = true)
     private boolean isActive = true;
 
     @Column(name = "modify_time")
     @ApiModelProperty(hidden = true)
     private Date modifyTime;
+
+    @Column(name = "goods_list", columnDefinition = "VARCHAR(255) DEFAULT '[]'")
+    @ApiModelProperty(hidden = true)
+    private String goodsList;
 
     @Column(name = "station_id")
     private long stationId;
@@ -76,5 +80,13 @@ public class Menu {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getGoodsList() {
+        return goodsList;
+    }
+
+    public void setGoodsList(String goodsList) {
+        this.goodsList = goodsList;
     }
 }

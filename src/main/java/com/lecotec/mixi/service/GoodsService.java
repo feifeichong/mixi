@@ -2,6 +2,7 @@ package com.lecotec.mixi.service;
 
 import com.lecotec.mixi.model.entity.Goods;
 import com.lecotec.mixi.model.parameter.GoodsSearchParam;
+import com.lecotec.mixi.model.parameter.IdsParam;
 import com.lecotec.mixi.repository.GoodsRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.criteria.Predicate;
@@ -52,5 +54,16 @@ public class GoodsService {
     public boolean deleteGoods(long id) {
         goodsRepository.deleteById(id);
         return true;
+    }
+
+    public Page<Goods> searchByIds(IdsParam idsParam) {
+        return goodsRepository.findAll((Specification<Goods>) (root, query, criteriaBuilder) -> {
+            if (CollectionUtils.isEmpty(idsParam.getIds())) {
+                query.where(root.in(-1L));
+            } else {
+                query.where(root.in(idsParam.getIds()));
+            }
+            return query.getRestriction();
+        }, PageRequest.of(idsParam.getPageNumber(), idsParam.getPageSize()));
     }
 }

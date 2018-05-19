@@ -1,0 +1,190 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1>设置菜单的菜品【<span id="menuNameTitle"></span>】</h1>
+    </div>
+    <div id="toolbar">
+        菜品类型：<select style="padding: 6px 12px; border-radius: 4px;" onchange="menuGoodsSettingPage.onGoodsTypeChange();"
+                     id="goodsTypeSelect"></select>
+    </div>
+    <div class="table-responsive">
+        <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-search="true"
+               data-toolbar="#toolbar" data-search-on-enter-key="true"></table>
+    </div>
+    <h2 class="sub-header">已选菜品列表</h2>
+    <div class="table-responsive">
+        <table id="hasSelectedTableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"
+               data-toolbar="#toolbar" data-search-on-enter-key="true"></table>
+    </div>
+</div>
+<script>
+    var menuGoodsSettingPage = {};
+    (function (page) {
+        var _menuData = null;
+        var _goodsTypes = null;
+
+        page.setMenuData = function (menuData) {
+            _menuData = menuData;
+            $("#menuNameTitle").html(_menuData.name);
+            initHasSelectedTableDatas();
+        };
+
+        page.onGoodsTypeChange = function () {
+            $("#tableResult").bootstrapTable("refresh", {silent: true});
+        };
+
+        function initGoodsType() {
+            $.ajax({
+                type: "get", url: "api/merchant/goodsType/all",
+                data: {pageNumber: 0, pageSize: 100}, async: false,
+                success: function (result) {
+                    _goodsTypes = result.rows;
+
+                    var select = $("#goodsTypeSelect");
+                    select.append('<option value="">全部</option>');
+                    for (var i = 0; i < result.rows.length; i++) {
+                        select.append('<option value="' + result.rows[i].id + '">' + result.rows[i].name + '</option>');
+                    }
+                }
+            });
+        }
+
+        function refreshAllTable() {
+            $("#tableResult").bootstrapTable("refresh", {silent: true});
+            $("#hasSelectedTableResult").bootstrapTable("refresh", {silent: true});
+        }
+
+        function setMenuGoods(goodsId, status) {
+            var arr = JSON.parse(_menuData.goodsList);
+            if (status) {
+                arr.push(goodsId);
+            } else {
+                arr.remove(goodsId);
+            }
+            _menuData.goodsList = JSON.stringify(arr);
+
+            $.ajax({
+                type: "POST", url: "api/merchant/menu",
+                data: JSON.stringify(_menuData), contentType: "application/json",
+                success: function (result) {
+                    if (result.status === SUCCESS) {
+                        setTimeout(refreshAllTable, 1000);
+                    }
+                }
+            });
+        }
+
+        function initTableDatas() {
+            $('#tableResult').bootstrapTable({
+                url: 'api/merchant/goods/searchByParam',
+                method: "get",
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: function (params) {
+                    return {
+                        pageSize: params.limit, pageNumber: (params.offset / params.limit),
+                        name: params.search, goodsTypeId: $("#goodsTypeSelect").val()
+                    };
+                },
+                columns: [
+                    {
+                        title: '序号', align: "center",
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {
+                        title: '分类', field: 'goodsTypeId',
+                        formatter: function (value, row, index) {
+                            return Enumerable.from(_goodsTypes).first(function (n) {
+                                return n.id === row.goodsTypeId
+                            }).name;
+                        }
+                    },
+                    {
+                        title: '菜品图片', field: 'imagePath',
+                        formatter: function (value, row, index) {
+                            return '<img src="' + row.imagePath + '" alt="" width="100" height="100">';
+                        }
+                    },
+                    {title: '菜品名称', field: 'name'},
+                    {title: '上架时间', field: 'creationTime'},
+                    {
+                        title: '状态', field: 'isActive',
+                        formatter: function (value, row, index) {
+                            return '<input id="isActiveChk' + index + '" value="' + row.id + '" type="checkbox" '
+                                + (JSON.parse(_menuData.goodsList).includes(row.id) ? "checked" : "")
+                                + ' data-on-color="success" data-off-color="danger" data-on-text="已选" data-off-text="未选"/>';
+                        }
+                    }
+                ],
+                onLoadSuccess: function (data) {
+                    for (var i = 0; i < data.rows.length; i++) {
+                        $("#isActiveChk" + i).bootstrapSwitch('state', JSON.parse(_menuData.goodsList).includes(data.rows[i].id))
+                            .on("switchChange.bootstrapSwitch", function (event, status) {
+                                setMenuGoods(parseInt(event.target.value), status);
+                            });
+                    }
+                }
+            });
+        };
+
+        function initHasSelectedTableDatas() {
+            $('#hasSelectedTableResult').bootstrapTable({
+                url: 'api/merchant/goods/searchByIds',
+                method: "post",
+                queryParams: function (params) {
+                    return {
+                        pageSize: params.limit, pageNumber: (params.offset / params.limit),
+                        ids: JSON.parse(_menuData.goodsList)
+                    };
+                },
+                columns: [
+                    {
+                        title: '序号', align: "center",
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {
+                        title: '分类', field: 'goodsTypeId',
+                        formatter: function (value, row, index) {
+                            return Enumerable.from(_goodsTypes).first(function (n) {
+                                return n.id === row.goodsTypeId
+                            }).name;
+                        }
+                    },
+                    {
+                        title: '菜品图片', field: 'imagePath',
+                        formatter: function (value, row, index) {
+                            return '<img src="' + row.imagePath + '" alt="" width="100" height="100">';
+                        }
+                    },
+                    {title: '菜品名称', field: 'name'},
+                    {title: '上架时间', field: 'creationTime'},
+                    {
+                        title: '状态', field: 'isActive',
+                        formatter: function (value, row, index) {
+                            return '<input id="isHasCheckedChk' + index + '" value="' + row.id + '" type="checkbox" '
+                                + (JSON.parse(_menuData.goodsList).includes(row.id) ? "checked" : "")
+                                + ' data-on-color="success" data-off-color="danger" data-on-text="已选" data-off-text="未选"/>';
+                        }
+                    }
+                ],
+                onLoadSuccess: function (data) {
+                    for (var i = 0; i < data.rows.length; i++) {
+                        $("#isHasCheckedChk" + i).bootstrapSwitch('state', JSON.parse(_menuData.goodsList).includes(data.rows[i].id))
+                            .on("switchChange.bootstrapSwitch", function (event, status) {
+                                setMenuGoods(JSON.parse(event.target.value), status);
+                            });
+                    }
+                }
+            });
+        };
+
+        $(function () {
+            initGoodsType();
+            initTableDatas();
+        });
+    })(menuGoodsSettingPage);
+</script>

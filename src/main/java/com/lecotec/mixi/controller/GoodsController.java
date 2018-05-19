@@ -2,6 +2,7 @@ package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.Goods;
 import com.lecotec.mixi.model.parameter.GoodsSearchParam;
+import com.lecotec.mixi.model.parameter.IdsParam;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
@@ -29,6 +30,12 @@ public class GoodsController {
     @GetMapping("searchByParam")
     public BootstrapTableResult<Goods> searchByParam(GoodsSearchParam goodsSearchParam) {
         Page<Goods> goodsPage = goodsService.searchByParam(goodsSearchParam);
+        return new BootstrapTableResult<>(goodsPage.getTotalElements(), goodsPage.getContent());
+    }
+
+    @PostMapping("searchByIds")
+    public BootstrapTableResult<Goods> searchByIds(@RequestBody IdsParam idsParam) {
+        Page<Goods> goodsPage = goodsService.searchByIds(idsParam);
         return new BootstrapTableResult<>(goodsPage.getTotalElements(), goodsPage.getContent());
     }
 
