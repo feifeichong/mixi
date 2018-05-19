@@ -1,15 +1,19 @@
 <style>
-    .goodsAddLabel { font-size: 18px;}
+    .goodsLabel { font-size: 18px;}
 </style>
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
-        <h1>新增菜品</h1>
+        <div class="right">
+            <button id="backBtn" style="display: none;" class="btn btn-default" onclick="indexPage.setContentBody('goods.html')" type="button">返回
+            </button>
+        </div>
+        <h1 id="goodsUpdatePageTitle">修改菜品</h1>
     </div>
 
-    <form class="form-horizontal" action="javascript:goodsAddPage.save();">
+    <form class="form-horizontal" action="javascript:goodsUpdatePage.update();">
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsAddLabel">基本信息</label>
+            <label class="col-sm-1 control-label goodsLabel">基本信息</label>
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">商品分类</span>
                 <select id="goodsTypeSelect" class="form-control"/>
@@ -45,7 +49,7 @@
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsAddLabel">套餐设置</label>
+            <label class="col-sm-1 control-label goodsLabel">套餐设置</label>
             <div class="col-sm-1" style="width: 11%;">
                 <div class="radio">
                     <label><input type="radio" name="isSetMeal" data-text="非套餐" checked>非套餐</label> &nbsp;&nbsp;
@@ -59,7 +63,7 @@
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsAddLabel">特色标签</label>
+            <label class="col-sm-1 control-label goodsLabel">特色标签</label>
             <div class="col-sm-4">
                 <div class="checkbox">
                     <label><input name="specialTag" type="checkbox" data-text="咪嘻推荐" checked>咪嘻推荐</label> &nbsp;&nbsp;&nbsp;
@@ -71,7 +75,7 @@
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsAddLabel">商品规格</label>
+            <label class="col-sm-1 control-label goodsLabel">商品规格</label>
             <div class="col-sm-11 input-group">
                 <div class="col-sm-12"><h6>为您的商品添加不同的规格，如：大杯、小杯等 <span style="color:red;">至少要留一个规格，不能全部移除</span></h6></div>
                 <div class="col-sm-12">
@@ -107,15 +111,15 @@
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1 input-group">
-                        <input class="btn btn-warning" onclick="goodsAddPage.addSpecs();" type="button" value="添加"/>
-                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsAddPage.deleteSpecs();" type="button" value="删除"/>
+                        <input class="btn btn-warning" onclick="goodsUpdatePage.addSpecs();" type="button" value="添加"/>
+                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsUpdatePage.deleteSpecs();" type="button" value="删除"/>
                     </div>
                 </div>
             </div>
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsAddLabel">商品属性</label>
+            <label class="col-sm-1 control-label goodsLabel">商品属性</label>
             <div class="col-sm-11 input-group">
                 <div class="col-sm-12"><h6>为您的商品添加不同的属性，如：辣度、甜度等。</h6></div>
                 <div class="col-sm-12">
@@ -130,15 +134,15 @@
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-2 input-group">
-                        <input class="btn btn-warning" style="margin-left: 5px;" onclick="goodsAddPage.addProp();" type="button" value="添加"/>
-                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsAddPage.deleteProp();" type="button" value="删除"/>
+                        <input class="btn btn-warning" style="margin-left: 5px;" onclick="goodsUpdatePage.addProp();" type="button" value="添加"/>
+                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsUpdatePage.deleteProp();" type="button" value="删除"/>
                     </div>
                 </div>
             </div>
         </div>
         <hr>
         <div id="goodsMaterial" class="form-group">
-            <label class="col-sm-1 control-label goodsAddLabel">商品原料</label>
+            <label class="col-sm-1 control-label goodsLabel">商品原料</label>
             <div class="col-sm-11 input-group">
                 <div class="col-sm-12"><h6>为您的商品添加不同的原料，如：土豆、白菜等。</h6></div>
                 <div class="col-sm-12">
@@ -157,7 +161,7 @@
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsAddLabel">售卖时间</label>
+            <label class="col-sm-1 control-label goodsLabel">售卖时间</label>
             <div class="col-sm-4">
                 <div class="radio">
                     <label><input type="radio" name="sellingTimeRadio" data-text="全时段售卖" checked>全时段售卖</label> &nbsp;&nbsp;
@@ -166,7 +170,7 @@
             </div>
         </div>
         <div id="sellingTime" class="form-group" style="display: none;">
-            <label class="col-sm-1 control-label goodsAddLabel"></label>
+            <label class="col-sm-1 control-label goodsLabel"></label>
             <div class="col-sm-2 input-group" style="float:left;margin-left: 15px;">
                 <span class="input-group-addon">开始时间</span>
                 <input id="beginTime" type="text" class="form-control"/>
@@ -177,7 +181,7 @@
             </div>
         </div>
         <div id="sellingFrequency" class="form-group" style="display: none;">
-            <label class="col-sm-1 control-label goodsAddLabel"></label>
+            <label class="col-sm-1 control-label goodsLabel"></label>
             <div class="col-sm-4 input-group" style="float:left;margin-left: 15px;">
                 <div class="checkbox">
                     <label><input name="sellingDay" type="checkbox" data-text="周一">周一</label> &nbsp;&nbsp;&nbsp;
@@ -194,18 +198,181 @@
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
-                <input id="submitBtn" class="btn btn-primary" type="submit" value="提交"/>
+                <input id="submitBtn" class="btn btn-primary" type="submit" value="更新"/>
                 &nbsp;&nbsp;
-                <input id="cancelBtn" class="btn btn-default" type="reset" value="重置"/>
+                <input id="cancelBtn" class="btn btn-default" onclick="indexPage.setContentBody('goods.html')" type="button" value="返回"/>
             </div>
         </div>
     </form>
     <div id="cmModal"></div>
 </div>
 <script>
-    var goodsAddPage = {};
+    var goodsUpdatePage = {};
     (function (page) {
         var _data = {};
+
+        page.isEditing = function (isEdit) {
+            if (!isEdit) {
+                $("input").attr("disabled", !isEdit);
+                $("select").attr("disabled", !isEdit);
+                $("textarea").attr("disabled", !isEdit);
+                $("#submitBtn").hide();
+                $("#cancelBtn").hide();
+                $("#goodsUpdatePageTitle").html("查看菜品");
+                $("#backBtn").show();
+            }
+        };
+
+        function initGoodsTags() {
+            var tags = JSON.parse(_data.tag);
+            $.each($("input[name='specialTag']"), function () {
+                if (tags.includes(this.getAttribute("data-text")))
+                    $(this).attr("checked", true);
+            });
+        }
+
+        function initGoodsType() {
+            $.ajax({
+                type: "get", url: "api/merchant/goodsType/all",
+                data: {pageNumber: 0, pageSize: 100}, async: false,
+                success: function (result) {
+                    for (var i = 0; i < result.rows.length; i++) {
+                        $("#goodsTypeSelect").append('<option value="' + result.rows[i].id + '">' + result.rows[i].name + '</option>');
+                    }
+                    $("#goodsTypeSelect").val(_data.goodsTypeId);
+                }
+            });
+        }
+
+        function initFileUploadControl() {
+            var option = {
+                language: 'zh', uploadUrl: "api/common/fileUpload", showUpload: true,
+                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
+                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1,
+                initialPreview: [_data.imagePath], initialPreviewAsData: true
+            };
+            $("#goodsImageUpload").fileinput(option).on("fileuploaded", function (event, tableJsonResult) {
+                if (tableJsonResult.response.status === SUCCESS) {
+                    _data.imagePath = tableJsonResult.response.data;
+                }
+            });
+        }
+
+        function initSetMealControl() {
+            var setMealDetail = JSON.parse(_data.setMealDetail);
+            var setMealRadios = $("input[name='isSetMeal']");
+
+            if (setMealDetail[0] === "套餐") {
+                setMealRadios.eq(1).attr("checked", true);
+                $("#setMealPersonCount").show();
+                $("#setMealPersonCountTxt").val(setMealDetail[1]);
+            } else if (setMealDetail[0] === "非套餐") {
+                setMealRadios.eq(0).attr("checked", true);
+                $("#setMealPersonCountTxt").hide();
+            }
+
+            setMealRadios.click(function (e) {
+                if (e.target.getAttribute("data-text") === "套餐") {
+                    $("#setMealPersonCount").show();
+                    $("#setMealPersonCountTxt").attr("required", "required");
+                } else {
+                    $("#setMealPersonCount").hide();
+                    $("#setMealPersonCountTxt").removeAttr("required");
+                }
+            });
+        }
+
+        function initSpecs() {
+            var specs = JSON.parse(_data.specs);
+            for (var i = 0; i < specs.length - 1; i++) {
+                var copyDom = $("div[data-repeat='goodsSpecs']");
+                var container = copyDom.parent();
+                container.append(copyDom.clone());
+            }
+            $("div[data-repeat='goodsSpecs']").each(function (i, dom) {
+                var select = $(dom).find("select");
+                var inputs = $(dom).find("input");
+                inputs[0].value = specs[i].name;
+                inputs[1].value = specs[i].price;
+                inputs[2].value = specs[i].mealBoxPrice;
+                select.val(specs[i].repertoryType);
+                inputs[3].value = specs[i].currentRepertory;
+                inputs[4].value = specs[i].maxRepertory;
+                inputs[5].value = specs[i].weight;
+                inputs[6].value = specs[i].barCode;
+                inputs[7].value = specs[i].SKUCode;
+            });
+        }
+
+        function initProperties() {
+            var properties = JSON.parse(_data.properties);
+            for (var i = 0; i < properties.length - 1; i++) {
+                var copyDom = $("div[data-repeat='goodsProp']");
+                var container = copyDom.parent();
+                container.append(copyDom.clone());
+            }
+            $("div[data-repeat='goodsProp']").each(function (i, dom) {
+                var inputs = $(dom).find("input");
+                inputs[0].value = properties[i].name;
+                inputs[1].value = properties[i].subdivision[0];
+                inputs[2].value = properties[i].subdivision[1];
+                inputs[3].value = properties[i].subdivision[2];
+                inputs[4].value = properties[i].subdivision[3];
+                inputs[5].value = properties[i].subdivision[4];
+            });
+        }
+
+        function initMaterial() {
+            var materials = JSON.parse(_data.material);
+            var inputs = $("#goodsMaterial input");
+            inputs[0].value = materials[0];
+            inputs[1].value = materials[1];
+            inputs[2].value = materials[2];
+            inputs[3].value = materials[3];
+            inputs[4].value = materials[4];
+            inputs[5].value = materials[5];
+            inputs[6].value = materials[6];
+            inputs[7].value = materials[7];
+            inputs[8].value = materials[8];
+            inputs[9].value = materials[9];
+        }
+
+        function initSellingConfig() {
+            var sellingConfig = JSON.parse(_data.sellingConfig);
+            var sellingTimeRadios = $("input[name='sellingTimeRadio']");
+
+            if (sellingConfig.sellingConfigType === "全时段售卖") {
+                sellingTimeRadios.eq(0).attr("checked", true);
+            } else if (sellingConfig.sellingConfigType === "自定义时间") {
+                sellingTimeRadios.eq(1).attr("checked", true);
+                $("#sellingTime").show();
+                $("#sellingFrequency").show();
+                $("#beginTime").val(sellingConfig.beginTime);
+                $("#endTime").val(sellingConfig.endTime);
+                $("#sellingFrequency input").each(function (index, dom) {
+                    if (sellingConfig.sellingFrequency.includes(dom.getAttribute("data-text"))) {
+                        $(dom).attr("checked", true);
+                    }
+                });
+            }
+        }
+
+        page.setData = function (data) {
+            _data = data;
+            $("#goodsName").val(_data.name);
+            $("#goodsDescription").val(_data.description);
+            $("#minPurchaseCountTxt").val(_data.minPurchaseCount);
+
+            initGoodsType();
+            initFileUploadControl();
+            initSetMealControl();
+            initGoodsTags();
+            initSpecs();
+            initProperties();
+            initMaterial();
+            initSellingConfig();
+        };
 
         function prepareMealDetails() {
             var mealDetails = [];
@@ -213,7 +380,7 @@
                 if (this.checked) {
                     mealDetails.push(this.getAttribute("data-text"));
                     if (this.getAttribute("data-text") === "套餐") {
-                        mealDetails.push($("#setMealPersonCountTxt").val());
+                        mealDetails.push($("#setMealPersonCountTxt").val() + "人套餐");
                     }
                 }
             });
@@ -283,7 +450,7 @@
             });
         }
 
-        page.save = function () {
+        page.update = function () {
             _data.goodsTypeId = parseInt($("#goodsTypeSelect").val());
             _data.name = $("#goodsName").val();
             _data.description = $("#goodsDescription").val();
@@ -351,45 +518,7 @@
             $(event.target).parent().parent().remove();
         };
 
-        function initGoodsType() {
-            $.ajax({
-                type: "get", url: "api/merchant/goodsType/all",
-                data: {pageNumber: 0, pageSize: 100},
-                success: function (result) {
-                    for (var i = 0; i < result.rows.length; i++) {
-                        $("#goodsTypeSelect").append('<option value="' + result.rows[i].id + '">' + result.rows[i].name + '</option>');
-                    }
-                }
-            });
-        }
-
-        function initFileUploadControl() {
-            var option = {
-                language: 'zh', uploadUrl: "api/common/fileUpload", showUpload: true,
-                showRemove: true, showPreview: true, dropZoneEnabled: false,
-                showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
-                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1
-            };
-            $("#goodsImageUpload").fileinput(option).on("fileuploaded", function (event, tableJsonResult) {
-                if (tableJsonResult.response.status === SUCCESS) {
-                    _data.imagePath = tableJsonResult.response.data;
-                }
-            });
-        }
-
-        function initSetMealControl() {
-            $("input[name='isSetMeal']").click(function (e) {
-                if (e.target.getAttribute("data-text") === "套餐") {
-                    $("#setMealPersonCount").show();
-                    $("#setMealPersonCountTxt").attr("required", "required");
-                } else {
-                    $("#setMealPersonCount").hide();
-                    $("#setMealPersonCountTxt").removeAttr("required");
-                }
-            });
-        }
-
-        function initSellingTimerPicker() {
+        function initSellingTimerPickerControls() {
             $('#beginTime').datetimepicker({
                 format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
             });
@@ -408,11 +537,8 @@
         }
 
         $(function () {
-            initGoodsType();
-            initFileUploadControl();
-            initSetMealControl();
-            initSellingTimerPicker();
+            initSellingTimerPickerControls();
             $("#cmModal").load("commonModal.html");
         });
-    })(goodsAddPage);
+    })(goodsUpdatePage);
 </script>
