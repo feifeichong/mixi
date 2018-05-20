@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "mx_exam_question")
-public class examQuestion {
+public class ExamQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)

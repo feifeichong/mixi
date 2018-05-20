@@ -6,72 +6,54 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 订单管理的实体类
- *
- * @author XINGYI
- */
 @Entity
 @Table(name = "mx_order")
 public class Order implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)
     private long id;
 
-    @Column(name = "rider_user_id", columnDefinition = "BIGINT(20) DEFAULT NULL COMMENT '骑手的ID'")
-    private long riderId;
+    @Column(name = "serial_number")
+    private String serialNumber;
 
-    @Column(name = "rider_user_name", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '骑手的名字'")
-    private String riderName;
+    @Column(name = "station_info")
+    private String stationInfo;
 
-    @Column(name = "customer_id", columnDefinition = "BIGINT(20) DEFAULT NULL COMMENT '用户的ID'")
-    private long customerId;
+    @Column(name = "customer_info")
+    private String customerInfo;
 
-    @Column(name = "customer_name", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '用户的名字'")
-    private String customerName;
+    @Column(name = "original_price")
+    private double originalPrice;
 
-    @Column(name = "order_price", columnDefinition = "double DEFAULT NULL COMMENT '订单价格'")
-    private Double orderPrice;
+    @Column(name = "real_price")
+    private double realPrice;
 
-    @Column(name = "order_state", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '订单状态'")
-    private String orderState;
+    @Column(name = "cost_detail")
+    private String costDetail;
 
-    @Column(name = "repay_state", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '还款状态'")
-    private String repayState;
+    private String status;
 
-    @Column(name = "open_state", columnDefinition = "bit(1) DEFAULT NULL COMMENT '启用状态'")
-    private Boolean openState;
+    @Column(name = "payment_type")
+    private String paymentType;
 
-    @Column(name = "station_id", columnDefinition = "BIGINT(20) DEFAULT NULL COMMENT '站点ID'")
-    private long stationId;
+    @Column(name = "payment_time")
+    private Date paymentTime;
 
-    @Column(name = "station_name", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '站点名称'")
-    private String stationName;
+    @Column(name = "dispatch_time")
+    private Date dispatchTime;
 
-    @Column(name = "order_tag", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '订单分类标识'")
-    private String tag;
+    @Column(name = "complete_time")
+    private Date complete_time;
 
-    @Column(name = "surplus_nopay", columnDefinition = "int DEFAULT NULL COMMENT '霸王餐月剩余次数'")
-    private int surplusNopay;
+    @Column(name = "goods_list", columnDefinition = "TEXT NULL")
+    private String goodsList;
 
-    @Column(columnDefinition = "varchar(255) DEFAULT NULL COMMENT '支付方式'")
-    private String payway;
+    @Column(name = "receiver_info")
+    private String receiverInfo;
 
-    @Column(name = "repay_time", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '还款时间'")
-    private String repayTime;
-
-    private String remark;
-
-    @Column(name = "pay_time", columnDefinition = "DATETIME DEFAULT NULL COMMENT '支付时间'")
-    private Date payTime;
-
-    @Column(name = "user_address", columnDefinition = "varchar(2000) DEFAULT NULL COMMENT '用户地址'")
-    private String userAddress;
-
-    @Column(name = "user_phoneno", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '用户电话号码'")
-    private String userPhoneNo;
+    @Column(name = "rider_info")
+    private String riderInfo;
 
     @ApiModelProperty(hidden = true)
     @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
@@ -85,148 +67,116 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public long getRiderId() {
-        return riderId;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setRiderId(long riderId) {
-        this.riderId = riderId;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
-    public String getRiderName() {
-        return riderName;
+    public String getStationInfo() {
+        return stationInfo;
     }
 
-    public void setRiderName(String riderName) {
-        this.riderName = riderName;
+    public void setStationInfo(String stationInfo) {
+        this.stationInfo = stationInfo;
     }
 
-    public long getCustomerId() {
-        return customerId;
+    public String getCustomerInfo() {
+        return customerInfo;
     }
 
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
+    public void setCustomerInfo(String customerInfo) {
+        this.customerInfo = customerInfo;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public double getOriginalPrice() {
+        return originalPrice;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setOriginalPrice(double originalPrice) {
+        this.originalPrice = originalPrice;
     }
 
-    public Double getOrderPrice() {
-        return orderPrice;
+    public double getRealPrice() {
+        return realPrice;
     }
 
-    public void setOrderPrice(Double orderPrice) {
-        this.orderPrice = orderPrice;
+    public void setRealPrice(double realPrice) {
+        this.realPrice = realPrice;
     }
 
-    public String getOrderState() {
-        return orderState;
+    public String getCostDetail() {
+        return costDetail;
     }
 
-    public void setOrderState(String orderState) {
-        this.orderState = orderState;
+    public void setCostDetail(String costDetail) {
+        this.costDetail = costDetail;
     }
 
-    public String getRepayState() {
-        return repayState;
+    public String getStatus() {
+        return status;
     }
 
-    public void setRepayState(String repayState) {
-        this.repayState = repayState;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public Boolean getOpenState() {
-        return openState;
+    public String getPaymentType() {
+        return paymentType;
     }
 
-    public void setOpenState(Boolean openState) {
-        this.openState = openState;
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
     }
 
-    public long getStationId() {
-        return stationId;
+    public Date getPaymentTime() {
+        return paymentTime;
     }
 
-    public void setStationId(long stationId) {
-        this.stationId = stationId;
+    public void setPaymentTime(Date paymentTime) {
+        this.paymentTime = paymentTime;
     }
 
-    public String getStationName() {
-        return stationName;
+    public Date getDispatchTime() {
+        return dispatchTime;
     }
 
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
+    public void setDispatchTime(Date dispatchTime) {
+        this.dispatchTime = dispatchTime;
     }
 
-    public String getTag() {
-        return tag;
+    public Date getComplete_time() {
+        return complete_time;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setComplete_time(Date complete_time) {
+        this.complete_time = complete_time;
     }
 
-    public int getSurplusNopay() {
-        return surplusNopay;
+    public String getGoodsList() {
+        return goodsList;
     }
 
-    public void setSurplusNopay(int surplusNopay) {
-        this.surplusNopay = surplusNopay;
+    public void setGoodsList(String goodsList) {
+        this.goodsList = goodsList;
     }
 
-    public String getPayway() {
-        return payway;
+    public String getReceiverInfo() {
+        return receiverInfo;
     }
 
-    public void setPayway(String payway) {
-        this.payway = payway;
+    public void setReceiverInfo(String receiverInfo) {
+        this.receiverInfo = receiverInfo;
     }
 
-    public String getRepayTime() {
-        return repayTime;
+    public String getRiderInfo() {
+        return riderInfo;
     }
 
-    public void setRepayTime(String repayTime) {
-        this.repayTime = repayTime;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public Date getPayTime() {
-        return payTime;
-    }
-
-    public void setPayTime(Date payTime) {
-        this.payTime = payTime;
-    }
-
-    public String getUserAddress() {
-        return userAddress;
-    }
-
-    public void setUserAddress(String userAddress) {
-        this.userAddress = userAddress;
-    }
-
-    public String getUserPhoneNo() {
-        return userPhoneNo;
-    }
-
-    public void setUserPhoneNo(String userPhoneNo) {
-        this.userPhoneNo = userPhoneNo;
+    public void setRiderInfo(String riderInfo) {
+        this.riderInfo = riderInfo;
     }
 
     public Date getCreationTime() {
@@ -235,15 +185,5 @@ public class Order implements Serializable {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Order [id=" + id + ", riderId=" + riderId + ", riderName=" + riderName + ", customerId=" + customerId
-                + ", customerName=" + customerName + ", orderPrice=" + orderPrice + ", orderState=" + orderState
-                + ", repayState=" + repayState + ", openState=" + openState + ", stationId=" + stationId
-                + ", stationName=" + stationName + ", tag=" + tag + ", surplusNopay=" + surplusNopay + ", payway="
-                + payway + ", repayTime=" + repayTime + ", remark=" + remark + ", payTime=" + payTime + ", userAddress="
-                + userAddress + ", userPhoneNo=" + userPhoneNo + ", creationTime=" + creationTime + "]";
     }
 }
