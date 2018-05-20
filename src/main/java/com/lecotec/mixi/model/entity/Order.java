@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "mx_order")
@@ -15,12 +16,15 @@ public class Order implements Serializable {
     private long id;
 
     @Column(name = "serial_number")
-    private String serialNumber;
+    @ApiModelProperty(hidden = true)
+    private String serialNumber = UUID.randomUUID().toString();
 
     @Column(name = "station_info")
+    @ApiModelProperty(hidden = true)
     private String stationInfo;
 
     @Column(name = "customer_info")
+    @ApiModelProperty(hidden = true)
     private String customerInfo;
 
     @Column(name = "original_price")
@@ -30,6 +34,7 @@ public class Order implements Serializable {
     private double realPrice;
 
     @Column(name = "cost_detail")
+    @ApiModelProperty(hidden = true)
     private String costDetail;
 
     private String status;
@@ -38,21 +43,27 @@ public class Order implements Serializable {
     private String paymentType;
 
     @Column(name = "payment_time")
+    @ApiModelProperty(hidden = true)
     private Date paymentTime;
 
     @Column(name = "dispatch_time")
+    @ApiModelProperty(hidden = true)
     private Date dispatchTime;
 
     @Column(name = "complete_time")
+    @ApiModelProperty(hidden = true)
     private Date complete_time;
 
     @Column(name = "goods_list", columnDefinition = "TEXT NULL")
+    @ApiModelProperty(hidden = true)
     private String goodsList;
 
     @Column(name = "receiver_info")
+    @ApiModelProperty(hidden = true)
     private String receiverInfo;
 
     @Column(name = "rider_info")
+    @ApiModelProperty(hidden = true)
     private String riderInfo;
 
     @ApiModelProperty(hidden = true)
