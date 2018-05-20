@@ -146,6 +146,7 @@
             $("#menuMaintainModal").modal("show");
             _maintainType = "edit";
             $("#menuName").val(_maintainData.name);
+            $("#stationSelect").val(_maintainData.stationId);
         };
 
         page.delete = function (id) {

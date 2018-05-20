@@ -25,7 +25,7 @@ public class Menu {
 
     @Column(name = "goods_list", columnDefinition = "VARCHAR(255) DEFAULT '[]'")
     @ApiModelProperty(hidden = true)
-    private String goodsList;
+    private String goodsList = "[]";
 
     @Column(name = "station_id")
     private long stationId;
