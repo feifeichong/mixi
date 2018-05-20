@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@Api(tags = "商品数据维护接口")
+@Api(tags = "商品数据接口")
 @RequestMapping("/api/merchant/goods")
 public class GoodsController {
 

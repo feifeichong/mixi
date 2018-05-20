@@ -108,7 +108,8 @@ public class CommonController {
     }
 
     @RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
-    public ResponseObject fileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws Exception {
+    @ApiOperation("文件上传接口")
+    public ResponseObject fileUpload(@RequestParam("file") MultipartFile file) throws Exception {
         String fileName = file.getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf('.'));
         String newFileName = fileName.substring(0, fileName.lastIndexOf('.') - 1) +

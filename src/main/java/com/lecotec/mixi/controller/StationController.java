@@ -5,6 +5,7 @@ import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
 import com.lecotec.mixi.service.StationService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/api/merchant/station")
+@Api(tags = "站点信息接口")
 public class StationController {
     @Autowired
     private StationService stationService;

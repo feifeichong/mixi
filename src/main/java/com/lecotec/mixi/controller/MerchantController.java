@@ -27,7 +27,7 @@ import static com.lecotec.mixi.common.ConstString.*;
 
 @RestController
 @RequestMapping("/api/merchant")
-@Api(value = "/api/merchant", tags = "商家登录、注册、忘记密码和修改密码接口集合")
+@Api(tags = "商家登录、注册、忘记密码和修改密码接口集合")
 public class MerchantController {
 
     @Autowired

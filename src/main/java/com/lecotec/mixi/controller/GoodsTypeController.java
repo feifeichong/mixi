@@ -5,6 +5,7 @@ import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
 import com.lecotec.mixi.service.GoodsTypeService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/api/merchant/goodsType")
+@Api(tags = "商品类型接口")
 public class GoodsTypeController {
 
     @Autowired
