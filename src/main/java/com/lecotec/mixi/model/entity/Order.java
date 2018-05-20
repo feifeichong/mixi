@@ -19,9 +19,15 @@ public class Order implements Serializable {
     @ApiModelProperty(hidden = true)
     private String serialNumber = UUID.randomUUID().toString();
 
+    @Column(name = "station_id")
+    private long stationId;
+
     @Column(name = "station_info")
     @ApiModelProperty(hidden = true)
     private String stationInfo;
+
+    @Column(name = "customer_id")
+    private long customerId;
 
     @Column(name = "customer_info")
     @ApiModelProperty(hidden = true)
@@ -196,5 +202,21 @@ public class Order implements Serializable {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public long getStationId() {
+        return stationId;
+    }
+
+    public void setStationId(long stationId) {
+        this.stationId = stationId;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 }

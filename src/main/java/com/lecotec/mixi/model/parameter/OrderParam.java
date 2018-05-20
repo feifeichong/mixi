@@ -7,7 +7,7 @@ public class OrderParam extends Order {
     private StationInfo stationInfoJson;
     private CustomerInfo customerInfoJson;
     private CostDetail costDetailJson;
-    private GoodsList goodsListJson;
+    private GoodsList[] goodsListJsons;
     private ReceiverInfo receiverInfoJson;
     private RiderInfo riderInfoJson;
 
@@ -38,13 +38,13 @@ public class OrderParam extends Order {
         this.setCostDetail(JSON.toJSONString(costDetailJson));
     }
 
-    public GoodsList getGoodsListJson() {
-        return goodsListJson;
+    public GoodsList[] getGoodsListJsons() {
+        return goodsListJsons;
     }
 
-    public void setGoodsListJson(GoodsList goodsListJson) {
-        this.goodsListJson = goodsListJson;
-        this.setGoodsList(JSON.toJSONString(goodsListJson));
+    public void setGoodsListJsons(GoodsList[] goodsListJsons) {
+        this.goodsListJsons = goodsListJsons;
+        this.setGoodsList(JSON.toJSONString(goodsListJsons));
     }
 
     public ReceiverInfo getReceiverInfoJson() {
