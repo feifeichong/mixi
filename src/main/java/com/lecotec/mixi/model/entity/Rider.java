@@ -1,6 +1,7 @@
 package com.lecotec.mixi.model.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -54,6 +55,9 @@ public class Rider {
 
     @Column(name = "is_start_working")
     private boolean isStartWorking;
+
+    @Column(name = "job_title")
+    private String jobTitle;//职称：全职、兼职
 
     @Column(name = "station_id")
     private long stationId;
@@ -196,5 +200,13 @@ public class Rider {
 
     public void setStationId(long stationId) {
         this.stationId = stationId;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 }

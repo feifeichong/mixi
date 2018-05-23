@@ -88,11 +88,10 @@
         };
 
         page.showDetail = function (id) {
-            // var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
-            // indexPage.setContentBody("goodsUpdate.html", function (response, status, xhr) {
-            //     goodsUpdatePage.isEditing(false);
-            //     goodsUpdatePage.setData(currentData);
-            // });
+            var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            indexPage.setContentBody("orderDetail.html", function (response, status, xhr) {
+                orderDetailPage.initData(currentData);
+            });
         };
 
         page.delete = function (id) {

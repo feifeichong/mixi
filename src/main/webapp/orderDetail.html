@@ -1,0 +1,132 @@
+<div id="orderDetailDiv" v-if="orderInfo" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('order.html');" type="button">返回</button>
+        </div>
+        <h1>当前订单状态：<span>{{orderInfo.status}}</span></h1>
+    </div>
+    <h3 class="sub-header">订单基本信息</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>订单编号</th>
+            <th>站点</th>
+            <th>购买人ID</th>
+            <th>订单原价</th>
+            <th>支付金额（元）</th>
+            <th>订单状态</th>
+            <th>支付方式</th>
+        </tr>
+        <tr>
+            <td>{{orderInfo.serialNumber}}</td>
+            <td>{{orderInfo.station.name}}</td>
+            <td>{{orderInfo.customer.phoneNumber}}</td>
+            <td>{{orderInfo.originalPrice}}</td>
+            <td>{{orderInfo.realPrice}}</td>
+            <td>{{orderInfo.status}}</td>
+            <td>{{orderInfo.paymentType}}</td>
+        </tr>
+        <tr>
+            <th>创建时间</th>
+            <th>付款时间</th>
+            <th>派单时间</th>
+            <th>完成时间</th>
+        </tr>
+        <tr>
+            <td>{{orderInfo.creationTime}}</td>
+            <td>{{orderInfo.paymentTime}}</td>
+            <td>{{orderInfo.dispatchTime}}</td>
+            <td>{{orderInfo.completeTime}}</td>
+        </tr>
+    </table>
+    <h3 class="sub-header">商品基本信息</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>商品编号</th>
+            <th>商品分类</th>
+            <th>商品名称</th>
+            <th>商品图片</th>
+            <th>规格</th>
+            <th>数量</th>
+            <th>小计（元）</th>
+        </tr>
+        <tr>
+            <td>{{orderInfo.serialNumber}}</td>
+            <td>{{orderInfo.station.name}}</td>
+            <td>{{orderInfo.customer.phoneNumber}}</td>
+            <td>{{orderInfo.originalPrice}}</td>
+            <td>{{orderInfo.realPrice}}</td>
+            <td>{{orderInfo.status}}</td>
+            <td>{{orderInfo.paymentType}}</td>
+        </tr>
+    </table>
+    <h3 class="sub-header">收货人信息</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>姓名</th>
+            <th>电话</th>
+            <th>地址</th>
+            <th>备注</th>
+        </tr>
+        <tr>
+            <td>{{orderInfo.receiverName}}</td>
+            <td>{{orderInfo.receiverPhoneNumber}}</td>
+            <td>{{orderInfo.receiverAddress}}</td>
+            <td>{{orderInfo.receiverRemark}}</td>
+        </tr>
+    </table>
+    <h3 class="sub-header">骑手信息</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>姓名</th>
+            <th>电话</th>
+            <th>配送范围</th>
+            <th>职称</th>
+        </tr>
+        <tr>
+            <td>{{orderInfo.rider.name}}</td>
+            <td>{{orderInfo.rider.phoneNumber}}</td>
+            <td>{{orderInfo.rider.stationId}}</td>
+            <td>{{orderInfo.rider.jobTitle}}</td>
+        </tr>
+    </table>
+    <h3 class="sub-header">费用信息</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>商品合计</th>
+            <th>首单立减</th>
+            <th>满减</th>
+            <th>在线支付立减</th>
+        </tr>
+        <tr>
+            <td>{{orderInfo.goodsTotalPrice}}</td>
+            <td>{{orderInfo.firstOrderReducion}}</td>
+            <td>{{orderInfo.fullReducion}}</td>
+            <td>{{orderInfo.onlinePayReducion}}</td>
+        </tr>
+        <tr>
+            <th>餐盒费</th>
+            <th>配送费</th>
+            <th>订单总金额</th>
+            <th>应付款金额</th>
+        </tr>
+        <tr>
+            <td>{{orderInfo.mealBoxPrice}}</td>
+            <td>{{orderInfo.sendPrice}}</td>
+            <td>{{orderInfo.totalOrderPrice}}</td>
+            <td>{{orderInfo.realOrderPrice}}</td>
+        </tr>
+    </table>
+</div>
+<script>
+    var orderDetailPage = new Vue({
+        el: '#orderDetailDiv',
+        data: {
+            orderInfo: null
+        },
+        methods: {
+            initData: function (order) {
+                this.orderInfo = order;
+            }
+        }
+    });
+</script>

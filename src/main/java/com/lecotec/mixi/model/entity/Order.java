@@ -70,6 +70,9 @@ public class Order implements Serializable {
     @Column(name = "receiver_address")
     private String receiverAddress;
 
+    @Column(name = "receiver_remark")
+    private String receiverRemark;
+
     @Column(name = "goods_total_price")
     private double goodsTotalPrice;
 
@@ -296,5 +299,13 @@ public class Order implements Serializable {
 
     public void setGoodsJsonList(String goodsJsonList) {
         this.goodsJsonList = goodsJsonList;
+    }
+
+    public String getReceiverRemark() {
+        return receiverRemark;
+    }
+
+    public void setReceiverRemark(String receiverRemark) {
+        this.receiverRemark = receiverRemark;
     }
 }
