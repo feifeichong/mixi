@@ -19,29 +19,21 @@ public class Order implements Serializable {
     @ApiModelProperty(hidden = true)
     private String serialNumber = UUID.randomUUID().toString();
 
-    @Column(name = "station_id")
-    private long stationId;
-
-    @Column(name = "station_info")
+    @ManyToOne()
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
     @ApiModelProperty(hidden = true)
-    private String stationInfo;
+    private Station station;
 
-    @Column(name = "customer_id")
-    private long customerId;
-
-    @Column(name = "customer_info")
+    @ManyToOne()
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     @ApiModelProperty(hidden = true)
-    private String customerInfo;
+    private Customer customer;
 
     @Column(name = "original_price")
     private double originalPrice;
 
     @Column(name = "real_price")
     private double realPrice;
-
-    @Column(name = "cost_detail")
-    @ApiModelProperty(hidden = true)
-    private String costDetail;
 
     private String status;
 
@@ -58,19 +50,49 @@ public class Order implements Serializable {
 
     @Column(name = "complete_time")
     @ApiModelProperty(hidden = true)
-    private Date complete_time;
+    private Date completeTime;
 
-    @Column(name = "goods_list", columnDefinition = "TEXT NULL")
+    @Column(name="goods_json_list", columnDefinition = "TEXT NULL")
     @ApiModelProperty(hidden = true)
-    private String goodsList;
+    private String goodsJsonList = "[]";
 
-    @Column(name = "receiver_info")
+    @ManyToOne
+    @JoinColumn(name = "rider_id", referencedColumnName = "id")
     @ApiModelProperty(hidden = true)
-    private String receiverInfo;
+    private Rider rider;
 
-    @Column(name = "rider_info")
-    @ApiModelProperty(hidden = true)
-    private String riderInfo;
+    @Column(name = "receiver_phone_number")
+    private String receiverPhoneNumber;
+
+    @Column(name = "receiver_name")
+    private String receiverName;
+
+    @Column(name = "receiver_address")
+    private String receiverAddress;
+
+    @Column(name = "goods_total_price")
+    private double goodsTotalPrice;
+
+    @Column(name = "first_order_reducion")
+    private double firstOrderReducion;
+
+    @Column(name = "full_reducion")
+    private double fullReducion;
+
+    @Column(name = "online_pay_reducion")
+    private double onlinePayReducion;
+
+    @Column(name = "mealbox_price")
+    private double mealBoxPrice;
+
+    @Column(name = "send_price")
+    private double sendPrice;
+
+    @Column(name = "total_order_price")
+    private double totalOrderPrice;
+
+    @Column(name = "real_order_price")
+    private double realOrderPrice;
 
     @ApiModelProperty(hidden = true)
     @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
@@ -92,22 +114,6 @@ public class Order implements Serializable {
         this.serialNumber = serialNumber;
     }
 
-    public String getStationInfo() {
-        return stationInfo;
-    }
-
-    public void setStationInfo(String stationInfo) {
-        this.stationInfo = stationInfo;
-    }
-
-    public String getCustomerInfo() {
-        return customerInfo;
-    }
-
-    public void setCustomerInfo(String customerInfo) {
-        this.customerInfo = customerInfo;
-    }
-
     public double getOriginalPrice() {
         return originalPrice;
     }
@@ -122,14 +128,6 @@ public class Order implements Serializable {
 
     public void setRealPrice(double realPrice) {
         this.realPrice = realPrice;
-    }
-
-    public String getCostDetail() {
-        return costDetail;
-    }
-
-    public void setCostDetail(String costDetail) {
-        this.costDetail = costDetail;
     }
 
     public String getStatus() {
@@ -164,36 +162,12 @@ public class Order implements Serializable {
         this.dispatchTime = dispatchTime;
     }
 
-    public Date getComplete_time() {
-        return complete_time;
+    public Date getCompleteTime() {
+        return completeTime;
     }
 
-    public void setComplete_time(Date complete_time) {
-        this.complete_time = complete_time;
-    }
-
-    public String getGoodsList() {
-        return goodsList;
-    }
-
-    public void setGoodsList(String goodsList) {
-        this.goodsList = goodsList;
-    }
-
-    public String getReceiverInfo() {
-        return receiverInfo;
-    }
-
-    public void setReceiverInfo(String receiverInfo) {
-        this.receiverInfo = receiverInfo;
-    }
-
-    public String getRiderInfo() {
-        return riderInfo;
-    }
-
-    public void setRiderInfo(String riderInfo) {
-        this.riderInfo = riderInfo;
+    public void setCompleteTime(Date completeTime) {
+        this.completeTime = completeTime;
     }
 
     public Date getCreationTime() {
@@ -204,19 +178,123 @@ public class Order implements Serializable {
         this.creationTime = creationTime;
     }
 
-    public long getStationId() {
-        return stationId;
+    public Station getStation() {
+        return station;
     }
 
-    public void setStationId(long stationId) {
-        this.stationId = stationId;
+    public void setStation(Station station) {
+        this.station = station;
     }
 
-    public long getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Rider getRider() {
+        return rider;
+    }
+
+    public void setRider(Rider rider) {
+        this.rider = rider;
+    }
+
+    public String getReceiverPhoneNumber() {
+        return receiverPhoneNumber;
+    }
+
+    public void setReceiverPhoneNumber(String receiverPhoneNumber) {
+        this.receiverPhoneNumber = receiverPhoneNumber;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    public String getReceiverAddress() {
+        return receiverAddress;
+    }
+
+    public void setReceiverAddress(String receiverAddress) {
+        this.receiverAddress = receiverAddress;
+    }
+
+    public double getGoodsTotalPrice() {
+        return goodsTotalPrice;
+    }
+
+    public void setGoodsTotalPrice(double goodsTotalPrice) {
+        this.goodsTotalPrice = goodsTotalPrice;
+    }
+
+    public double getFirstOrderReducion() {
+        return firstOrderReducion;
+    }
+
+    public void setFirstOrderReducion(double firstOrderReducion) {
+        this.firstOrderReducion = firstOrderReducion;
+    }
+
+    public double getFullReducion() {
+        return fullReducion;
+    }
+
+    public void setFullReducion(double fullReducion) {
+        this.fullReducion = fullReducion;
+    }
+
+    public double getOnlinePayReducion() {
+        return onlinePayReducion;
+    }
+
+    public void setOnlinePayReducion(double onlinePayReducion) {
+        this.onlinePayReducion = onlinePayReducion;
+    }
+
+    public double getMealBoxPrice() {
+        return mealBoxPrice;
+    }
+
+    public void setMealBoxPrice(double mealBoxPrice) {
+        this.mealBoxPrice = mealBoxPrice;
+    }
+
+    public double getSendPrice() {
+        return sendPrice;
+    }
+
+    public void setSendPrice(double sendPrice) {
+        this.sendPrice = sendPrice;
+    }
+
+    public double getTotalOrderPrice() {
+        return totalOrderPrice;
+    }
+
+    public void setTotalOrderPrice(double totalOrderPrice) {
+        this.totalOrderPrice = totalOrderPrice;
+    }
+
+    public double getRealOrderPrice() {
+        return realOrderPrice;
+    }
+
+    public void setRealOrderPrice(double realOrderPrice) {
+        this.realOrderPrice = realOrderPrice;
+    }
+
+    public String getGoodsJsonList() {
+        return goodsJsonList;
+    }
+
+    public void setGoodsJsonList(String goodsJsonList) {
+        this.goodsJsonList = goodsJsonList;
     }
 }

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "mx_goods")
@@ -53,6 +54,9 @@ public class Goods {
     @Column(name = "is_active")
     @ApiModelProperty(hidden = true)
     private boolean isActive = true;
+
+    @Transient
+    private List<Order> orderList;
 
     @ApiModelProperty(hidden = true)
     @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
@@ -159,7 +163,7 @@ public class Goods {
     }
 
     public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+        this.isActive = (isActive);
     }
 
     public Date getCreationTime() {
@@ -168,5 +172,13 @@ public class Goods {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
     }
 }

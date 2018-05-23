@@ -1,235 +1,69 @@
 package com.lecotec.mixi.model.parameter;
 
 import com.alibaba.fastjson.JSON;
+import com.lecotec.mixi.model.entity.Customer;
 import com.lecotec.mixi.model.entity.Order;
+import com.lecotec.mixi.model.entity.Rider;
+import com.lecotec.mixi.model.entity.Station;
 
 public class OrderParam extends Order {
-    private StationInfo stationInfoJson;
-    private CustomerInfo customerInfoJson;
-    private CostDetail costDetailJson;
-    private GoodsList[] goodsListJsons;
-    private ReceiverInfo receiverInfoJson;
-    private RiderInfo riderInfoJson;
+    private GoodsList[] goodsList;
+    private long customerId;
+    private long stationId;
+    private long riderId;
 
-    public StationInfo getStationInfoJson() {
-        return stationInfoJson;
+    public GoodsList[] getGoodsList() {
+        return goodsList;
     }
 
-    public void setStationInfoJson(StationInfo stationInfoJson) {
-        this.stationInfoJson = stationInfoJson;
-        this.setStationInfo(JSON.toJSONString(stationInfoJson));
+    public void setGoodsList(GoodsList[] goodsList) {
+        this.goodsList = goodsList;
+        super.setGoodsJsonList(JSON.toJSONString(this.goodsList));
     }
 
-    public CustomerInfo getCustomerInfoJson() {
-        return customerInfoJson;
+    public long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomerInfoJson(CustomerInfo customerInfoJson) {
-        this.customerInfoJson = customerInfoJson;
-        this.setCustomerInfo(JSON.toJSONString(customerInfoJson));
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+        super.setCustomer(new Customer() {
+            {
+                setId(customerId);
+            }
+        });
     }
 
-    public CostDetail getCostDetailJson() {
-        return costDetailJson;
+    public long getStationId() {
+        return stationId;
     }
 
-    public void setCostDetailJson(CostDetail costDetailJson) {
-        this.costDetailJson = costDetailJson;
-        this.setCostDetail(JSON.toJSONString(costDetailJson));
+    public void setStationId(long stationId) {
+        this.stationId = stationId;
+        super.setStation(new Station() {
+            {
+                setId(stationId);
+            }
+        });
     }
 
-    public GoodsList[] getGoodsListJsons() {
-        return goodsListJsons;
+    public long getRiderId() {
+        return riderId;
     }
 
-    public void setGoodsListJsons(GoodsList[] goodsListJsons) {
-        this.goodsListJsons = goodsListJsons;
-        this.setGoodsList(JSON.toJSONString(goodsListJsons));
-    }
-
-    public ReceiverInfo getReceiverInfoJson() {
-        return receiverInfoJson;
-    }
-
-    public void setReceiverInfoJson(ReceiverInfo receiverInfoJson) {
-        this.receiverInfoJson = receiverInfoJson;
-        this.setReceiverInfo(JSON.toJSONString(receiverInfoJson));
-    }
-
-    public RiderInfo getRiderInfoJson() {
-        return riderInfoJson;
-    }
-
-    public void setRiderInfoJson(RiderInfo riderInfoJson) {
-        this.riderInfoJson = riderInfoJson;
-        this.setRiderInfo(JSON.toJSONString(riderInfoJson));
-    }
-
-    private static class StationInfo {
-        private long id;
-        private String name;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-    private static class CustomerInfo {
-        private long id;
-        private String phoneNumber;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-    }
-
-    private static class CostDetail {
-        private double goodsTotalPrice;
-        private double firstOrderReducion;
-        private double fullReducion;
-        private double onlinePayReducion;
-        private double mealBoxPrice;
-        private double sendPrice;
-        private double totalOrderPrice;
-        private double realOrderPrice;
-
-        public double getGoodsTotalPrice() {
-            return goodsTotalPrice;
-        }
-
-        public void setGoodsTotalPrice(double goodsTotalPrice) {
-            this.goodsTotalPrice = goodsTotalPrice;
-        }
-
-        public double getFirstOrderReducion() {
-            return firstOrderReducion;
-        }
-
-        public void setFirstOrderReducion(double firstOrderReducion) {
-            this.firstOrderReducion = firstOrderReducion;
-        }
-
-        public double getFullReducion() {
-            return fullReducion;
-        }
-
-        public void setFullReducion(double fullReducion) {
-            this.fullReducion = fullReducion;
-        }
-
-        public double getOnlinePayReducion() {
-            return onlinePayReducion;
-        }
-
-        public void setOnlinePayReducion(double onlinePayReducion) {
-            this.onlinePayReducion = onlinePayReducion;
-        }
-
-        public double getMealBoxPrice() {
-            return mealBoxPrice;
-        }
-
-        public void setMealBoxPrice(double mealBoxPrice) {
-            this.mealBoxPrice = mealBoxPrice;
-        }
-
-        public double getSendPrice() {
-            return sendPrice;
-        }
-
-        public void setSendPrice(double sendPrice) {
-            this.sendPrice = sendPrice;
-        }
-
-        public double getTotalOrderPrice() {
-            return totalOrderPrice;
-        }
-
-        public void setTotalOrderPrice(double totalOrderPrice) {
-            this.totalOrderPrice = totalOrderPrice;
-        }
-
-        public double getRealOrderPrice() {
-            return realOrderPrice;
-        }
-
-        public void setRealOrderPrice(double realOrderPrice) {
-            this.realOrderPrice = realOrderPrice;
-        }
+    public void setRiderId(long riderId) {
+        this.riderId = riderId;
+        super.setRider(new Rider() {
+            {
+                setId(riderId);
+            }
+        });
     }
 
     private static class GoodsList {
-        private long id;
-        private String goodsTypeName;
-        private String name;
-        private String imagePath;
-        private String specsName;
+        private long goodsId;
         private int count;
-        private String price;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getGoodsTypeName() {
-            return goodsTypeName;
-        }
-
-        public void setGoodsTypeName(String goodsTypeName) {
-            this.goodsTypeName = goodsTypeName;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getImagePath() {
-            return imagePath;
-        }
-
-        public void setImagePath(String imagePath) {
-            this.imagePath = imagePath;
-        }
-
-        public String getSpecsName() {
-            return specsName;
-        }
-
-        public void setSpecsName(String specsName) {
-            this.specsName = specsName;
-        }
+        private double price;
 
         public int getCount() {
             return count;
@@ -239,90 +73,20 @@ public class OrderParam extends Order {
             this.count = count;
         }
 
-        public String getPrice() {
+        public double getPrice() {
             return price;
         }
 
-        public void setPrice(String price) {
+        public void setPrice(double price) {
             this.price = price;
         }
-    }
 
-    private static class ReceiverInfo {
-        private String name;
-        private String phoneNumber;
-        private String address;
-        private String remark;
-
-        public String getName() {
-            return name;
+        public long getGoodsId() {
+            return goodsId;
         }
 
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
-        public String getRemark() {
-            return remark;
-        }
-
-        public void setRemark(String remark) {
-            this.remark = remark;
-        }
-    }
-
-    private static class RiderInfo {
-        private long id;
-        private String name;
-        private String phoneNumber;
-        private String stationName;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-
-        public String getStationName() {
-            return stationName;
-        }
-
-        public void setStationName(String stationName) {
-            this.stationName = stationName;
+        public void setGoodsId(long goodsId) {
+            this.goodsId = goodsId;
         }
     }
 }

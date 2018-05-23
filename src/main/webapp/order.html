@@ -32,12 +32,14 @@
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
                 <span class="input-group-addon">订单编号</span>
-                <input id="searchKeyword" onkeyup="orderPage.onEnterKeyPress()" class="form-control" data-toggle="tooltip" data-placement="bottom" title="输入内容，点击键盘Enter查询"/>
+                <input id="searchKeyword" onkeyup="orderPage.onEnterKeyPress()" class="form-control" data-toggle="tooltip" data-placement="bottom"
+                       title="输入内容，点击键盘Enter查询"/>
             </div>
         </div>
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
-                <span class="input-group-addon">站点</span><select id="stationSelect" onchange="orderPage.refreshTableDatas();" class="form-control"></select>
+                <span class="input-group-addon">站点</span><select id="stationSelect" onchange="orderPage.refreshTableDatas();"
+                                                                 class="form-control"></select>
             </div>
         </div>
     </div>
@@ -134,30 +136,10 @@
                         }
                     },
                     {title: '订单编号', field: 'serialNumber',},
-                    {
-                        title: '站点', field: 'stationInfo',
-                        formatter: function (value, row, index) {
-                            return JSON.parse(row.stationInfo).name;
-                        }
-                    },
-                    {
-                        title: '配送员', field: 'riderInfo',
-                        formatter: function (value, row, index) {
-                            return JSON.parse(row.riderInfo).name;
-                        }
-                    },
-                    {
-                        title: '收货人姓名', field: 'riderInfo',
-                        formatter: function (value, row, index) {
-                            return JSON.parse(row.receiverInfo).name;
-                        }
-                    },
-                    {
-                        title: '收货人电话', field: 'riderInfo',
-                        formatter: function (value, row, index) {
-                            return JSON.parse(row.receiverInfo).phoneNumber;
-                        }
-                    },
+                    {title: '站点', field: 'station.name'},
+                    {title: '配送员', field: 'rider.name'},
+                    {title: '收货人姓名', field: 'receiverName'},
+                    {title: '收货人电话', field: 'receiverPhoneNumber'},
                     {title: '订单金额', field: 'realPrice'},
                     {title: '状态', field: 'status'},
                     {

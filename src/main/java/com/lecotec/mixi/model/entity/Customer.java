@@ -30,8 +30,7 @@ public class Customer {
     @Pattern(regexp = "^[1-9]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$")
     private String birthday;
 
-    @Column(name = "receiver_address")
-    private String receiverAddress;
+    private String receivers;
 
     @ApiModelProperty(hidden = true)
     @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
@@ -85,12 +84,12 @@ public class Customer {
         this.birthday = birthday;
     }
 
-    public String getReceiverAddress() {
-        return receiverAddress;
+    public String getReceivers() {
+        return receivers;
     }
 
-    public void setReceiverAddress(String receiverAddress) {
-        this.receiverAddress = receiverAddress;
+    public void setReceivers(String receivers) {
+        this.receivers = receivers;
     }
 
     public Date getCreationTime() {

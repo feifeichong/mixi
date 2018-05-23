@@ -34,7 +34,7 @@ public class OrderService {
                 predicates.add(criteriaBuilder.equal(root.get("status"), orderSearchParam.getStatus()));
             }
             if (!ObjectUtils.isEmpty(orderSearchParam.getStationId())) {
-                predicates.add(criteriaBuilder.equal(root.get("stationId"), orderSearchParam.getStationId()));
+                predicates.add(criteriaBuilder.equal(root.get("station").get("id"), orderSearchParam.getStationId()));
             }
 
             query.where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));

@@ -2,9 +2,7 @@ package com.lecotec.mixi.model.parameter;
 
 public class OrderSearchParam extends PageParam {
     private String status;
-
     private String searchKeyword;
-
     private Long stationId;
 
     public String getStatus() {
