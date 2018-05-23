@@ -56,14 +56,7 @@ public class GoodsService {
         return true;
     }
 
-    public Page<Goods> searchByIds(IdsParam idsParam) {
-        return goodsRepository.findAll((Specification<Goods>) (root, query, criteriaBuilder) -> {
-            if (CollectionUtils.isEmpty(idsParam.getIds())) {
-                query.where(root.in(-1L));
-            } else {
-                query.where(root.in(idsParam.getIds()));
-            }
-            return query.getRestriction();
-        }, PageRequest.of(idsParam.getPageNumber(), idsParam.getPageSize()));
+    public List<Goods> getGoodsByIds(IdsParam idsParam) {
+        return goodsRepository.findByIdIn(idsParam.getIds());
     }
 }

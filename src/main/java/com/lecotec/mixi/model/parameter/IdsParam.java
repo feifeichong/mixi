@@ -2,7 +2,7 @@ package com.lecotec.mixi.model.parameter;
 
 import java.util.List;
 
-public class IdsParam extends PageParam {
+public class IdsParam {
     private List<Long> ids;
 
     public List<Long> getIds() {
