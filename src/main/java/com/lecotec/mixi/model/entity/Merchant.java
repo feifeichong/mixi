@@ -19,6 +19,8 @@ public class Merchant {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
+    private String name;
+
     @NotBlank(message = "密码不能为空")
     private String password;
 
@@ -78,5 +80,13 @@ public class Merchant {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

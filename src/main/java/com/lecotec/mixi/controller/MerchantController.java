@@ -3,9 +3,11 @@ package com.lecotec.mixi.controller;
 import com.lecotec.mixi.common.ConstString;
 import com.lecotec.mixi.common.EncryptUtil;
 import com.lecotec.mixi.common.RandomUtil;
+import com.lecotec.mixi.model.entity.GoodsType;
 import com.lecotec.mixi.model.entity.Merchant;
 import com.lecotec.mixi.model.parameter.UserParamForChangePassword;
 import com.lecotec.mixi.model.parameter.UserParamWithPassword;
+import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
@@ -14,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,5 +78,16 @@ public class MerchantController {
         }
 
         return new SuccessResponse(merchantService.updateMerchantPassword(phoneNumber, newPassword));
+    }
+
+    @GetMapping("all")
+    public BootstrapTableResult<Merchant> getMerchants(int pageNumber, int pageSize) {
+        Page<Merchant> merchants = merchantService.getMerchants(pageNumber, pageSize);
+        return new BootstrapTableResult<>(merchants.getTotalElements(), merchants.getContent());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseObject deleteMerchant(@PathVariable("id") long id) {
+        return new SuccessResponse(merchantService.deleteMerchant(id));
     }
 }
