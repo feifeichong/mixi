@@ -1,0 +1,84 @@
+<div id="riderDetailDiv" v-if="riderInfo" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('rider.html');" type="button">返回</button>
+        </div>
+        <h1>审核状态：<span>{{riderInfo.approvalStatus}}</span></h1>
+    </div>
+    <h3 class="sub-header">骑手详情</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>性别</th>
+            <th>生日</th>
+            <th>配送地区</th>
+            <th>职称</th>
+            <th>保证金</th>
+        </tr>
+        <tr>
+            <td>{{riderInfo.name}}</td>
+            <td>{{riderInfo.phoneNumber}}</td>
+            <td>{{riderInfo.sex}}</td>
+            <td>{{riderInfo.birthday}}</td>
+            <td>{{riderInfo.stationId}}</td>
+            <td>{{riderInfo.jobTitle}}</td>
+            <td>{{riderInfo.depositAmount}}</td>
+        </tr>
+        <tr>
+            <th>考核分数</th>
+            <th>身份证号</th>
+            <th>身份证照片（正）</th>
+            <th>身份证照片（反）</th>
+            <th>手持身份证照片</th>
+            <th>健康证</th>
+        </tr>
+        <tr>
+            <td>{{riderInfo.examScore}}</td>
+            <td>{{riderInfo.identityCard}}</td>
+            <td><img :src="riderInfo.positivePhotoOfIdCard" width="100" height="100" alt=""></td>
+            <td><img :src="riderInfo.negativePhotoOfIdCard" width="100" height="100" alt=""></td>
+            <td><img :src="riderInfo.riderWithIdentityCardPhotoPath" width="100" height="100" alt=""></td>
+            <td><img :src="riderInfo.healthCertificatePhoto" width="100" height="100" alt=""></td>
+        </tr>
+    </table>
+    <hr>
+    <div class="form-group" v-if="riderInfo.approvalStatus==='未审核'">
+        <div class="col-sm-12 input-group" style="text-align: center">
+            <button class="btn btn-default" @click="approve">审核未通过</button>
+            &nbsp;&nbsp;
+            <button class="btn btn-success" @click="approve">审核通过</button>
+        </div>
+    </div>
+    <div id="cmModal"></div>
+</div>
+<script>
+    var riderApprovalPage = new Vue({
+        el: '#riderDetailDiv',
+        data: {
+            riderInfo: null
+        },
+        methods: {
+            initData: function (rider) {
+                this.riderInfo = rider;
+            },
+            approve: function () {
+                this.riderInfo.approvalStatus = event.target.innerText;
+                this.$http.post("/api/rider", this.riderInfo)
+                    .then(function (res) {
+                        if (res.data.status === SUCCESS) {
+                            indexPage.setContentBody("rider.html");
+                        } else {
+                            commonModal.showModal(res.data.data);
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    });
+            }
+        },
+        mounted:function () {
+            $("#cmModal").load("commonModal.html");
+        }
+    });
+</script>

@@ -120,7 +120,7 @@
                     var param = {name: $("#menuName").val(), stationId: $("#menuStationId").val()};
                     submitMaintainRequest(param);
                     break;
-                case "edit":
+                case "showDetail":
                     _maintainData.name = $("#menuName").val();
                     _maintainData.stationId = $("#menuStationId").val();
                     submitMaintainRequest(_maintainData);
@@ -144,7 +144,7 @@
         page.edit = function (id) {
             _maintainData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
             $("#menuMaintainModal").modal("show");
-            _maintainType = "edit";
+            _maintainType = "showDetail";
             $("#menuName").val(_maintainData.name);
             $("#stationSelect").val(_maintainData.stationId);
         };

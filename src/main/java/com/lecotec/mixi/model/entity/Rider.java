@@ -35,6 +35,9 @@ public class Rider {
     @Column(name = "identity_card", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '身份证号码'")
     private String identityCard;
 
+    @Column(name = "rider_with_identity_card_photo_path", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '身份证号码'")
+    private String riderWithIdentityCardPhotoPath;
+
     @Column(name = "positive_photo_of_id_card", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '身份证正面照片地址'")
     private String positivePhotoOfIdCard;
 
@@ -52,6 +55,9 @@ public class Rider {
 
     @Column(name = "exam_score")
     private int examScore;
+
+    @Column(name = "approval_status")
+    private String approvalStatus;//审核状态：未审核、审核通过、审核未通过
 
     @Column(name = "is_start_working")
     private boolean isStartWorking;
@@ -208,5 +214,21 @@ public class Rider {
 
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
+    }
+
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    public String getRiderWithIdentityCardPhotoPath() {
+        return riderWithIdentityCardPhotoPath;
+    }
+
+    public void setRiderWithIdentityCardPhotoPath(String riderWithIdentityCardPhotoPath) {
+        this.riderWithIdentityCardPhotoPath = riderWithIdentityCardPhotoPath;
     }
 }

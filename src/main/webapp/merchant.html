@@ -69,16 +69,6 @@
             });
         }
 
-        function changeActiveStatus(id, status) {
-            $.ajax({
-                type: "PUT", url: "api/merchant/goodsType/changeActiveStatus",
-                data: {id: id, isActive: status,},
-                success: function (result) {
-                    $("#tableResult").bootstrapTable("refresh", {silent: true});
-                }
-            });
-        }
-
         $(function () {
             searchTableDatas();
             $("#deleteConfimModal").load("deleteConfirmModal.html");

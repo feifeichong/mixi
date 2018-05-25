@@ -1,10 +1,8 @@
 package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.Rider;
-import com.lecotec.mixi.model.parameter.UserParam;
-import com.lecotec.mixi.model.parameter.UserParamForChangePassword;
-import com.lecotec.mixi.model.parameter.UserParamWithPassword;
-import com.lecotec.mixi.model.parameter.UserParamWithShortMsgCode;
+import com.lecotec.mixi.model.parameter.*;
+import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
@@ -15,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -102,5 +101,16 @@ public class RiderController {
     public ResponseObject payedDeposit(@Valid @RequestBody UserParam userParam) {
         return riderService.payedDeposit(userParam.getPhoneNumber(), DEPOSIT_AMOUNT)
                 ? new SuccessResponse() : new FailResponse("手机号对应的骑手信息不存在");
+    }
+
+    @GetMapping("all")
+    public BootstrapTableResult<Rider> searchRiders(RiderSerchParam riderSerchParam) {
+        Page<Rider> result = riderService.searchRiders(riderSerchParam);
+        return new BootstrapTableResult<>(result.getTotalElements(), result.getContent());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseObject deleteRider(@PathVariable("id") long id) {
+        return new SuccessResponse(riderService.deleteRider(id));
     }
 }
