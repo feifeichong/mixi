@@ -1,9 +1,9 @@
 package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.Customer;
-import com.lecotec.mixi.model.parameter.UserParamForChangePassword;
-import com.lecotec.mixi.model.parameter.UserParamWithPassword;
-import com.lecotec.mixi.model.parameter.UserParamWithShortMsgCode;
+import com.lecotec.mixi.model.entity.Goods;
+import com.lecotec.mixi.model.parameter.*;
+import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,5 +95,11 @@ public class CustomerController {
         }
 
         return new SuccessResponse(customerService.updateCustomerPassword(phoneNumber, newPassword));
+    }
+
+    @GetMapping("searchByParam")
+    public BootstrapTableResult<Customer> searchByParam(CustomerSearchParam customerSearchParam) {
+        Page<Customer> result = customerService.searchByParam(customerSearchParam);
+        return new BootstrapTableResult<>(result.getTotalElements(), result.getContent());
     }
 }

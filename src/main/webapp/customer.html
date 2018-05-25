@@ -1,0 +1,116 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1>客户查询</h1>
+    </div>
+    <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <div class="input-group">
+                <span class="input-group-addon">用户账号</span>
+                <input id="phoneNumber" onkeyup="customerPage.onEnterKeyPress()" class="form-control" data-toggle="tooltip" data-placement="bottom"
+                       title="输入内容，点击键盘Enter查询"/>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <div class="input-group">
+                <span class="input-group-addon">用户昵称</span>
+                <input id="nickname" onkeyup="customerPage.onEnterKeyPress()" class="form-control" data-toggle="tooltip" data-placement="bottom"
+                       title="输入内容，点击键盘Enter查询"/>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 placeholder">
+            <div class="input-group">
+                <span class="input-group-addon">注册时间</span>
+                <input id="beginTime" type="text" onchange="customerPage.onTimeChanged()" readonly style="cursor: pointer;" class="form-control"/>
+                <span class="input-group-addon">至</span>
+                <input id="endTime" type="text" onchange="customerPage.onTimeChanged()" readonly style="cursor: pointer;" class="form-control"/>
+            </div>
+        </div>
+    </div>
+    <h2 class="sub-header">查询结果</h2>
+    <div class="table-responsive">
+        <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
+    </div>
+    <div id="deleteConfimModal"></div>
+</div>
+<script>
+    var customerPage = {};
+    (function (page) {
+        page.onEnterKeyPress = function () {
+            var code = event.charCode || event.keyCode;
+            if (code == 13) {
+                page.refreshTableDatas();
+            }
+        };
+
+        page.onTimeChanged = function () {
+            page.refreshTableDatas();
+        };
+
+        page.showDetail = function (id) {
+            var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            indexPage.setContentBody("customerDetail.html", function (response, status, xhr) {
+                customerDetailPage.initData(currentData);
+            });
+        };
+
+        page.refreshTableDatas = function () {
+            $('#tableResult').bootstrapTable("refresh", {silent: true});
+        };
+
+        function initTableDatas() {
+            $('#tableResult').bootstrapTable({
+                url: 'api/customer/searchByParam',
+                method: "get",
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: function (params) {
+                    return {
+                        pageSize: params.limit, pageNumber: (params.offset / params.limit),
+                        phoneNumber: $("#phoneNumber").val(), nickname: $("#nickname").val(),
+                        beginTime: $("#beginTime").val(), endTime: $("#endTime").val()
+                    };
+                },
+                columns: [
+                    {
+                        title: '序号', align: "center",
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {
+                        title: '用户头像', field: 'headPortrait',
+                        formatter: function (value, row, index) {
+                            return '<img src="' + row.headPortrait + '" width="100" height="100" alt="">';
+                        }
+                    },
+                    {title: '用户账号', field: 'phoneNumber'},
+                    {title: '用户昵称', field: 'nickname'},
+                    {title: '生日', field: 'birthday'},
+                    {title: '注册时间', field: 'creationTime'},
+                    {title: '消费金额', field: ''},
+                    {title: '订单数量', field: ''},
+                    {
+                        title: '操作', field: 'id', formatter: function (value, row, index) {
+                            return '<button type="button" class="btn btn-default" onclick="customerPage.showDetail(' + value + ');"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> 查看详情</button>';
+                        }
+                    }
+                ]
+            });
+        };
+
+        $(function () {
+            $("#phoneNumber").tooltip();
+            $("#nickname").tooltip();
+            $("#deleteConfimModal").load("deleteConfirmModal.html");
+
+            $('#beginTime').datetimepicker({
+                format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN"
+            });
+            $('#endTime').datetimepicker({
+                format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN"
+            });
+
+            initTableDatas();
+        });
+    })(customerPage);
+</script>
