@@ -15,20 +15,20 @@ public class Station {
     private long id;
 
     @NotBlank
-    @Column(name = "name")
     private String name;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "is_active", columnDefinition = "BIT(1) DEFAULT true")
     private boolean isActive = true;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "modify_time")
     private Date modifyTime;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
+
+    @ManyToOne
+    @JoinColumn(name = "merchant_id", referencedColumnName = "id")
+    private Merchant merchant;
 
     public long getId() {
         return id;
@@ -46,14 +46,6 @@ public class Station {
         this.name = name;
     }
 
-    public boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
     public Date getModifyTime() {
         return modifyTime;
     }
@@ -68,5 +60,21 @@ public class Station {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean active) {
+        isActive = active;
+    }
+
+    public Merchant getMerchant() {
+        return merchant;
+    }
+
+    public void setMerchant(Merchant merchant) {
+        this.merchant = merchant;
     }
 }

@@ -9,7 +9,6 @@ import com.lecotec.mixi.model.entity.Station;
 public class OrderParam extends Order {
     private GoodsList[] goodsList;
     private long customerId;
-    private long stationId;
     private long riderId;
 
     public GoodsList[] getGoodsList() {
@@ -30,19 +29,6 @@ public class OrderParam extends Order {
         super.setCustomer(new Customer() {
             {
                 setId(customerId);
-            }
-        });
-    }
-
-    public long getStationId() {
-        return stationId;
-    }
-
-    public void setStationId(long stationId) {
-        this.stationId = stationId;
-        super.setStation(new Station() {
-            {
-                setId(stationId);
             }
         });
     }

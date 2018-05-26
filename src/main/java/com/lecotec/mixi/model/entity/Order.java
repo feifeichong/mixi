@@ -15,91 +15,71 @@ public class Order implements Serializable {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    @Column(name = "serial_number")
     @ApiModelProperty(hidden = true)
     private String serialNumber = UUID.randomUUID().toString();
 
-    @ManyToOne()
-    @JoinColumn(name = "station_id", referencedColumnName = "id")
+    private double originalPrice;
+
+    private double realPrice;
+
+    private String status;
+
+    private String paymentType;
+
     @ApiModelProperty(hidden = true)
-    private Station station;
+    private Date paymentTime;
+
+    @ApiModelProperty(hidden = true)
+    private Date dispatchTime;
+
+    @ApiModelProperty(hidden = true)
+    private Date completeTime;
+
+    @Column(columnDefinition = "TEXT NULL")
+    @ApiModelProperty(hidden = true)
+    private String goodsJsonList = "[]";
 
     @ManyToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     @ApiModelProperty(hidden = true)
     private Customer customer;
 
-    @Column(name = "original_price")
-    private double originalPrice;
-
-    @Column(name = "real_price")
-    private double realPrice;
-
-    private String status;
-
-    @Column(name = "payment_type")
-    private String paymentType;
-
-    @Column(name = "payment_time")
-    @ApiModelProperty(hidden = true)
-    private Date paymentTime;
-
-    @Column(name = "dispatch_time")
-    @ApiModelProperty(hidden = true)
-    private Date dispatchTime;
-
-    @Column(name = "complete_time")
-    @ApiModelProperty(hidden = true)
-    private Date completeTime;
-
-    @Column(name="goods_json_list", columnDefinition = "TEXT NULL")
-    @ApiModelProperty(hidden = true)
-    private String goodsJsonList = "[]";
-
     @ManyToOne
     @JoinColumn(name = "rider_id", referencedColumnName = "id")
     @ApiModelProperty(hidden = true)
     private Rider rider;
 
-    @Column(name = "receiver_phone_number")
+    @ManyToOne
+    @JoinColumn(name = "menu_id", referencedColumnName = "id")
+    @ApiModelProperty(hidden = true)
+    private Menu menu;
+
     private String receiverPhoneNumber;
 
-    @Column(name = "receiver_name")
     private String receiverName;
 
-    @Column(name = "receiver_address")
     private String receiverAddress;
 
-    @Column(name = "receiver_remark")
     private String receiverRemark;
 
-    @Column(name = "goods_total_price")
     private double goodsTotalPrice;
 
-    @Column(name = "first_order_reducion")
     private double firstOrderReducion;
 
-    @Column(name = "full_reducion")
     private double fullReducion;
 
-    @Column(name = "online_pay_reducion")
     private double onlinePayReducion;
 
-    @Column(name = "mealbox_price")
     private double mealBoxPrice;
 
-    @Column(name = "send_price")
     private double sendPrice;
 
-    @Column(name = "total_order_price")
     private double totalOrderPrice;
 
-    @Column(name = "real_order_price")
     private double realOrderPrice;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
 
     public long getId() {
         return id;
@@ -179,14 +159,6 @@ public class Order implements Serializable {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
-    }
-
-    public Station getStation() {
-        return station;
-    }
-
-    public void setStation(Station station) {
-        this.station = station;
     }
 
     public Customer getCustomer() {
@@ -307,5 +279,13 @@ public class Order implements Serializable {
 
     public void setReceiverRemark(String receiverRemark) {
         this.receiverRemark = receiverRemark;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 }

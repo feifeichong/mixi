@@ -3,15 +3,14 @@ package com.lecotec.mixi.controller;
 import com.lecotec.mixi.common.ConstString;
 import com.lecotec.mixi.common.EncryptUtil;
 import com.lecotec.mixi.common.RandomUtil;
-import com.lecotec.mixi.model.entity.GoodsType;
-import com.lecotec.mixi.model.entity.Merchant;
+import com.lecotec.mixi.model.entity.MerchantUser;
 import com.lecotec.mixi.model.parameter.UserParamForChangePassword;
 import com.lecotec.mixi.model.parameter.UserParamWithPassword;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
-import com.lecotec.mixi.service.MerchantService;
+import com.lecotec.mixi.service.MerchantUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -31,10 +30,10 @@ import static com.lecotec.mixi.common.ConstString.*;
 @RestController
 @RequestMapping("/api/merchant")
 @Api(tags = "商家登录、注册、忘记密码和修改密码接口集合")
-public class MerchantController {
+public class MerchantUserController {
 
     @Autowired
-    private MerchantService merchantService;
+    private MerchantUserService merchantUserService;
 
     @PostMapping("/login/pwdLogin")
     @ApiOperation("商家登录接口（手机号、密码），调用之前先获取RSA公钥，加密密码(先用md5转码)")
@@ -43,7 +42,7 @@ public class MerchantController {
         String phoneNumber = userParamWithPassword.getPhoneNumber();
         String password = EncryptUtil.rsaDecrypt(userParamWithPassword.getPassword(), privateKey);
 
-        Merchant merchant = merchantService.findByPhoneNumber(phoneNumber);
+        MerchantUser merchant = merchantUserService.findByPhoneNumber(phoneNumber);
 
         if (ObjectUtils.isEmpty(merchant) || !StringUtils.equals(password, merchant.getPassword())) {
             return new FailResponse("手机号或者密码错误！");
@@ -61,8 +60,8 @@ public class MerchantController {
     }
 
     @PostMapping
-    public ResponseObject saveMerchant(@Valid @RequestBody Merchant merchant) {
-        return new SuccessResponse(merchantService.saveMerchant(merchant));
+    public ResponseObject saveMerchant(@Valid @RequestBody MerchantUser merchant) {
+        return new SuccessResponse(merchantUserService.saveMerchant(merchant));
     }
 
     @PutMapping("/updateMerchantPassword")
@@ -71,23 +70,23 @@ public class MerchantController {
         String password = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getPassword()/*, privateKey)*/;
         String newPassword = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getNewPassword()/*, privateKey)*/;
 
-        Merchant merchant = merchantService.findByPhoneNumber(phoneNumber);
+        MerchantUser merchant = merchantUserService.findByPhoneNumber(phoneNumber);
 
         if (ObjectUtils.isEmpty(merchant) || !StringUtils.equals(password, merchant.getPassword())) {
             return new FailResponse("手机号或者密码错误！");
         }
 
-        return new SuccessResponse(merchantService.updateMerchantPassword(phoneNumber, newPassword));
+        return new SuccessResponse(merchantUserService.updateMerchantPassword(phoneNumber, newPassword));
     }
 
     @GetMapping("all")
-    public BootstrapTableResult<Merchant> getMerchants(int pageNumber, int pageSize) {
-        Page<Merchant> merchants = merchantService.getMerchants(pageNumber, pageSize);
+    public BootstrapTableResult<MerchantUser> getMerchants(int pageNumber, int pageSize) {
+        Page<MerchantUser> merchants = merchantUserService.getMerchants(pageNumber, pageSize);
         return new BootstrapTableResult<>(merchants.getTotalElements(), merchants.getContent());
     }
 
     @DeleteMapping("/{id}")
     public ResponseObject deleteMerchant(@PathVariable("id") long id) {
-        return new SuccessResponse(merchantService.deleteMerchant(id));
+        return new SuccessResponse(merchantUserService.deleteMerchant(id));
     }
 }

@@ -1,8 +1,10 @@
 package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.Customer;
-import com.lecotec.mixi.model.entity.Goods;
-import com.lecotec.mixi.model.parameter.*;
+import com.lecotec.mixi.model.parameter.CustomerSearchParam;
+import com.lecotec.mixi.model.parameter.UserParamForChangePassword;
+import com.lecotec.mixi.model.parameter.UserParamWithPassword;
+import com.lecotec.mixi.model.parameter.UserParamWithShortMsgCode;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;

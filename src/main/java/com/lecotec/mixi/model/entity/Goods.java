@@ -16,7 +16,6 @@ public class Goods {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    @Column(name = "goods_type_id")
     private long goodsTypeId;
 
     @NotBlank
@@ -25,15 +24,12 @@ public class Goods {
     @NotBlank
     private String description;
 
-    @Column(name = "image_path")
     @NotBlank
     private String imagePath;
 
-    @Column(name = "min_purchase_count")
     @Positive
     private int minPurchaseCount;
 
-    @Column(name = "set_meal_detail")
     @NotBlank
     private String setMealDetail;
 
@@ -48,10 +44,8 @@ public class Goods {
 
     private String material;
 
-    @Column(name = "selling_config")
     private String sellingConfig;
 
-    @Column(name = "is_active")
     @ApiModelProperty(hidden = true)
     private boolean isActive = true;
 
@@ -59,8 +53,7 @@ public class Goods {
     private List<Order> orderList;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
 
     public long getId() {
         return id;

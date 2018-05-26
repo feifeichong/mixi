@@ -15,24 +15,21 @@ public class Menu {
 
     private String name;
 
-    @Column(name = "is_active", columnDefinition = "BIT(1) DEFAULT true")
     @ApiModelProperty(hidden = true)
     private boolean isActive = true;
 
-    @Column(name = "modify_time")
     @ApiModelProperty(hidden = true)
     private Date modifyTime;
 
-    @Column(name = "goods_list", columnDefinition = "VARCHAR(255) DEFAULT '[]'")
     @ApiModelProperty(hidden = true)
     private String goodsList = "[]";
 
-    @Column(name = "station_id")
-    private long stationId;
-
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
+
+    @ManyToOne
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
+    private Station station;
 
     public long getId() {
         return id;
@@ -66,14 +63,6 @@ public class Menu {
         this.modifyTime = modifyTime;
     }
 
-    public long getStationId() {
-        return stationId;
-    }
-
-    public void setStationId(long stationId) {
-        this.stationId = stationId;
-    }
-
     public Date getCreationTime() {
         return creationTime;
     }
@@ -88,5 +77,13 @@ public class Menu {
 
     public void setGoodsList(String goodsList) {
         this.goodsList = goodsList;
+    }
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
     }
 }

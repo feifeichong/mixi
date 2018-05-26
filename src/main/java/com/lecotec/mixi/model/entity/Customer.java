@@ -36,8 +36,8 @@ public class Customer {
     @Column(unique = true)
     private String webo;
 
-    @Pattern(regexp = "[a-zA-Z\\d_]{8,}")
-    @ApiModelProperty(required = true)
+    @Pattern(regexp = "[a-zA-Z\\d_]{8,16}", message = "密码是8至16位以上字母、数字和下划线组成")
+    @ApiModelProperty(required = true, value = "密码是8至16位以上字母、数字和下划线组成")
     private String password;
 
     private String headImage;
@@ -46,8 +46,8 @@ public class Customer {
 
     private String birthday;
 
-    @Column(columnDefinition = "TEXT NULL COMMENT '收件人地址列表, [{name:\"xxx\", phoneNumber:\"xxx\", address:\"xxx\"},...]'")
-    @ApiModelProperty("收件人地址列表, [{name:\"xxx\", phoneNumber:\"xxx\", address:\"xxx\"},...]")
+    @Column(columnDefinition = "TEXT NULL COMMENT '收件人地址列表, 格式为：[{name:\"xxx\", phoneNumber:\"xxx\", address:\"xxx\"},...]'")
+    @ApiModelProperty("收件人地址列表, 格式为：[{name:\"xxx\", phoneNumber:\"xxx\", address:\"xxx\"},...]")
     private String receiversJson = "[]";
 
     @ApiModelProperty(hidden = true)

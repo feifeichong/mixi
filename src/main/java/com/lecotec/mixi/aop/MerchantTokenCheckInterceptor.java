@@ -2,7 +2,7 @@ package com.lecotec.mixi.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.lecotec.mixi.common.ConstString;
-import com.lecotec.mixi.model.entity.Merchant;
+import com.lecotec.mixi.model.entity.MerchantUser;
 import com.lecotec.mixi.model.response.FailResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
@@ -55,7 +55,7 @@ public class MerchantTokenCheckInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        Merchant merchant = (Merchant) merchantObj;
+        MerchantUser merchant = (MerchantUser) merchantObj;
         String merchantUserTypeInServer = merchant.getMerchantUserType();
         String merchantPhoneNumberInServer = merchant.getPhoneNumber();
 

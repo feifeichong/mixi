@@ -4,9 +4,9 @@ import com.lecotec.mixi.common.RandomUtil;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "mx_rider")
@@ -37,8 +37,8 @@ public class Rider {
     @Column(unique = true)
     private String webo;
 
-    @Pattern(regexp = "[a-zA-Z\\d_]{8,}")
-    @ApiModelProperty(required = true)
+    @Pattern(regexp = "[a-zA-Z\\d_]{8,16}", message = "密码是8至16位以上字母、数字和下划线组成")
+    @ApiModelProperty(required = true, value = "密码是8至16位以上字母、数字和下划线组成")
     private String password;
 
     private String name;
@@ -81,7 +81,9 @@ public class Rider {
     @Column(columnDefinition = "VARCHAR(255) NULL COMMENT '骑手工作类型：全职、兼职'")
     private String jobTitle;
 
-    private long stationId;
+    @ManyToOne
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
+    private Station station;
 
     @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
@@ -270,19 +272,19 @@ public class Rider {
         this.jobTitle = jobTitle;
     }
 
-    public long getStationId() {
-        return stationId;
-    }
-
-    public void setStationId(long stationId) {
-        this.stationId = stationId;
-    }
-
     public Date getCreationTime() {
         return creationTime;
     }
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
     }
 }
