@@ -1,9 +1,9 @@
 package com.lecotec.mixi.model.entity;
 
+import com.lecotec.mixi.common.RandomUtil;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -15,26 +15,43 @@ public class Customer {
     @ApiModelProperty(hidden = true)
     private long id;
 
+    @Column(unique = true)
+    @ApiModelProperty(hidden = true)
+    private String account = RandomUtil.getRandomStringByLength(16);
+
+    @Column(unique = true)
     @Pattern(regexp = "1\\d{10}")
-    @Column(name = "phone_number", unique = true)
+    @ApiModelProperty(required = true)
     private String phoneNumber;
 
-    @NotBlank(message = "密码不能为空")
+    @Column(unique = true)
+    private String email;
+
+    @Column(unique = true)
+    private String wechat;
+
+    @Column(unique = true)
+    private String qq;
+
+    @Column(unique = true)
+    private String webo;
+
+    @Pattern(regexp = "[a-zA-Z\\d_]{8,}")
+    @ApiModelProperty(required = true)
     private String password;
 
-    @Column(name = "head_portrait", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '头像链接地址'")
-    private String headPortrait;
+    private String headImage;
 
-    private String nickname;
+    private String nickname = RandomUtil.getRandomStringByLength(8);
 
-    @Pattern(regexp = "^[1-9]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$")
     private String birthday;
 
-    private String receivers;
+    @Column(columnDefinition = "TEXT NULL COMMENT '收件人地址列表, [{name:\"xxx\", phoneNumber:\"xxx\", address:\"xxx\"},...]'")
+    @ApiModelProperty("收件人地址列表, [{name:\"xxx\", phoneNumber:\"xxx\", address:\"xxx\"},...]")
+    private String receiversJson = "[]";
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
 
     public long getId() {
         return id;
@@ -44,12 +61,12 @@ public class Customer {
         this.id = id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAccount() {
+        return account;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getPhoneNumber() {
@@ -60,12 +77,52 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getHeadPortrait() {
-        return headPortrait;
+    public String getEmail() {
+        return email;
     }
 
-    public void setHeadPortrait(String headPortrait) {
-        this.headPortrait = headPortrait;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWechat() {
+        return wechat;
+    }
+
+    public void setWechat(String wechat) {
+        this.wechat = wechat;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public String getWebo() {
+        return webo;
+    }
+
+    public void setWebo(String webo) {
+        this.webo = webo;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getHeadImage() {
+        return headImage;
+    }
+
+    public void setHeadImage(String headImage) {
+        this.headImage = headImage;
     }
 
     public String getNickname() {
@@ -76,27 +133,27 @@ public class Customer {
         this.nickname = nickname;
     }
 
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getReceivers() {
-        return receivers;
-    }
-
-    public void setReceivers(String receivers) {
-        this.receivers = receivers;
-    }
-
     public Date getCreationTime() {
         return creationTime;
     }
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getReceiversJson() {
+        return receiversJson;
+    }
+
+    public void setReceiversJson(String receiversJson) {
+        this.receiversJson = receiversJson;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 }
