@@ -13,7 +13,7 @@ public class Merchant {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    private String shopImage;
+    private String merchantImage;
 
     private String name;
 
@@ -21,15 +21,13 @@ public class Merchant {
 
     @Column(columnDefinition = "VARCHAR(255) NULL COMMENT '类别：中餐、面食等'")
     @ApiModelProperty("类别：中餐、面食等")
-    private String shopType;
+    private String merchantType;
 
-    private String businessBeginTime;
-
-    private String businessEndTime;
+    private String businessTime;
 
     private Date approvalTime;
 
-    @Column(columnDefinition = "VARCHAR(255) NULL COMMENT '骑手的审核状态：未审核、审核通过、审核未通过'")
+    @Column(columnDefinition = "VARCHAR(255) NULL COMMENT '商家的审核状态：未审核、审核通过、审核未通过'")
     private String approvalStatus;
 
     @ApiModelProperty(hidden = true)
@@ -46,12 +44,12 @@ public class Merchant {
         this.id = id;
     }
 
-    public String getShopImage() {
-        return shopImage;
+    public String getMerchantImage() {
+        return merchantImage;
     }
 
-    public void setShopImage(String shopImage) {
-        this.shopImage = shopImage;
+    public void setMerchantImage(String merchantImage) {
+        this.merchantImage = merchantImage;
     }
 
     public String getName() {
@@ -70,28 +68,12 @@ public class Merchant {
         this.address = address;
     }
 
-    public String getShopType() {
-        return shopType;
+    public String getMerchantType() {
+        return merchantType;
     }
 
-    public void setShopType(String shopType) {
-        this.shopType = shopType;
-    }
-
-    public String getBusinessBeginTime() {
-        return businessBeginTime;
-    }
-
-    public void setBusinessBeginTime(String businessBeginTime) {
-        this.businessBeginTime = businessBeginTime;
-    }
-
-    public String getBusinessEndTime() {
-        return businessEndTime;
-    }
-
-    public void setBusinessEndTime(String businessEndTime) {
-        this.businessEndTime = businessEndTime;
+    public void setMerchantType(String merchantType) {
+        this.merchantType = merchantType;
     }
 
     public Date getApprovalTime() {
@@ -124,5 +106,13 @@ public class Merchant {
 
     public void setIsActive(boolean active) {
         isActive = active;
+    }
+
+    public String getBusinessTime() {
+        return businessTime;
+    }
+
+    public void setBusinessTime(String businessTime) {
+        this.businessTime = businessTime;
     }
 }
