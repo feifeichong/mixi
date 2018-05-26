@@ -1,0 +1,68 @@
+<div id="merchantDetailDiv" v-if="merchantInfo" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('merchant.html');" type="button">返回</button>
+        </div>
+        <h1>审核状态：<span>{{merchantInfo.approvalStatus}}</span></h1>
+    </div>
+    <h3 class="sub-header">商家详情</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>店铺图片</th>
+            <th>店铺名称</th>
+            <th>地址</th>
+            <th>类别</th>
+            <th>营业时间</th>
+            <th>提交时间</th>
+            <th>审核状态</th>
+        </tr>
+        <tr>
+            <td><img :src="merchantInfo.merchantImage" width="100" height="100" alt=""></td>
+            <td>{{merchantInfo.name}}</td>
+            <td>{{merchantInfo.address}}</td>
+            <td>{{merchantInfo.merchantType}}</td>
+            <td>{{merchantInfo.businessTime}}</td>
+            <td>{{merchantInfo.creationTime}}</td>
+            <td>{{merchantInfo.approvalStatus}}</td>
+        </tr>
+    </table>
+    <hr>
+    <div class="form-group" v-if="merchantInfo.approvalStatus==='未审核'">
+        <div class="col-sm-12 input-group" style="text-align: center">
+            <button class="btn btn-default" @click="approve">审核未通过</button>
+            &nbsp;&nbsp;
+            <button class="btn btn-success" @click="approve">审核通过</button>
+        </div>
+    </div>
+    <div id="cmModal"></div>
+</div>
+<script>
+    var merchantApprovalPage = new Vue({
+        el: '#merchantDetailDiv',
+        data: {
+            merchantInfo: null
+        },
+        methods: {
+            initData: function (merchant) {
+                this.merchantInfo = merchant;
+            },
+            approve: function () {
+                this.merchantInfo.approvalStatus = event.target.innerText;
+                this.$http.post("/api/merchant", this.merchantInfo)
+                    .then(function (res) {
+                        if (res.data.status === SUCCESS) {
+                            indexPage.setContentBody("merchant.html");
+                        } else {
+                            commonModal.showModal(res.data.data);
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    });
+            }
+        },
+        mounted: function () {
+            $("#cmModal").load("commonModal.html");
+        }
+    });
+</script>
