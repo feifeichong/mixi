@@ -33,6 +33,9 @@ public class Merchant {
     private String approvalStatus;
 
     @ApiModelProperty(hidden = true)
+    private boolean isActive = true;
+
+    @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
 
     public long getId() {
@@ -113,5 +116,13 @@ public class Merchant {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean active) {
+        isActive = active;
     }
 }

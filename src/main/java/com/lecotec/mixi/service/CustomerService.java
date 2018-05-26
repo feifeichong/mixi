@@ -20,7 +20,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer saveCustomer(Customer customer) {
+    public Customer saveOrUpdateCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
@@ -32,7 +32,7 @@ public class CustomerService {
         return customerRepository.updateCustomerPassword(phoneNumber, newPassword) > 0;
     }
 
-    public Page<Customer> searchByParam(CustomerSearchParam customerSearchParam) {
+    public Page<Customer> searchCustomerForMixiConsole(CustomerSearchParam customerSearchParam) {
         return customerRepository.findAll((Specification<Customer>) (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 

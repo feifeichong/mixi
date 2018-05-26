@@ -8,8 +8,6 @@ import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
 import com.lecotec.mixi.service.RiderService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +23,14 @@ import static com.lecotec.mixi.common.AuthorityUtil.produceCookieAndSession;
 import static com.lecotec.mixi.common.ConstString.*;
 
 @RestController
-@RequestMapping("/api/rider")
-@Api(value = "/api/rider", tags = "骑手登录、注册、忘记密码、修改密码和缴纳保证金接口集合")
+@Api(tags = "骑手信息接口")
 public class RiderController {
 
     @Autowired
     private RiderService riderService;
 
-    @PostMapping("/login/shortMsgCodeLogin")
-    @ApiOperation("骑手登录接口（手机号、短信验证码），调用之前先获取RSA公钥，加密手机号和短信验证码")
-    @ApiImplicitParams(@ApiImplicitParam(name = "userParamWithShortMsgCode", value = "手机号、短信验证码", required = true, dataType = "UserParamWithShortMsgCode"))
+    @PostMapping("/api/rider/login/shortMsgCodeLogin")
+    @ApiOperation("骑手登录接口（手机号、短信验证码）")
     public ResponseObject shortMsgCodeLogin(@Valid @RequestBody UserParamWithShortMsgCode userParamWithShortMsgCode, HttpServletResponse response, HttpSession session) throws Exception {
         /*Key privateKey = (Key) session.getAttribute(ConstString.RSA_PRIVATE_KEY);*/
         String phoneNumber = /*EncryptUtil.rsaDecrypt(*/userParamWithShortMsgCode.getPhoneNumber()/*, privateKey)*/;
@@ -52,9 +48,8 @@ public class RiderController {
         return new SuccessResponse();
     }
 
-    @PostMapping("/login/pwdLogin")
-    @ApiOperation("骑手登录接口（手机号、密码），调用之前先获取RSA公钥，加密手机号和密码")
-    @ApiImplicitParams(@ApiImplicitParam(name = "userParamWithPassword", value = "手机号、密码", required = true, dataType = "UserParamWithPassword"))
+    @PostMapping("/api/rider/login/pwdLogin")
+    @ApiOperation("骑手登录接口（手机号、密码）")
     public ResponseObject pwdLogin(@Valid @RequestBody UserParamWithPassword userParamWithPassword, HttpServletResponse response, HttpSession session) throws Exception {
         /*Key privateKey = (Key) session.getAttribute(ConstString.RSA_PRIVATE_KEY);*/
         String phoneNumber = /*EncryptUtil.rsaDecrypt(*/userParamWithPassword.getPhoneNumber()/*, privateKey)*/;
@@ -71,16 +66,14 @@ public class RiderController {
         return new SuccessResponse();
     }
 
-    @PostMapping
+    @PostMapping("/api/rider")
     @ApiOperation("骑手注册接口")
-    @ApiImplicitParam(name = "rider", value = "用户上传骑手信息", required = true, dataType = "Rider")
     public ResponseObject saveRider(@Valid @RequestBody Rider rider) {
         return new SuccessResponse(riderService.saveRider(rider));
     }
 
-    @PutMapping("/riderPassword")
+    @PutMapping("/api/rider/updateRiderPassword")
     @ApiOperation("骑手修改密码接口")
-    @ApiImplicitParam(name = "userParamForChangePassword", value = "骑手提交密码修改信息", required = true, dataType = "UserParamForChangePassword")
     public ResponseObject updateRiderPassword(@Valid @RequestBody UserParamForChangePassword userParamForChangePassword) {
         String phoneNumber = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getPhoneNumber()/*, privateKey)*/;
         String password = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getPassword()/*, privateKey)*/;
@@ -95,21 +88,22 @@ public class RiderController {
         return new SuccessResponse(riderService.updateRiderPassword(phoneNumber, newPassword));
     }
 
-    @PutMapping("/rider/payedDeposit")
+    @PutMapping("/api/rider/payedDeposit")
     @ApiOperation("骑手缴纳保证金后，更新是否已缴纳的接口")
-    @ApiImplicitParams(@ApiImplicitParam(name = "userParam", value = "手机号", required = true, dataType = "UserParam"))
     public ResponseObject payedDeposit(@Valid @RequestBody UserParam userParam) {
         return riderService.payedDeposit(userParam.getPhoneNumber(), DEPOSIT_AMOUNT)
                 ? new SuccessResponse() : new FailResponse("手机号对应的骑手信息不存在");
     }
 
-    @GetMapping("all")
-    public BootstrapTableResult<Rider> searchRiders(RiderSerchParam riderSerchParam) {
-        Page<Rider> result = riderService.searchRiders(riderSerchParam);
+    @GetMapping("/api/merchant/searchRiderForMixiConsole")
+    @ApiOperation("系统后台获取骑手列表")
+    public BootstrapTableResult<Rider> searchRiderForMixiConsole(RiderSerchParam riderSerchParam) {
+        Page<Rider> result = riderService.searchRiderForMixiConsole(riderSerchParam);
         return new BootstrapTableResult<>(result.getTotalElements(), result.getContent());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/merchant/rider/{id}")
+    @ApiOperation("后台删除骑手信息")
     public ResponseObject deleteRider(@PathVariable("id") long id) {
         return new SuccessResponse(riderService.deleteRider(id));
     }

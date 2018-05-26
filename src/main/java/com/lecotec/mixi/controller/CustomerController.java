@@ -29,15 +29,13 @@ import static com.lecotec.mixi.common.ConstString.CUSTOMER_PHONE_NUMBER;
 import static com.lecotec.mixi.common.ConstString.CUSTOMER_TOKEN;
 
 @RestController
-@RequestMapping("/api/customer")
-@Api(value = "/api/customer", tags = "顾客登录、注册、忘记密码和修改密码接口集合")
+@Api(tags = "顾客信息接口")
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping("/login/shortMsgCodeLogin")
-    @ApiOperation("顾客登录接口（手机号、短信验证码），调用之前先获取RSA公钥，加密手机号和短信验证码")
-    @ApiImplicitParams(@ApiImplicitParam(name = "userParamWithShortMsgCode", value = "手机号、短信验证码", required = true, dataType = "UserParamWithShortMsgCode"))
+    @PostMapping("/api/customer/login/shortMsgCodeLogin")
+    @ApiOperation("顾客登录接口（手机号、短信验证码）")
     public ResponseObject shortMsgCodeLogin(@Valid @RequestBody UserParamWithShortMsgCode userParamWithShortMsgCode, HttpServletResponse response, HttpSession session) throws Exception {
         /*Key privateKey = (Key) session.getAttribute(ConstString.RSA_PRIVATE_KEY);*/
         String phoneNumber = /*EncryptUtil.rsaDecrypt(*/userParamWithShortMsgCode.getPhoneNumber()/*, privateKey)*/;
@@ -56,9 +54,8 @@ public class CustomerController {
         return new SuccessResponse();
     }
 
-    @PostMapping("/login/pwdLogin")
-    @ApiOperation("顾客登录接口（手机号、密码），调用之前先获取RSA公钥，加密手机号和密码")
-    @ApiImplicitParams(@ApiImplicitParam(name = "userParamWithPassword", value = "手机号、密码", required = true, dataType = "UserParamWithPassword"))
+    @PostMapping("/api/customer/login/pwdLogin")
+    @ApiOperation("顾客登录接口（手机号、密码）")
     public ResponseObject pwdLogin(@Valid @RequestBody UserParamWithPassword userParamWithPassword, HttpServletResponse response, HttpSession session) throws Exception {
         /*Key privateKey = (Key) session.getAttribute(ConstString.RSA_PRIVATE_KEY);*/
         String phoneNumber = /*EncryptUtil.rsaDecrypt(*/userParamWithPassword.getPhoneNumber()/*, privateKey)*/;
@@ -75,20 +72,18 @@ public class CustomerController {
         return new SuccessResponse();
     }
 
-    @PostMapping
+    @PostMapping("/api/customer")
     @ApiOperation("顾客注册接口")
-    @ApiImplicitParam(name = "customer", value = "用户上传顾客信息", required = true, dataType = "Customer")
-    public ResponseObject saveCustomer(@Valid @RequestBody Customer customer) {
-        return new SuccessResponse(customerService.saveCustomer(customer));
+    public ResponseObject saveOrUpdateCustomer(@Valid @RequestBody Customer customer) {
+        return new SuccessResponse(customerService.saveOrUpdateCustomer(customer));
     }
 
-    @PutMapping("/customerPassword")
+    @PutMapping("/api/customer/changePassword")
     @ApiOperation("顾客修改密码接口")
-    @ApiImplicitParam(name = "userParamForChangePassword", value = "顾客提交密码修改信息", required = true, dataType = "UserParamForChangePassword")
     public ResponseObject updateCustomerPassword(@Valid @RequestBody UserParamForChangePassword userParamForChangePassword) {
-        String phoneNumber = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getPhoneNumber()/*, privateKey)*/;
-        String password = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getPassword()/*, privateKey)*/;
-        String newPassword = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getNewPassword()/*, privateKey)*/;
+        String phoneNumber = userParamForChangePassword.getPhoneNumber();
+        String password = userParamForChangePassword.getPassword();
+        String newPassword = userParamForChangePassword.getNewPassword();
 
         Customer customer = customerService.findByPhoneNumber(phoneNumber);
 
@@ -99,9 +94,10 @@ public class CustomerController {
         return new SuccessResponse(customerService.updateCustomerPassword(phoneNumber, newPassword));
     }
 
-    @GetMapping("searchByParam")
-    public BootstrapTableResult<Customer> searchByParam(CustomerSearchParam customerSearchParam) {
-        Page<Customer> result = customerService.searchByParam(customerSearchParam);
+    @GetMapping("/api/merchant/searchCustomerForMixiConsole")
+    @ApiOperation("系统后台查询顾客信息接口")
+    public BootstrapTableResult<Customer> searchCustomerForMixiConsole(CustomerSearchParam customerSearchParam) {
+        Page<Customer> result = customerService.searchCustomerForMixiConsole(customerSearchParam);
         return new BootstrapTableResult<>(result.getTotalElements(), result.getContent());
     }
 }

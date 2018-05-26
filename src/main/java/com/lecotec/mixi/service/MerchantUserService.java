@@ -17,19 +17,19 @@ public class MerchantUserService {
         return merchantUserRepository.findByPhoneNumber(phoneNumber);
     }
 
-    public boolean updateMerchantPassword(String phoneNumber, String newPassword) {
-        return merchantUserRepository.updateMerchantPassword(phoneNumber, newPassword) > 0;
+    public boolean updateMerchantUserPassword(String phoneNumber, String newPassword) {
+        return merchantUserRepository.updateMerchantUserPassword(phoneNumber, newPassword) > 0;
     }
 
-    public MerchantUser saveMerchant(MerchantUser merchant) {
+    public MerchantUser saveOrUpdateMerchantUser(MerchantUser merchant) {
         return merchantUserRepository.save(merchant);
     }
 
-    public Page<MerchantUser> getMerchants(int pageNumber, int pageSize) {
+    public Page<MerchantUser> getMerchantUsers(int pageNumber, int pageSize) {
         return merchantUserRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
-    public boolean deleteMerchant(long id) {
+    public boolean deleteMerchantUser(long id) {
         merchantUserRepository.deleteById(id);
         return true;
     }

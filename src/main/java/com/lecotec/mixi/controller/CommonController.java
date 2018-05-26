@@ -12,17 +12,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
@@ -36,22 +30,8 @@ import static com.lecotec.mixi.common.ConstString.RSA_PUBLIC_KEY;
 
 @RestController
 @RequestMapping("/api/common")
-@Api(value = "/api/common", tags = "公共模块接口集合")
+@Api(tags = "公共模块接口")
 public class CommonController {
-
-    @Autowired
-    private Environment env;
-
-    public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
-        File targetFile = new File(filePath);
-        if (!targetFile.exists()) {
-            targetFile.mkdirs();
-        }
-        FileOutputStream out = new FileOutputStream(filePath + "/" + fileName);
-        out.write(file);
-        out.flush();
-        out.close();
-    }
 
     @GetMapping("/rsaPublicKey")
     @ApiOperation("获取RSA加密公钥")
@@ -105,17 +85,5 @@ public class CommonController {
 
         AuthorityUtil.produceAuthority(response, session, userParamWithUserType);
         return new SuccessResponse();
-    }
-
-    @RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
-    @ApiOperation("文件上传接口")
-    public ResponseObject fileUpload(@RequestParam("file") MultipartFile file) throws Exception {
-        String fileName = file.getOriginalFilename();
-        String suffix = fileName.substring(fileName.lastIndexOf('.'));
-        String newFileName = fileName.substring(0, fileName.lastIndexOf('.') - 1) +
-                String.valueOf(System.currentTimeMillis()) + suffix;
-
-        uploadFile(file.getBytes(), env.getProperty("upload.dir"), newFileName);
-        return new SuccessResponse(env.getProperty("upload.server") + "/" + newFileName);
     }
 }

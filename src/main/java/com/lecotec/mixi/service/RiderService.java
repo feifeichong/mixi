@@ -36,7 +36,7 @@ public class RiderService {
         return riderRepository.payedDeposit(phoneNumber, depositAmount) > 0;
     }
 
-    public Page<Rider> searchRiders(RiderSerchParam riderSerchParam) {
+    public Page<Rider> searchRiderForMixiConsole(RiderSerchParam riderSerchParam) {
         return riderRepository.findAll((Specification<Rider>) (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
