@@ -1,11 +1,13 @@
 package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.Station;
+import com.lecotec.mixi.model.parameter.StationParam;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
 import com.lecotec.mixi.service.StationService;
 import io.swagger.annotations.Api;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +29,10 @@ public class StationController {
     }
 
     @PostMapping
-    public ResponseObject saveOrUpdateStation(@Valid @RequestBody Station station) {
-        station.setModifyTime(new Date());
+    public ResponseObject saveOrUpdateStation(@Valid @RequestBody StationParam stationParam) {
+        stationParam.setModifyTime(new Date());
+        Station station = new Station();
+        BeanUtils.copyProperties(stationParam, station);
         return new SuccessResponse(stationService.saveStation(station));
     }
 

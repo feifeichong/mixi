@@ -29,6 +29,7 @@ public class Menu {
 
     @ManyToOne
     @JoinColumn(name = "station_id", referencedColumnName = "id")
+    @ApiModelProperty(hidden = true)
     private Station station;
 
     public long getId() {

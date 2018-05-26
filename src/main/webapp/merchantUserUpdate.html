@@ -2,7 +2,7 @@
     <div class="title page-header">
         <h1>更新系统用户</h1>
     </div>
-    <form class="form-horizontal" action="javascript:merchantUpdatePage.update();">
+    <form class="form-horizontal" action="javascript:merchantUserUpdatePage.update();">
         <div class="form-group">
             <div class="col-xs-12 col-sm-8 col-md-4 input-group">
                 <span class="input-group-addon">用户账号</span>
@@ -42,7 +42,7 @@
     </form>
 </div>
 <script>
-    var merchantUpdatePage = {};
+    var merchantUserUpdatePage = {};
     (function (page) {
         var _data = {};
 
@@ -58,12 +58,12 @@
             _data.name = $("#name").val();
             _data.merchantUserType = $("#userType").val();
             $.ajax({
-                type: "POST", url: "api/merchant",
+                type: "POST", url: "api/merchantUser",
                 contentType: "application/json",
                 data: JSON.stringify(_data),
                 success: function (result) {
                     if (result.status === SUCCESS)
-                        indexPage.setContentBody("merchant.html");
+                        indexPage.setContentBody("merchantUser.html");
                     else
                         commonModal.showModal(result.data);
                 }
@@ -77,8 +77,8 @@
             $("#cmModal").load("commonModal.html");
 
             $("#cancelBtn").click(function () {
-                indexPage.setContentBody("merchant.html");
+                indexPage.setContentBody("merchantUser.html");
             });
         });
-    })(merchantUpdatePage);
+    })(merchantUserUpdatePage);
 </script>

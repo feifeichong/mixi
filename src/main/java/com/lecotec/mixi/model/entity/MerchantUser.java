@@ -15,21 +15,20 @@ public class MerchantUser {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    @Column(unique = true)
-    private String account = RandomUtil.getRandomStringByLength(8);
-
     @Pattern(regexp = "1\\d{10}")
+    @Column(unique = true)
     private String phoneNumber;
 
     private String name;
 
     @Pattern(regexp = "[a-zA-Z\\d_]{8,}")
-    @ApiModelProperty(required = true)
-    private String password;
+    @ApiModelProperty(hidden = true)
+    private String password = RandomUtil.getRandomStringByLength(10);
 
     private String sex;
 
     @Column(columnDefinition = "VARCHAR(255) NULL COMMENT '用户类型：系统管理员、员工'")
+    @ApiModelProperty("用户类型：系统管理员、员工")
     private String merchantUserType;
 
     @ApiModelProperty(hidden = true)
@@ -37,6 +36,7 @@ public class MerchantUser {
 
     @ManyToOne
     @JoinColumn(name = "merchant_id", referencedColumnName = "id")
+    @ApiModelProperty(hidden = true)
     private Merchant merchant;
 
     public long getId() {

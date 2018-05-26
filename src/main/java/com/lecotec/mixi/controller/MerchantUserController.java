@@ -4,6 +4,7 @@ import com.lecotec.mixi.common.ConstString;
 import com.lecotec.mixi.common.EncryptUtil;
 import com.lecotec.mixi.common.RandomUtil;
 import com.lecotec.mixi.model.entity.MerchantUser;
+import com.lecotec.mixi.model.parameter.MerchantUserParam;
 import com.lecotec.mixi.model.parameter.UserParamForChangePassword;
 import com.lecotec.mixi.model.parameter.UserParamWithPassword;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
@@ -14,6 +15,7 @@ import com.lecotec.mixi.service.MerchantUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.ObjectUtils;
@@ -28,7 +30,7 @@ import static com.lecotec.mixi.common.AuthorityUtil.produceCookie;
 import static com.lecotec.mixi.common.ConstString.*;
 
 @RestController
-@RequestMapping("/api/merchant")
+@RequestMapping("/api/merchantUser")
 @Api(tags = "商家后台用户信息接口")
 public class MerchantUserController {
 
@@ -44,7 +46,7 @@ public class MerchantUserController {
 
         MerchantUser merchantUser = merchantUserService.findByPhoneNumber(phoneNumber);
 
-        if (ObjectUtils.isEmpty(merchantUser) || !StringUtils.equals(EncryptUtil.calcMD5(password), merchantUser.getPassword())) {
+        if (ObjectUtils.isEmpty(merchantUser) || !StringUtils.equals(password, merchantUser.getPassword())) {
             return new FailResponse("手机号或者密码错误！");
         }
 
@@ -60,8 +62,9 @@ public class MerchantUserController {
     }
 
     @PostMapping
-    public ResponseObject saveOrUpdateMerchantUser(@Valid @RequestBody MerchantUser merchantUser) throws Exception {
-        merchantUser.setPassword(EncryptUtil.calcMD5(merchantUser.getPassword()));
+    public ResponseObject saveOrUpdateMerchantUser(@Valid @RequestBody MerchantUserParam merchantUserParam) {
+        MerchantUser merchantUser = new MerchantUser();
+        BeanUtils.copyProperties(merchantUserParam, merchantUser);
         return new SuccessResponse(merchantUserService.saveOrUpdateMerchantUser(merchantUser));
     }
 

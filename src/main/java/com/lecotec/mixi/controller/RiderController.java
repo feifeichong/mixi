@@ -10,6 +10,7 @@ import com.lecotec.mixi.service.RiderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.ObjectUtils;
@@ -68,7 +69,9 @@ public class RiderController {
 
     @PostMapping("/api/rider")
     @ApiOperation("骑手注册接口")
-    public ResponseObject saveRider(@Valid @RequestBody Rider rider) {
+    public ResponseObject saveRider(@Valid @RequestBody RiderParam riderParam) {
+        Rider rider = new Rider();
+        BeanUtils.copyProperties(riderParam, rider);
         return new SuccessResponse(riderService.saveRider(rider));
     }
 
@@ -95,7 +98,7 @@ public class RiderController {
                 ? new SuccessResponse() : new FailResponse("手机号对应的骑手信息不存在");
     }
 
-    @GetMapping("/api/merchant/searchRiderForMixiConsole")
+    @GetMapping("/api/merchant/rider/searchRiderForMixiConsole")
     @ApiOperation("系统后台获取骑手列表")
     public BootstrapTableResult<Rider> searchRiderForMixiConsole(RiderSerchParam riderSerchParam) {
         Page<Rider> result = riderService.searchRiderForMixiConsole(riderSerchParam);

@@ -57,14 +57,7 @@
                         }
                     },
                     {title: '菜单名称', field: 'name'},
-                    {
-                        title: '所属站点', field: 'stationId',
-                        formatter: function (value, row, index) {
-                            return Enumerable.from(_stations).firstOrDefault(function (n) {
-                                return n.id === row.stationId;
-                            }, {name: "<span style='color:red'>无匹配站点</span>"}).name;
-                        }
-                    },
+                    {title: '所属站点', field: 'station.name',},
                     {
                         title: '菜品数量', field: 'goodsList',
                         formatter: function (value, row, index) {

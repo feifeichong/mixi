@@ -2,23 +2,11 @@
     <div class="title page-header">
         <h1>新增系统用户</h1>
     </div>
-    <form class="form-horizontal" action="javascript:merchantAddPage.save();">
+    <form class="form-horizontal" action="javascript:merchantUserAddPage.save();">
         <div class="form-group">
             <div class="col-xs-12 col-sm-8 col-md-4 input-group">
                 <span class="input-group-addon">用户账号</span>
                 <input id="phoneNumber" type="text" class="form-control" required/>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-xs-12 col-sm-8 col-md-4 input-group">
-                <span class="input-group-addon">密码</span>
-                <input id="password" type="password" class="form-control" required/>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-xs-12 col-sm-8 col-md-4 input-group">
-                <span class="input-group-addon">确认密码</span>
-                <input id="confirmPassword" type="password" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
@@ -55,40 +43,35 @@
     <div id="cmModal"></div>
 </div>
 <script>
-    var merchantAddPage = {};
+    var merchantUserAddPage = {};
     (function (page) {
         var _data = {};
 
+        page.save = function () {
+            _data.phoneNumber = $("#phoneNumber").val();
+            _data.name = $("#name").val();
+            _data.merchantUserType = $("#userType").val();
+
+            $.ajax({
+                type: "POST", url: "api/merchantUser",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("merchantUser.html");
+                    else
+                        commonModal.showModal(result.data);
+                }
+            });
+        };
+
         $(function () {
+            _data.sex = $("#sex").attr("data-on-text");
             $("#sex").bootstrapSwitch("state", true).on("switchChange.bootstrapSwitch", function (event, status) {
                 _data.sex = status ? event.target.getAttribute("data-on-text") : event.target.getAttribute("data-off-text");
             });
 
             $("#cmModal").load("commonModal.html");
-
-            page.save = function () {
-                _data.phoneNumber = $("#phoneNumber").val();
-                _data.password = calcMD5_Bin16($("#password").val());
-                _data.name = $("#name").val();
-                _data.merchantUserType = $("#userType").val();
-
-                if ($("#password").val() !== $("#confirmPassword").val()) {
-                    commonModal.showModal("两次输入的密码不一致");
-                    return false;
-                }
-
-                $.ajax({
-                    type: "POST", url: "api/merchant",
-                    contentType: "application/json",
-                    data: JSON.stringify(_data),
-                    success: function (result) {
-                        if (result.status === SUCCESS)
-                            indexPage.setContentBody("merchant.html");
-                        else
-                            commonModal.showModal(result.data);
-                    }
-                });
-            };
         });
-    })(merchantAddPage);
+    })(merchantUserAddPage);
 </script>

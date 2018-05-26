@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "mx_rider")
@@ -83,6 +82,7 @@ public class Rider {
 
     @ManyToOne
     @JoinColumn(name = "station_id", referencedColumnName = "id")
+    @ApiModelProperty(hidden = true)
     private Station station;
 
     @ApiModelProperty(hidden = true)

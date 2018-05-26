@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @Api(tags = "商品数据接口")
@@ -29,9 +28,9 @@ public class GoodsController {
     }
 
     @PostMapping("getGoodsByIds")
-    public SuccessResponse getGoodsByIds(@RequestBody IdsParam idsParam) {
-        List<Goods> goodsPage = goodsService.getGoodsByIds(idsParam);
-        return new SuccessResponse(goodsPage);
+    public BootstrapTableResult<Goods> getGoodsByIds(@RequestBody IdsParam idsParam) {
+        Page<Goods> goodsPage = goodsService.getGoodsByIds(idsParam);
+        return new BootstrapTableResult(goodsPage.getTotalElements(), goodsPage.getContent());
     }
 
     @GetMapping("searchByParam")

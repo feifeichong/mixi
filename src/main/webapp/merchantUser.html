@@ -1,7 +1,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
         <div class="right">
-            <button class="btn btn-success" onclick="indexPage.setContentBody('merchantAdd.html')" type="button">添加系统用户</button>
+            <button class="btn btn-success" onclick="indexPage.setContentBody('merchantUserAdd.html')" type="button">添加系统用户</button>
         </div>
         <h1>系统用户查询</h1>
     </div>
@@ -16,7 +16,7 @@
     (function (page) {
         function searchTableDatas() {
             $('#tableResult').bootstrapTable({
-                url: 'api/merchant/all',
+                url: 'api/merchantUser/all',
                 method: "get",
                 contentType: "application/x-www-form-urlencoded",
                 queryParams: function (params) {
@@ -30,6 +30,7 @@
                         }
                     },
                     {title: '用户账号', field: 'phoneNumber'},
+                    {title: '用户密码', field: 'password'},
                     {title: '姓名', field: 'name'},
                     {title: '性别', field: 'sex'},
                     {title: '用户角色', field: 'merchantUserType'},
@@ -46,8 +47,8 @@
 
         page.edit = function (id) {
             var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
-            indexPage.setContentBody("merchantUpdate.html", function (response, status, xhr) {
-                merchantUpdatePage.setData(currentData);
+            indexPage.setContentBody("merchantUserUpdate.html", function (response, status, xhr) {
+                merchantUserUpdatePage.setData(currentData);
             });
         };
 
@@ -58,7 +59,7 @@
 
         function deleteMerchant(id) {
             $.ajax({
-                type: "DELETE", url: "api/merchant/" + id,
+                type: "DELETE", url: "api/merchantUser/" + id,
                 data: {},
                 success: function (result) {
                     if (result.status === SUCCESS)

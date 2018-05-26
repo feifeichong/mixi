@@ -131,7 +131,7 @@
 
         function initHasSelectedTableDatas() {
             $('#hasSelectedTableResult').bootstrapTable({
-                url: 'api/merchant/goods/searchByIds',
+                url: 'api/merchant/goods/getGoodsByIds',
                 method: "post",
                 queryParams: function (params) {
                     return {

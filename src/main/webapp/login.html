@@ -76,7 +76,7 @@
             var password = $("#password").val();
 
             $.ajax({
-                type: "POST", url: "api/merchant/login/pwdLogin", contentType: "application/json",
+                type: "POST", url: "api/merchantUser/login/pwdLogin", contentType: "application/json",
                 data: JSON.stringify({phoneNumber: userName, password: rsaEncrypt(password, _publicKey)}),
                 success: function (response) {
                     if (response.status === SUCCESS) {

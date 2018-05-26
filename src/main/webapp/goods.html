@@ -17,17 +17,16 @@
         <div class="clearfix"></div>
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
-                <span class="input-group-addon">菜品名称</span><input id="goodsName" class="form-control"/>
+                <span class="input-group-addon">菜品名称</span>
+                <input id="goodsName" data-toggle="tooltip" data-placement="bottom"
+                       title="输入内容，点击键盘Enter查询" onkeyup="goodsPage.onEnterKeyPress()"
+                       class="form-control"/>
             </div>
         </div>
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
-                <span class="input-group-addon">菜品类型</span><select id="goodsTypeSelect" class="form-control"></select>
-            </div>
-        </div>
-        <div class="col-xs-6 col-sm-4 placeholder">
-            <div class="input-group">
-                <button onclick="goodsPage.refreshTableDatas();" class="btn btn-primary">查询</button>
+                <span class="input-group-addon">菜品类型</span>
+                <select id="goodsTypeSelect" onchange="goodsPage.refreshTableDatas()" class="form-control"></select>
             </div>
         </div>
     </div>
@@ -61,11 +60,23 @@
             });
         }
 
+        page.refreshTableDatas = function () {
+            $('#tableResult').bootstrapTable("refresh", {silent: true});
+        };
+
+        page.onEnterKeyPress = function () {
+            var code = event.charCode || event.keyCode;
+            if (code == 13) {
+                page.refreshTableDatas();
+            }
+        };
+
         page.selectGoodsActiveStatus = function () {
             $(event.target).parent().parent().find("li").each(function (index, dom) {
                 $(dom).removeClass("active");
             });
             $(event.target).parent().addClass("active");
+            page.refreshTableDatas();
         };
 
         function changeActiveStatus(id, status) {
@@ -180,6 +191,7 @@
         $(function () {
             initGoodsType();
             initTableDatas();
+            $("#goodsName").tooltip();
             $("#deleteConfimModal").load("deleteConfirmModal.html");
         });
     })(goodsPage);

@@ -28,6 +28,7 @@ public class Station {
 
     @ManyToOne
     @JoinColumn(name = "merchant_id", referencedColumnName = "id")
+    @ApiModelProperty(hidden = true)
     private Merchant merchant;
 
     public long getId() {
