@@ -1,83 +1,101 @@
 package com.lecotec.mixi.model.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.*;
-
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.*;
+import java.util.Date;
 
-/**
- * 评论
- * @author XINGYI
- *
- */
 @Entity
 @Table(name = "mx_comment")
-public class Comment implements Serializable{
+public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(hidden = true)
+    private long id;
 
-	private static final long serialVersionUID = 1L;
+    @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @ApiModelProperty(hidden = true)
+    private Order order;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @ApiModelProperty(hidden = true)
+    private Customer customer;
 
-	@Column(name = "order_id",columnDefinition = "BIGINT(20) DEFAULT NULL COMMENT '订单的ID'")
-	private long orderId;
+    private String status;
 
-	@Column(name = "user_name",columnDefinition = "varchar(255) DEFAULT NULL COMMENT '用户昵称'")
-	private String userName;
+    private boolean isShow;
 
-	@Column(name = "ip_address",columnDefinition = "varchar(255) DEFAULT NULL COMMENT 'ip地址'")
-	private String ipAddress;
+    private String content;
 
-	@Column(name = "reply_state",columnDefinition = "varchar(255) DEFAULT NULL COMMENT '回复状态'")
-	private String replyState;
+    @Column(columnDefinition = "TEXT NULL")
+    private String imagePaths;
 
-	@Column(name = "is_show",columnDefinition = "BIT DEFAULT NULL COMMENT '是否显示(0是，1否)'")
-	private boolean isShow;
+    @ApiModelProperty(hidden = true)
+    private Date creationTime = new Date();
 
-	@Column(name = "station_name",columnDefinition = "varchar(255) DEFAULT NULL COMMENT '站点名称'")
-	private String stationName;
+    public long getId() {
+        return id;
+    }
 
-	@Column(name = "station_id",columnDefinition = "varchar(255) DEFAULT NULL COMMENT '站点ID'")
-	private String stationId;
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	@Column(name = "rider_id",columnDefinition = "varchar(255) DEFAULT NULL COMMENT '骑手ID'")
-	private long riderId;
+    public Order getOrder() {
+        return order;
+    }
 
-	@Column(name = "rider_name",columnDefinition = "varchar(255) DEFAULT NULL COMMENT '骑手昵称'")
-	private String riderName;
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 
-	@Column(name = "rider_level",columnDefinition = "int DEFAULT NULL COMMENT '骑手等级'")
-	private String riderLevel;
+    public Customer getCustomer() {
+        return customer;
+    }
 
-	@Column(name = "rider_satisfaction",columnDefinition = "int DEFAULT NULL COMMENT '骑手满意程度(满意/不满意)'")
-	private String riderSatisfaction;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
-	@Column(name = "shop_id",columnDefinition = "varchar(255) DEFAULT NULL COMMENT '店铺ID'")
-	private long shopId;
+    public String getStatus() {
+        return status;
+    }
 
-	@Column(name = "shop_name",columnDefinition = "varchar(255) DEFAULT NULL COMMENT '店铺名称'")
-	private String shopName;
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	@Column(name = "shop_level",columnDefinition = "int DEFAULT NULL COMMENT '店铺星级'")
-	private int shopLevel;
+    public boolean getIsShow() {
+        return isShow;
+    }
 
-	@Column(name = "taste_level",columnDefinition = "int DEFAULT NULL COMMENT '口味等级'")
-	private int tasteLevel;
+    public void setIsShow(boolean show) {
+        isShow = show;
+    }
 
-	@Column(name = "package_level",columnDefinition = "int DEFAULT NULL COMMENT '包装等级'")
-	private int packageLevel;
+    public String getContent() {
+        return content;
+    }
 
-	@Column(name = "comment_description",columnDefinition = "LONGTEXT DEFAULT NULL COMMENT '评论描述'")
-	private String commentDescription;
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	@Column(columnDefinition = "varchar(255) DEFAULT NULL COMMENT '图片地址'")
-	private String image;
+    public String getImagePaths() {
+        return imagePaths;
+    }
 
-	@ApiModelProperty(hidden = true)
-	@Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-	private Date creationTime;
+    public void setImagePaths(String imagePaths) {
+        this.imagePaths = imagePaths;
+    }
+
+    public Date getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
+    }
 }

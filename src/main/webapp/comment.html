@@ -1,0 +1,92 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1>评论查询</h1>
+    </div>
+    <div class="table-responsive">
+        <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
+    </div>
+    <div id="deleteConfimModal"></div>
+</div>
+<script>
+    var commentPage = {};
+    (function (page) {
+        function searchTableDatas() {
+            $('#tableResult').bootstrapTable({
+                url: 'api/merchant/comment/searchByParam',
+                method: "get",
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: function (params) {
+                    return {pageSize: params.limit, pageNumber: params.offset / params.limit};
+                },
+                columns: [
+                    {
+                        title: '序号', align: "center",
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {title: '订单号', field: 'order.serialNumber'},
+                    {title: '用户昵称', field: 'customer.nickname'},
+                    {title: '评论时间', field: 'creationTime'},
+                    {title: '回复状态', field: 'status'},
+                    {
+                        title: '状态', field: 'isShow',
+                        formatter: function (value, row, index) {
+                            return '<input id="isActiveChk' + index + '" value="' + row.id + '" type="checkbox" ' + (row.isShow ? "checked" : "") + ' data-on-color="success" data-off-color="danger"/>';
+                        }
+                    },
+                    {
+                        title: '操作', field: 'id', formatter: function (value, row, index) {
+                            var html = '<button type="button" class="btn btn-warning" onclick="commentPage.reply(' + value + ');"><span class="glyphicon glyphicon-send" aria-hidden="true"></span>回复</button>';
+                            html += ' <button type="button" class="btn btn-danger" onclick="commentPage.delete(' + value + ');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</button>';
+                            return html;
+                        }
+                    }
+                ],
+                onLoadSuccess: function (data) {
+                    for (var i = 0; i < data.rows.length; i++) {
+                        $("#isActiveChk" + i).bootstrapSwitch('state', data.rows[i].isShow).on("switchChange.bootstrapSwitch", function (event, status) {
+                            changeActiveStatus(event.target.value, status);
+                        });
+                    }
+                }
+            });
+        };
+
+        page.reply = function (id) {
+            var data = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+        };
+
+        page.delete = function (id) {
+            deleteConfirmModal.showModal();
+            deleteConfirmModal.bindDeleteAction(deleteComment, id);
+        };
+
+        function changeActiveStatus(id, status) {
+            $.ajax({
+                type: "PUT", url: "api/merchant/comment/changeActiveStatus",
+                data: {id: id, isShow: status},
+                success: function (result) {
+                    $("#tableResult").bootstrapTable("refresh", {silent: true});
+                }
+            });
+        }
+
+        function deleteComment(id) {
+            $.ajax({
+                type: "DELETE", url: "api/merchant/comment/" + id,
+                data: {},
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        $("#tableResult").bootstrapTable("refresh", {silent: true});
+                }
+            });
+        }
+
+        $(function () {
+            searchTableDatas();
+            $("#deleteConfimModal").load("deleteConfirmModal.html");
+        });
+    })(commentPage);
+</script>

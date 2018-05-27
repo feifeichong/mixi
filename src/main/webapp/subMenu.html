@@ -13,18 +13,20 @@
     (function (page) {
         var _menus = [
             {
-                "title": "营销中心", "subMenus": [["goods.html", "商品管理"], ["goodsType.html", "商品分类管理"],
-                    ["station.html", "站点管理"], ["menu.html", "菜单管理"], ["comment.html", "评价管理"]]
+                "title": "运营中心",
+                "subMenus": [["station.html", "站点管理"], ["menu.html", "菜单管理"], ["goods.html", "商品管理"], ["goodsType.html", "商品分类管理"],
+                    ["order.html", "订单管理"], ["comment.html", "评价管理"]]
             },
-            {"title": "订单中心", "subMenus": [["order.html", "订单管理"], ["orderDispatch.html", "系统派单管理"]]},
             {
-                "title": "运营中心", "subMenus": [["onSales.html", "活动管理"], ["coupon.html", "优惠券管理"],
-                    ["carouselAdvertise.html", "轮播广告管理"], ["rider.html", "骑手管理"], ["customer.html", "顾客管理"],
-                    ["messagePush.html", "系统推送管理"]]
+                "title": "营销中心中心", "subMenus": [["onSales.html", "活动管理"], ["coupon.html", "优惠券管理"],["carouselAdvertise.html", "轮播广告管理"],
+                    ["customerService.html", "客服管理"], ["news.html", "新闻管理"], ["messagePush.html", "系统推送管理"]]
             },
-            {"title": "审核中心", "subMenus": [["rider.html", "骑手审核"]]},
-            {"title": "财务中心", "subMenus": [["financeStatistics.html", "自营财务统计"]]},
-            {"title": "系统设置", "subMenus": [["merchant.html", "商家管理"], ["merchantUser.html", "商家用户管理"], ["sendRuleSettings.html", "配送设置"], ["riderExam.html", "骑手考试管理"]]},
+            {"title": "商家中心", "subMenus": [["merchantUser.html", "商家用户管理"], ["financeStatistics.html", "财务统计"]]},
+            {
+                "title": "系统设置",
+                "subMenus": [["admin.html", "超级管理员维护"], ["merchant.html", "商家管理"], ["trainningRadio.html", "骑手培训视频管理"],
+                    ["exam.html", "骑手考试题目管理"], ["examScore.html", "骑手成绩管理"], ["rider.html", "骑手管理"], ["customer.html", "顾客管理"]]
+            },
         ];
 
         page.initSubMenus = function () {
