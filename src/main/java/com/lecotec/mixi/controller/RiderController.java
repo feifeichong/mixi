@@ -110,4 +110,10 @@ public class RiderController {
     public ResponseObject deleteRider(@PathVariable("id") long id) {
         return new SuccessResponse(riderService.deleteRider(id));
     }
+
+    @GetMapping("/api/merchant/rider/getRiderByStationId")
+    public BootstrapTableResult<Rider> getRiderByStationId(long stationId, int pageNumber, int pageSize) {
+        Page<Rider> result = riderService.getRiderByStationId(stationId, pageNumber, pageSize);
+        return new BootstrapTableResult<>(result.getTotalElements(), result.getContent());
+    }
 }

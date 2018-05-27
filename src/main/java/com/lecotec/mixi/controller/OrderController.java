@@ -38,4 +38,9 @@ public class OrderController {
     public ResponseObject deleteOrder(@PathVariable("id") long id) {
         return new SuccessResponse(orderService.deleteOrder(id));
     }
+
+    @PutMapping("api/merchant/order/dispatchToRider")
+    public ResponseObject dispatchToRider(long orderId, long riderId) {
+        return orderService.dispatchToRider(orderId, riderId);
+    }
 }

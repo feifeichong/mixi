@@ -59,4 +59,15 @@ public class RiderService {
         riderRepository.deleteById(id);
         return true;
     }
+
+    public Page<Rider> getRiderByStationId(long stationId, int pageNumber, int pageSize) {
+        return riderRepository.findAll((Specification<Rider>) (root, query, criteriaBuilder) -> {
+            Predicate[] predicates = new Predicate[]{
+                    criteriaBuilder.equal(root.get("station"), stationId),
+                    criteriaBuilder.equal(root.get("isStartWorking"), true)
+            };
+            query.where(criteriaBuilder.and(predicates));
+            return query.getRestriction();
+        }, PageRequest.of(pageNumber, pageSize));
+    }
 }

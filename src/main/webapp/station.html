@@ -84,7 +84,7 @@
         function submitMaintainRequest(param) {
             $.ajax({
                 type: "POST", url: "api/merchant/station",
-                data: JSON.stringify(param),contentType:"application/json",
+                data: JSON.stringify(param), contentType: "application/json",
                 success: function (result) {
                     if (result.status === SUCCESS) {
                         $("#tableResult").bootstrapTable("refresh", {silent: true});

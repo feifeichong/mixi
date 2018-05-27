@@ -53,11 +53,29 @@
                data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
     </div>
     <div id="deleteConfimModal"></div>
+    <div class="modal fade" id="dispatchModal" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">订单派发【当前站点：<span id="currentStation"></span>】</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="stationRiderResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+                               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
+                    </div>
+                    <div id="dispatchMsg" style="display: none;" class="alert alert-danger" role="alert"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var orderPage = {};
     (function (page) {
         var _stations = null;
+        var _currentNewOrder = {};
 
         function initStations() {
             $.ajax({
@@ -88,6 +106,66 @@
             });
             $(event.target).parent().addClass("active");
             page.refreshTableDatas();
+        };
+
+        page.dispatch = function (id) {
+            _currentNewOrder = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            $("#currentStation").html(_currentNewOrder.station.name);
+            $("#dispatchModal").modal("show");
+            initStationRiderTableDatas();
+        };
+
+        page.dispatchToRider = function (riderId) {
+            $.ajax({
+                type: "PUT", url: "api/merchant/order/dispatchToRider",
+                data: {riderId: riderId, orderId: _currentNewOrder.id},
+                success: function (result) {
+                    if (result.status === SUCCESS) {
+                        $("#dispatchModal").modal("hide");
+                        page.refreshTableDatas();
+                    } else {
+                        $("#dispatchMsg").html(result.data).fadeIn(3000);
+                        setTimeout(function () {
+                            $("#dispatchMsg").fadeOut(1000);
+                        }, 3000);
+                    }
+                }
+            });
+        };
+
+        function initStationRiderTableDatas() {
+            $('#stationRiderResult').bootstrapTable({
+                url: 'api/merchant/rider/getRiderByStationId',
+                method: "get",
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: function (params) {
+                    return {
+                        pageSize: params.limit, pageNumber: (params.offset / params.limit), stationId: _currentNewOrder.station.id
+                    };
+                },
+                columns: [
+                    {
+                        title: '序号', align: "center",
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {title: '骑手姓名', field: 'name',},
+                    {title: '骑手手机号码', field: 'phoneNumber'},
+                    {
+                        title: '在途订单数量', field: 'orderIdsJson', formatter: function (value, row, index) {
+                            return JSON.parse(row.orderIdsJson).length;
+                        }
+                    },
+                    {
+                        title: '操作', field: 'id', formatter: function (value, row, index) {
+                            var html = "";
+                            html += '<button type="button" class="btn btn-success" onclick="orderPage.dispatchToRider(' + value + ');"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> 派单</button>&nbsp;';
+                            return html;
+                        }
+                    }
+                ]
+            });
         };
 
         page.showDetail = function (id) {
@@ -140,14 +218,19 @@
                     {title: '订单编号', field: 'serialNumber',},
                     {title: '站点', field: 'station.name'},
                     {title: '配送员', field: 'rider.name'},
+                    {title: '配送员电话', field: 'rider.phoneNumber'},
                     {title: '收货人姓名', field: 'receiverName'},
                     {title: '收货人电话', field: 'receiverPhoneNumber'},
                     {title: '订单金额', field: 'realPrice'},
                     {title: '状态', field: 'status'},
                     {
                         title: '操作', field: 'id', formatter: function (value, row, index) {
-                            var html = '<button type="button" class="btn btn-default" onclick="orderPage.showDetail(' + value + ');"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> 查看详情</button>';
-                            html += ' <button type="button" class="btn btn-danger" onclick="orderPage.delete(' + value + ');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</button>';
+                            var html = "";
+                            if (row.status === "新订单") {
+                                html += '<button type="button" class="btn btn-success" onclick="orderPage.dispatch(' + value + ');"><span class="glyphicon glyphicon-send" aria-hidden="true">派单</span></button>&nbsp;';
+                            }
+                            html += '<button type="button" class="btn btn-default" onclick="orderPage.showDetail(' + value + ');"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>查看详情</button>&nbsp;';
+                            html += '<button type="button" class="btn btn-danger" onclick="orderPage.delete(' + value + ');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</button>&nbsp;';
                             return html;
                         }
                     }
