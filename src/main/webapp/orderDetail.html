@@ -85,7 +85,7 @@
         <tr>
             <td>{{orderInfo.rider.name}}</td>
             <td>{{orderInfo.rider.phoneNumber}}</td>
-            <td>{{orderInfo.rider.stationId}}</td>
+            <td>{{orderInfo.rider.station.name}}</td>
             <td>{{orderInfo.rider.jobTitle}}</td>
         </tr>
     </table>
@@ -132,10 +132,10 @@
                         goodsIds.push(goodsList[i].goodsId);
                     }
 
-                    this.$http.post("/api/merchant/goods/getGoodsByIds", {ids: goodsIds})
+                    this.$http.post("/api/merchant/goods/getGoodsByIds", {ids: goodsIds, pageNumber: 0, pageSize: 10000})
                         .then(function (res) {
                             for (var i = 0; i < goodsList.length; i++) {
-                                Object.assign(goodsList[i], res.data.data[i]);
+                                Object.assign(goodsList[i], res.data.rows[i]);
                             }
                             this.orderInfo = order;
                             this.orderInfo.goodsJsonList = goodsList;

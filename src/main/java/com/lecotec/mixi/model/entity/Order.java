@@ -50,9 +50,9 @@ public class Order implements Serializable {
     private Rider rider;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id", referencedColumnName = "id")
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
     @ApiModelProperty(hidden = true)
-    private Menu menu;
+    private Station station;
 
     private String receiverPhoneNumber;
 
@@ -281,11 +281,11 @@ public class Order implements Serializable {
         this.receiverRemark = receiverRemark;
     }
 
-    public Menu getMenu() {
-        return menu;
+    public Station getStation() {
+        return station;
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void setStation(Station station) {
+        this.station = station;
     }
 }
