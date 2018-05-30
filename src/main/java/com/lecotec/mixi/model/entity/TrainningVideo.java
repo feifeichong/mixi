@@ -3,21 +3,25 @@ package com.lecotec.mixi.model.entity;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-@Table(name = "mx_training_video")
-public class TrainingVideo {
+@Table(name = "mx_trainning_video")
+public class TrainningVideo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)
     private long id;
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     @Column(name = "cover_path")
     private String coverPath;
 
+    @NotBlank
     @Column(name = "video_path")
     private String videoPath;
 
@@ -25,8 +29,7 @@ public class TrainingVideo {
     private boolean isActive = true;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
 
     public long getId() {
         return id;
@@ -60,11 +63,11 @@ public class TrainingVideo {
         this.videoPath = videoPath;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 

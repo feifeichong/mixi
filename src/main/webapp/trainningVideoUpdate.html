@@ -1,0 +1,114 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div id="backBtn" class="right">
+            <button class="btn btn-success" style="display: none;" onclick="indexPage.setContentBody('trainningVideo.html')" type="button">返回</button>
+        </div>
+        <h1 id="videoTile">编辑上传的视频</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:trainningVideoUpdatePage.update();">
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">视频名称</span>
+                <input id="videoName" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">视频封面</span>
+                <input id="coverPath" name="file" type="file" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">视频上传</span>
+                <input id="videoPath" name="file" type="file" class="form-control"/>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <input id="submitBtn" class="btn btn-primary" type="submit" value="更新"/>
+                &nbsp;&nbsp;
+                <input id="cancelBtn" class="btn btn-default" type="button" value="返回"/>
+            </div>
+        </div>
+    </form>
+    <div id="cmModal"></div>
+</div>
+<script>
+    var trainningVideoUpdatePage = {};
+    (function (page) {
+        var _data = {};
+
+        page.setData = function (data, isShowDetail) {
+            if (isShowDetail) {
+                $("input").attr("disabled", isShowDetail);
+                $("select").attr("disabled", isShowDetail);
+                $("textarea").attr("disabled", isShowDetail);
+                $("#submitBtn").hide();
+                $("#cancelBtn").hide();
+                $("#videoTile").html("查看视频详细");
+                $("#backBtn").show();
+            }
+            _data = data;
+            $("#videoName").val(_data.name);
+            initFileUploadControl();
+        };
+
+        function initFileUploadControl() {
+            var coverOption = {
+                language: 'zh', uploadUrl: "/api/fileUpload", showUpload: true,
+                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
+                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1,
+                initialPreview: [_data.coverPath], initialPreviewAsData: true
+            };
+            $("#coverPath").fileinput(coverOption).on("fileuploaded", function (event, tableJsonResult) {
+                if (tableJsonResult.response.status === SUCCESS) {
+                    _data.coverPath = tableJsonResult.response.data;
+                }
+            });
+
+            var videoOption = {
+                language: 'zh', uploadUrl: "/api/fileUpload", showUpload: true,
+                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showCaption: true, maxFileSize: 2000, maxFileCount: 1,
+                initialPreview: [_data.videoPath], initialPreviewAsData: true
+            };
+            $("#videoPath").fileinput(videoOption).on("fileuploaded", function (event, tableJsonResult) {
+                if (tableJsonResult.response.status === SUCCESS) {
+                    _data.videoPath = tableJsonResult.response.data;
+                }
+            });
+        }
+
+        page.update = function () {
+            _data.name = $("#videoName").val();
+
+            if (!_data.coverPath || !_data.videoPath) {
+                commonModal.showModal("请选择图片或者视频并上传");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST", url: "api/merchant/trainningVideo",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("trainningVideo.html");
+                    else
+                        commonModal.showModal(result.data);
+                }
+            });
+        };
+
+        $(function () {
+            $("#cmModal").load("commonModal.html");
+            $("#cancelBtn").click(function () {
+                indexPage.setContentBody("trainningVideo.html");
+            });
+        });
+    })(trainningVideoUpdatePage);
+</script>
