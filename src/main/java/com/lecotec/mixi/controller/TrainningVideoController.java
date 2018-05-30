@@ -9,10 +9,7 @@ import com.lecotec.mixi.service.TrainningVideoService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,12 +19,12 @@ public class TrainningVideoController {
     @Autowired
     private TrainningVideoService trainningVideoService;
 
-    @RequestMapping("/api/merchant/trainningVideo")
+    @PostMapping("/api/merchant/trainningVideo")
     public ResponseObject saveOrUpdate(@Valid @RequestBody TrainningVideo trainningVideo) {
         return new SuccessResponse(trainningVideoService.saveOrUpdate(trainningVideo));
     }
 
-    @RequestMapping("/api/merchant/trainningVideo/searchForConsole")
+    @GetMapping("/api/merchant/trainningVideo/searchForConsole")
     public BootstrapTableResult<TrainningVideo> searchForConsole(TrainningVideoSearchParam trainningVideoSearchParam) {
         Page<TrainningVideo> result = trainningVideoService.searchForConsole(trainningVideoSearchParam);
         return new BootstrapTableResult<>(result.getTotalElements(), result.getContent());
@@ -36,5 +33,10 @@ public class TrainningVideoController {
     @PutMapping("/api/merchant/trainningVideo/changeActiveStatus")
     public ResponseObject changeActiveStatus(long id, boolean isActive) {
         return new SuccessResponse(trainningVideoService.changeActiveStatus(id, isActive));
+    }
+
+    @DeleteMapping("/api/merchant/trainningVideo/{id}")
+    public ResponseObject deleteById(@PathVariable("id") long id) {
+        return new SuccessResponse(trainningVideoService.deleteById(id));
     }
 }

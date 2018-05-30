@@ -1,0 +1,112 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('question.html')" type="button">返回</button>
+        </div>
+        <h1>修改题目</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:questionUpdatePage.update();">
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">题目名称</span>
+                <input id="questionName" type="text" placeholder="输入题目名称 如：1.骑手基本准则" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group" data-control-type="option">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><input type="checkbox" value="A">&nbsp;&nbsp;A</span>
+                <input type="text" class="form-control" placeholder="输入选项内容" required/>
+            </div>
+        </div>
+        <div class="form-group" data-control-type="option">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><input type="checkbox" value="B">&nbsp;&nbsp;B</span>
+                <input type="text" class="form-control" placeholder="输入选项内容" required/>
+            </div>
+        </div>
+        <div class="form-group" data-control-type="option">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><input type="checkbox" value="C">&nbsp;&nbsp;C</span>
+                <input type="text" class="form-control" placeholder="输入选项内容" required/>
+            </div>
+        </div>
+        <div class="form-group" data-control-type="option">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><input type="checkbox" value="D">&nbsp;&nbsp;D</span>
+                <input type="text" class="form-control" placeholder="输入选项内容" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 alert alert-danger" role="alert">请勾选出正确答案，如是多选，请勾选出所有正确答案</div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <input id="submitBtn" class="btn btn-primary" type="submit" value="提交"/>
+                &nbsp;&nbsp;
+                <input id="cancelBtn" class="btn btn-default" type="reset" value="重置"/>
+            </div>
+        </div>
+    </form>
+    <div id="cmModal"></div>
+</div>
+<script>
+    var questionUpdatePage = {};
+    (function (page) {
+        var _data = {};
+
+        page.setData = function (data) {
+            _data = data;
+            $("#questionName").val(_data.name);
+
+            var answer = JSON.parse(_data.answer);
+            $("div[data-control-type='option'] input[type='checkbox']").each(function (index, element) {
+                if (answer.includes(element.value)) {
+                    element.checked = "checked";
+                }
+            });
+
+            var options = JSON.parse(_data.options);
+            $("div[data-control-type='option'] input[type='text']").each(function (index, element) {
+                element.value = options[index];
+            });
+        };
+
+        page.update = function () {
+            _data.name = $("#questionName").val();
+
+            var answer = [];
+            var options = [];
+            $("div[data-control-type='option'] input[type='checkbox']:checked").each(function (index, element) {
+                answer.push(element.value);
+            });
+            $("div[data-control-type='option'] input[type='text']").each(function (index, element) {
+                options.push(element.value);
+            });
+            _data.answer = JSON.stringify(answer);
+            _data.options = JSON.stringify(options);
+
+            if (answer.length === 0) {
+                commonModal.showModal("请选择问题答案");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST", url: "api/merchant/question",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("question.html");
+                    else
+                        commonModal.showModal(result.data);
+                }
+            });
+        };
+
+        $(function () {
+            $("#cmModal").load("commonModal.html");
+        });
+    })(questionUpdatePage);
+</script>

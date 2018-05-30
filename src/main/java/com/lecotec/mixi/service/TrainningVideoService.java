@@ -46,4 +46,9 @@ public class TrainningVideoService {
     public boolean changeActiveStatus(long id, boolean isActive) {
         return trainningVideoRepository.changeActiveStatus(id, isActive) > 0;
     }
+
+    public boolean deleteById(long id) {
+        trainningVideoRepository.deleteById(id);
+        return true;
+    }
 }

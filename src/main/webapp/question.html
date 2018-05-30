@@ -1,0 +1,139 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('questionAdd.html')" type="button">添加题目</button>
+        </div>
+        <h1>培训考试</h1>
+    </div>
+    <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <div class="input-group">
+                <span class="input-group-addon">题目名称</span>
+                <input id="questionName" onkeyup="questionPage.onEnterKeyPress()" class="form-control" data-toggle="tooltip"
+                       data-placement="bottom" title="输入内容，点击键盘Enter查询"/>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 placeholder">
+            <div class="input-group">
+                <span class="input-group-addon">提交时间</span>
+                <input id="beginTime" type="text" onchange="questionPage.onTimeChanged()" readonly style="cursor: pointer;"
+                       class="form-control"/>
+                <span class="input-group-addon">至</span>
+                <input id="endTime" type="text" onchange="questionPage.onTimeChanged()" readonly style="cursor: pointer;" class="form-control"/>
+            </div>
+        </div>
+    </div>
+    <h2 class="sub-header">查询结果</h2>
+    <div class="table-responsive">
+        <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
+    </div>
+    <div id="deleteConfimModal"></div>
+    <div id="commonModal"></div>
+</div>
+<script>
+    var questionPage = {};
+    (function (page) {
+        page.onEnterKeyPress = function () {
+            var code = event.charCode || event.keyCode;
+            if (code == 13) {
+                page.refreshTableDatas();
+            }
+        };
+
+        page.onTimeChanged = function () {
+            page.refreshTableDatas();
+        };
+
+        page.edit = function (id) {
+            var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            indexPage.setContentBody("questionUpdate.html", function (response, status, xhr) {
+                questionUpdatePage.setData(currentData);
+            });
+        };
+
+        page.delete = function (id) {
+            deleteConfirmModal.showModal();
+            deleteConfirmModal.bindDeleteAction(deleteById, id);
+        };
+
+        function deleteById(id) {
+            $.ajax({
+                type: "DELETE", url: "api/merchant/question/" + id,
+                data: {},
+                success: function (result) {
+                    if (result.status === SUCCESS) {
+                        page.refreshTableDatas();
+                    }
+                }
+            });
+        }
+
+        page.refreshTableDatas = function () {
+            $('#tableResult').bootstrapTable("refresh", {silent: true});
+        };
+
+        var optionHeaders = ["A", "B", "C", "D"];
+        function initTableDatas() {
+            $('#tableResult').bootstrapTable({
+                url: 'api/merchant/question/searchForConsole',
+                method: "get",
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: function (params) {
+                    return {
+                        pageSize: params.limit, pageNumber: (params.offset / params.limit),
+                        name: $("#questionName").val(), beginTime: $("#beginTime").val(), endTime: $("#endTime").val()
+                    };
+                },
+                columns: [
+                    {
+                        title: '序号', align: "center",
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {title: '题目', field: 'name'},
+                    {
+                        title: '选项', field: 'options', formatter: function (value, row, index) {
+                            var items = JSON.parse(row.options);
+                            var html = "";
+                            for (var i = 0; i < items.length; i++) {
+                                html += optionHeaders[i] + ". " + items[i] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        title: '答案', field: 'answer', formatter: function (value, row, index) {
+                            var item = JSON.parse(row.answer);
+                            return item.join(",");
+                        }
+                    },
+                    {title: '提交时间', field: 'creationTime'},
+                    {
+                        title: '操作', field: 'id', formatter: function (value, row, index) {
+                            var html = ' <button type="button" class="btn btn-warning" onclick="questionPage.edit(' + value + ');"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑</button>';
+                            html += ' <button type="button" class="btn btn-danger" onclick="questionPage.delete(' + value + ');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</button>';
+                            return html;
+                        }
+                    }
+                ]
+            });
+        };
+
+        $(function () {
+            $("#questionName").tooltip();
+            $("#deleteConfimModal").load("deleteConfirmModal.html");
+            $("#commonModal").load("commonModal.html");
+
+            $('#beginTime').datetimepicker({
+                format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN"
+            });
+            $('#endTime').datetimepicker({
+                format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN"
+            });
+
+            initTableDatas();
+        });
+    })(questionPage);
+</script>

@@ -61,12 +61,12 @@
 
         page.delete = function (id) {
             deleteConfirmModal.showModal();
-            deleteConfirmModal.bindDeleteAction(deleteGoods, id);
+            deleteConfirmModal.bindDeleteAction(deleteById, id);
         };
 
-        function deleteGoods(id) {
+        function deleteById(id) {
             $.ajax({
-                type: "DELETE", url: "api/merchant/goods/" + id,
+                type: "DELETE", url: "api/merchant/trainningVideo/" + id,
                 data: {},
                 success: function (result) {
                     if (result.status === SUCCESS) {

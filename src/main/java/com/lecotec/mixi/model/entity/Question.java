@@ -3,28 +3,29 @@ package com.lecotec.mixi.model.entity;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-@Table(name = "mx_exam_question")
-public class ExamQuestion {
+@Table(name = "mx_question")
+public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)
     private long id;
 
+    @NotBlank
     private String name;
 
+    @NotBlank
+    @Column(columnDefinition = "TEXT NULL")
     private String options;
 
+    @NotBlank
     private String answer;
 
-    @Column(name = "is_active", columnDefinition = "BIT(1) DEFAULT TRUE")
-    private boolean isActive = true;
-
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
 
     public long getId() {
         return id;
@@ -56,14 +57,6 @@ public class ExamQuestion {
 
     public void setAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 
     public Date getCreationTime() {
