@@ -49,9 +49,6 @@ public class Goods {
     @ApiModelProperty(hidden = true)
     private boolean isActive = true;
 
-    @Transient
-    private List<Order> orderList;
-
     @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
 
@@ -165,13 +162,5 @@ public class Goods {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
-    }
-
-    public List<Order> getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
     }
 }

@@ -13,19 +13,24 @@ public class Advertisement {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    private double title;
+    private String name;
 
     private String position;
 
-    @Column(name = "image_path")
     private String imagePath;
 
     @Column(name = "is_active", columnDefinition = "BIT(1) DEFAULT true")
-    private boolean isActive;
+    @ApiModelProperty(hidden = true)
+    private boolean isActive = true;
+
+    private String type;
+
+    private long goodsId;
+
+    private String outerLinkAddress;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
 
     public long getId() {
         return id;
@@ -35,12 +40,12 @@ public class Advertisement {
         this.id = id;
     }
 
-    public double getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(double title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPosition() {
@@ -59,12 +64,28 @@ public class Advertisement {
         this.imagePath = imagePath;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
+    }
+
+    public long getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(long goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public String getOuterLinkAddress() {
+        return outerLinkAddress;
+    }
+
+    public void setOuterLinkAddress(String outerLinkAddress) {
+        this.outerLinkAddress = outerLinkAddress;
     }
 
     public Date getCreationTime() {
@@ -73,5 +94,13 @@ public class Advertisement {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
