@@ -1,0 +1,75 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1>修改消息</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:pushedMessageUpdatePage.update();">
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">消息标题</span>
+                <input id="messageTitle" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group" data-control-type="option">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">消息内容</span>
+                <textarea id="messageContent" class="form-control" cols="30" rows="10" required></textarea>
+            </div>
+        </div>
+        <div class="form-group" data-control-type="option">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">接收对象</span>
+                <select id="userTypePushed" class="form-control">
+                    <option value="所有人">所有人</option>
+                    <option value="顾客">顾客</option>
+                    <option value="骑手">骑手</option>
+                    <option value="商家">商家</option>
+                </select>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <input id="submitBtn" class="btn btn-primary" type="submit" value="更新"/>
+                &nbsp;&nbsp;
+                <input id="cancelBtn" onclick="indexPage.setContentBody('pushedMessage.html')" class="btn btn-default" type="button" value="返回"/>
+            </div>
+        </div>
+    </form>
+    <div id="cmModal"></div>
+</div>
+<script>
+    var pushedMessageUpdatePage = {};
+    (function (page) {
+        var _data = {};
+
+        page.setData = function (data) {
+            _data = data;
+            $("#messageTitle").val(_data.title);
+            $("#messageContent").val(_data.content);
+            $("#userTypePushed").val(_data.userTypePushed);
+        };
+
+        page.update = function () {
+            _data.title = $("#messageTitle").val();
+            _data.content = $("#messageContent").val();
+            _data.userTypePushed = $("#userTypePushed").val();
+
+            $.ajax({
+                type: "POST", url: "api/merchant/pushedMessage",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("pushedMessage.html");
+                    else
+                        commonModal.showModal(result.data);
+                }
+            });
+        };
+
+        $(function () {
+            $("#cmModal").load("commonModal.html");
+        });
+    })(pushedMessageUpdatePage);
+</script>

@@ -15,15 +15,14 @@ public class PushedMessage {
 
     private String title;
 
-    @Column(name = "pushed_user_type")
-    private String pushedUserType;
+    private String content;
 
-    @Column(name = "publish_user")
+    private String userTypePushed;
+
     private String publishUser;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "creation_time", insertable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    private Date creationTime;
+    private Date creationTime = new Date();
 
     public long getId() {
         return id;
@@ -40,15 +39,6 @@ public class PushedMessage {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public String getPushedUserType() {
-        return pushedUserType;
-    }
-
-    public void setPushedUserType(String pushedUserType) {
-        this.pushedUserType = pushedUserType;
-    }
-
     public String getPublishUser() {
         return publishUser;
     }
@@ -63,5 +53,21 @@ public class PushedMessage {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getUserTypePushed() {
+        return userTypePushed;
+    }
+
+    public void setUserTypePushed(String userTypePushed) {
+        this.userTypePushed = userTypePushed;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
