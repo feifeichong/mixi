@@ -72,34 +72,35 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">咪嘻咪嘻后台管理系统</a>
+            <a class="navbar-brand" href="/">咪嘻咪嘻后台管理系统</a>
         </div>
         <div id="navbarMenu" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-left nav-topMenu">
-                <li><a href="javascript:indexPage.selectTopMenu(0)">运营中心</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(0)">后台首页</a></li>
                 <li><a href="javascript:indexPage.selectTopMenu(1)">营销中心</a></li>
-                <li><a href="javascript:indexPage.selectTopMenu(2)">商家中心</a></li>
-                <li><a href="javascript:indexPage.selectTopMenu(3)">系统设置</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(2)">订单管理</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(3)">运营中心</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(4)">审核管理</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(5)">财务中心</a></li>
+                <li><a href="javascript:indexPage.selectTopMenu(6)">系统设置</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="javascript:void(0)">欢迎您，
-                    <script>document.writeln($.cookie("MERCHANT_PHONE_NUMBER"));</script>
+                    <script>document.writeln($.cookie("MERCHANT_USER_NAME"));</script>
+                    (
+                    <script>document.writeln($.cookie("MERCHANT_USER_TYPE"));</script>
+                    )
                 </a></li>
-                <li><a href="javascript:indexPage.logout();">退出</a></li>
+                <li><a href="javascript:indexPage.logout();">退出登录</a></li>
             </ul>
         </div>
     </div>
 </nav>
 <div class="container-fluid">
     <div id="sideBarMenu" class="row col-sm-3 col-md-2 sidebar">
-        <ul class="nav nav-sidebar">
-            <li><a style="color: #fff; background-color: #428bca;" href="javascript:void(0)">首页</a></li>
-        </ul>
+
     </div>
     <div id="contentBody" class="row">
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="color:#2F9D32">
-            <h1>欢迎使用咪嘻咪嘻后台管理系统</h1>
-        </div>
     </div>
 </div>
 <script>
@@ -125,12 +126,17 @@
         };
 
         page.logout = function () {
-            $.removeCookie("MERCHANT_PHONE_NUMBER");
-            $.removeCookie("MERCHANT_TOKEN");
+            $.removeCookie("MERCHANT_USER_PHONE_NUMBER");
+            $.removeCookie("MERCHANT_USER_NAME");
             $.removeCookie("MERCHANT_USER_TYPE");
+            $.removeCookie("MERCHANT_USER_TOKEN");
             $.removeCookie("JSESSIONID");
             window.location.href = "login.html";
         };
+
+        $(function () {
+            page.selectTopMenu(0);
+        });
     })(indexPage);
 </script>
 </body>

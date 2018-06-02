@@ -21,7 +21,7 @@ public class MerchantUser {
 
     private String name;
 
-    @Pattern(regexp = "[a-zA-Z\\d_]{8,}")
+    @Pattern(regexp = "\\w{8,16}", message = "密码是8至16位以上字母、数字组成")
     @ApiModelProperty(hidden = true)
     private String password = RandomUtil.getRandomStringByLength(10);
 
@@ -33,11 +33,6 @@ public class MerchantUser {
 
     @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
-
-    @ManyToOne
-    @JoinColumn(name = "merchant_id", referencedColumnName = "id")
-    @ApiModelProperty(hidden = true)
-    private Merchant merchant;
 
     public long getId() {
         return id;
@@ -93,13 +88,5 @@ public class MerchantUser {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Merchant getMerchant() {
-        return merchant;
-    }
-
-    public void setMerchant(Merchant merchant) {
-        this.merchant = merchant;
     }
 }

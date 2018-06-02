@@ -65,19 +65,13 @@
     var loginPage = {};
 
     (function (page) {
-        var _publicKey = "";
-
-        $(function () {
-            page.initPublicKey();
-        });
-
         page.login = function () {
             var userName = $("#userName").val();
             var password = $("#password").val();
 
             $.ajax({
-                type: "POST", url: "api/merchantUser/login/pwdLogin", contentType: "application/json",
-                data: JSON.stringify({phoneNumber: userName, password: rsaEncrypt(password, _publicKey)}),
+                type: "POST", url: "/api/merchant/merchantUser/login/pwdLogin", contentType: "application/json",
+                data: JSON.stringify({phoneNumber: userName, password: password}),
                 success: function (response) {
                     if (response.status === SUCCESS) {
                         window.location.href = "index.html";
@@ -85,16 +79,6 @@
                         $("#myModalBody").html(response.data);
                         $('#loginModal').modal("show");
                     }
-                }
-            });
-        }
-
-        page.initPublicKey = function () {
-            $.ajax({
-                type: "GET", url: "api/common/rsaPublicKey",
-                data: {},
-                success: function (response) {
-                    _publicKey = response.data;
                 }
             });
         }

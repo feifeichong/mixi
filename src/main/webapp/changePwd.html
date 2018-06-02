@@ -1,0 +1,63 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1>修改密码</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:changePwdPage.save();">
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">原密码</span>
+                <input id="oldPwd" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">新密码</span>
+                <input id="newPwd" type="password" placeholder="8-16位字母、数字、字符" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">新密码确认</span>
+                <input id="newPwdRepeated" type="password" class="form-control" required/>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <input id="submitBtn" class="btn btn-primary" type="submit" value="提交"/>
+                &nbsp;&nbsp;
+                <input id="cancelBtn" class="btn btn-default" type="reset" value="重置"/>
+            </div>
+        </div>
+    </form>
+    <div id="cmModal"></div>
+</div>
+<script>
+    var changePwdPage = {};
+    (function (page) {
+        var _data = {};
+        page.save = function () {
+            _data.title = $("#messageTitle").val();
+            _data.content = $("#messageContent").val();
+            _data.userTypePushed = $("#userTypePushed").val();
+            _data.publishUser = $.cookie("MERCHANT_PHONE_NUMBER");
+
+            $.ajax({
+                type: "POST", url: "api/merchant/pushedMessage",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("pushedMessage.html");
+                    else
+                        commonModal.showModal(result.data);
+                }
+            });
+        };
+
+        $(function () {
+            $("#cmModal").load("commonModal.html");
+        });
+    })(changePwdPage);
+</script>

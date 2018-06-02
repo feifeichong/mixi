@@ -15,15 +15,17 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.lecotec.mixi.common.ConstString.MERCHANT;
-import static com.lecotec.mixi.common.ConstString.MERCHANT_TOKEN;
+import static com.lecotec.mixi.common.ConstString.MERCHANT_USER_TOKEN;
 
 public class MerchantTokenCheckInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         Cookie[] cookies = request.getCookies();
-        if (ObjectUtils.isEmpty(cookies))
+        if (ObjectUtils.isEmpty(cookies)) {
+            sendNoRightResponse(response);
             return false;
+        }
 
         String merchantPhoneNumber = "";
         String merchantUserType = "";
@@ -36,7 +38,7 @@ public class MerchantTokenCheckInterceptor implements HandlerInterceptor {
                 case ConstString.MERCHANT_USER_TYPE:
                     merchantUserType = cookie.getValue();
                     break;
-                case ConstString.MERCHANT_TOKEN:
+                case ConstString.MERCHANT_USER_TOKEN:
                     merchantToken = cookie.getValue();
                     break;
             }
@@ -44,14 +46,11 @@ public class MerchantTokenCheckInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession();
         Object merchantObj = session.getAttribute(MERCHANT);
-        Object merchantTokenInServer = session.getAttribute(MERCHANT_TOKEN);
+        Object merchantTokenInServer = session.getAttribute(MERCHANT_USER_TOKEN);
 
         if (StringUtils.isAnyEmpty(merchantPhoneNumber, merchantUserType, merchantToken) || ObjectUtils.isEmpty(merchantObj)
                 || ObjectUtils.isEmpty(merchantTokenInServer)) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8");
-            FailResponse responseObj = new FailResponse("您没有权限访问当前接口!");
-            response.getWriter().print(JSON.toJSONString(responseObj));
+            sendNoRightResponse(response);
             return false;
         }
 
@@ -59,12 +58,14 @@ public class MerchantTokenCheckInterceptor implements HandlerInterceptor {
         String merchantUserTypeInServer = merchant.getMerchantUserType();
         String merchantPhoneNumberInServer = merchant.getPhoneNumber();
 
-        if (StringUtils.equals(merchantPhoneNumber, merchantPhoneNumberInServer)
+        return StringUtils.equals(merchantPhoneNumber, merchantPhoneNumberInServer)
                 && StringUtils.equals(merchantUserType, merchantUserTypeInServer)
-                && StringUtils.equals(merchantToken, merchantTokenInServer.toString())) {
-            return true;
-        }
+                && StringUtils.equals(merchantToken, merchantTokenInServer.toString());
+    }
 
-        return false;
+    private void sendNoRightResponse(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().print(JSON.toJSONString(new FailResponse("您没有权限访问当前接口，请登录！")));
     }
 }

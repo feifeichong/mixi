@@ -13,20 +13,28 @@
     (function (page) {
         var _menus = [
             {
-                "title": "运营中心",
+                "subMenus": [["indexContent.html", "首页"], ["changePwd.html", "修改密码"], ["loginRecord.html", "登录日志"]]
+            },
+            {
                 "subMenus": [["station.html", "站点管理"], ["menu.html", "菜单管理"], ["goods.html", "商品管理"], ["goodsType.html", "商品分类管理"],
-                    ["order.html", "订单管理"], ["comment.html", "评价管理"]]
+                    ["comment.html", "评价管理"]]
             },
             {
-                "title": "营销中心中心", "subMenus": [["onSales.html", "活动管理"], ["advertisement.html", "轮播广告管理"],
-                    ["pushedMessage.html", "系统推送管理"]]
+                "subMenus": [["order.html", "订单管理"]]
             },
-            {"title": "商家中心", "subMenus": [["merchantUser.html", "系统用户管理"], ["financeStatistics.html", "财务统计"]]},
             {
-                "title": "系统设置",
-                "subMenus": [["merchant.html", "商家管理"], ["trainningVideo.html", "培训视频（骑手端）"],
-                    ["question.html", "培训考试"], ["rider.html", "骑手管理"], ["customer.html", "顾客管理"]]
+                "subMenus": [["advertisement.html", "轮播广告管理"], ["stationCaptain.html", "站长管理"], ["rider.html", "骑手管理"], ["customer.html", "顾客管理"], ["pushedMessage.html", "系统推送管理"]]
             },
+            {
+                "subMenus": [["rider.html", "骑手审核"]]
+            },
+            {
+                "subMenus": [["financeStatistics.html", "财务统计"], ["businessStatistics.html", "营业统计"]]
+            },
+            {
+                "subMenus": [["merchantUser.html", "系统用户管理"], ["merchantUser.html", "配送规则管理"], ["trainningVideo.html", "培训视频（骑手端）管理"],
+                    ["question.html", "培训考试管理"]]
+            }
         ];
 
         page.initSubMenus = function () {
@@ -46,6 +54,9 @@
             var defaultUrl = _menus[indexPage.getSubMenuIndex()].subMenus[index][0];
             indexPage.setContentBody(defaultUrl);
         };
-        $(page.initSubMenus());
+
+        $(function () {
+            page.initSubMenus();
+        });
     })(subMenuPage);
 </script>
