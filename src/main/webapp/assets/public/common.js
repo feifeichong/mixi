@@ -15,3 +15,21 @@ Array.prototype.remove = function (val) {
         return r != null ? decodeURI(r[2]) : null;
     }
 })(jQuery);
+
+$(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+    var jsonRes = jqXHR.responseJSON;
+    switch (jqXHR.status) {
+        case 400:
+            commonModal.showModal(jsonRes.data.join(", <br>"));
+            break;
+        case 401:
+            window.location.href = "/login.html";
+            break;
+        case 404:
+            commonModal.showModal(jsonRes.data.join(", <br>"));
+            break;
+        case 500:
+            commonModal.showModal(jsonRes.data);
+            break;
+    }
+});

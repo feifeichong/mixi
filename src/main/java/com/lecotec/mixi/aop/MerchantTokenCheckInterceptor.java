@@ -64,6 +64,7 @@ public class MerchantTokenCheckInterceptor implements HandlerInterceptor {
     }
 
     private void sendNoRightResponse(HttpServletResponse response) throws IOException {
+        response.setStatus(401);
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().print(JSON.toJSONString(new FailResponse("您没有权限访问当前接口，请登录！")));

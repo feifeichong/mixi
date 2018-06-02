@@ -40,7 +40,6 @@
         <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
                data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
     </div>
-    <div id="deleteConfimModal"></div>
 </div>
 <script>
     var riderPage = {};
@@ -129,7 +128,6 @@
 
         $(function () {
             $("#riderName").tooltip();
-            $("#deleteConfimModal").load("deleteConfirmModal.html");
             searchTableDatas();
         });
     })

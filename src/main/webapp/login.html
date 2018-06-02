@@ -43,23 +43,7 @@
         </div>
         <div class="clearDiv"><br/></div>
     </form>
-    <!-- Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">提示信息</h4>
-                </div>
-                <div class="modal-body">
-                    <h5 id="myModalBody"></h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="cmModal"></div>
 </div>
 <script>
     var loginPage = {};
@@ -75,13 +59,14 @@
                 success: function (response) {
                     if (response.status === SUCCESS) {
                         window.location.href = "index.html";
-                    } else if (response.status === FAIL) {
-                        $("#myModalBody").html(response.data);
-                        $('#loginModal').modal("show");
                     }
                 }
             });
         }
+        
+        $(function () {
+            $("#cmModal").load("commonModal.html");
+        });
     })(loginPage);
 </script>
 </body>

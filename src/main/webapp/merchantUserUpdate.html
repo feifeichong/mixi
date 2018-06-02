@@ -74,7 +74,6 @@
             $("#sex").bootstrapSwitch().on("switchChange.bootstrapSwitch", function (event, status) {
                 _data.sex = status ? event.target.getAttribute("data-on-text") : event.target.getAttribute("data-off-text");
             });
-            $("#cmModal").load("commonModal.html");
 
             $("#cancelBtn").click(function () {
                 indexPage.setContentBody("merchantUser.html");

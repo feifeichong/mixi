@@ -34,7 +34,6 @@
             <button class="btn btn-success" @click="approve">审核通过</button>
         </div>
     </div>
-    <div id="cmModal"></div>
 </div>
 <script>
     var merchantApprovalPage = new Vue({
@@ -62,7 +61,6 @@
             }
         },
         mounted: function () {
-            $("#cmModal").load("commonModal.html");
         }
     });
 </script>

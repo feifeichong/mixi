@@ -98,10 +98,11 @@
 </nav>
 <div class="container-fluid">
     <div id="sideBarMenu" class="row col-sm-3 col-md-2 sidebar">
-
     </div>
     <div id="contentBody" class="row">
     </div>
+    <div id="deleteModal"></div>
+    <div id="cmModal"></div>
 </div>
 <script>
     var indexPage = {};
@@ -136,6 +137,8 @@
 
         $(function () {
             page.selectTopMenu(0);
+            $("#deleteModal").load("deleteConfirmModal.html");
+            $("#cmModal").load("commonModal.html");
         });
     })(indexPage);
 </script>

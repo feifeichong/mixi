@@ -34,7 +34,6 @@
             </div>
         </div>
     </form>
-    <div id="cmModal"></div>
 </div>
 <script>
     var trainningVideoAddPage = {};
@@ -84,8 +83,6 @@
                 if (tableJsonResult.response.status === SUCCESS)
                     _data.videoPath = tableJsonResult.response.data;
             });
-
-            $("#cmModal").load("commonModal.html");
         });
     })(trainningVideoAddPage);
 </script>
