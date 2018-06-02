@@ -32,7 +32,7 @@ public class MerchantTokenCheckInterceptor implements HandlerInterceptor {
         String merchantToken = "";
         for (Cookie cookie : cookies) {
             switch (cookie.getName()) {
-                case ConstString.MERCHANT_PHONE_NUMBER:
+                case ConstString.MERCHANT_USER_PHONE_NUMBER:
                     merchantPhoneNumber = cookie.getValue();
                     break;
                 case ConstString.MERCHANT_USER_TYPE:

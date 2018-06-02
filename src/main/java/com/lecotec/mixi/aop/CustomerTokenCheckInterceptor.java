@@ -18,8 +18,10 @@ public class CustomerTokenCheckInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         Cookie[] cookies = request.getCookies();
-        if (ObjectUtils.isEmpty(cookies))
-            return true;
+        if (ObjectUtils.isEmpty(cookies)){
+            sendNoRightResponse(response);
+            return false;
+        }
 
         String customerPhoneNumber = "";
         String customerToken = "";
@@ -35,9 +37,7 @@ public class CustomerTokenCheckInterceptor implements HandlerInterceptor {
         }
 
         if (StringUtils.isAnyEmpty(customerPhoneNumber, customerToken)) {
-            response.setContentType("application/json");
-            FailResponse responseObj = new FailResponse("you have no authority, please get token!");
-            response.getWriter().print(JSON.toJSONString(responseObj));
+            sendNoRightResponse(response);
             return false;
         }
 
@@ -50,6 +50,13 @@ public class CustomerTokenCheckInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        sendNoRightResponse(response);
         return false;
+    }
+
+    private void sendNoRightResponse(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().print(JSON.toJSONString(new FailResponse("您没有权限访问当前接口，请登录！")));
     }
 }

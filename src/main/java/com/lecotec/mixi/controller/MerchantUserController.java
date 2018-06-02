@@ -62,11 +62,11 @@ public class MerchantUserController {
         return new SuccessResponse(merchantUserService.saveOrUpdateMerchantUser(merchantUser));
     }
 
-    @PutMapping("/updateMerchantPassword")
+    @PutMapping("/updateMerchantUserPassword")
     public ResponseObject updateMerchantUserPassword(@Valid @RequestBody UserParamForChangePassword userParamForChangePassword) {
-        String phoneNumber = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getPhoneNumber()/*, privateKey)*/;
-        String password = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getPassword()/*, privateKey)*/;
-        String newPassword = /*EncryptUtil.rsaDecrypt(*/userParamForChangePassword.getNewPassword()/*, privateKey)*/;
+        String phoneNumber = userParamForChangePassword.getPhoneNumber();
+        String password = userParamForChangePassword.getPassword();
+        String newPassword = userParamForChangePassword.getNewPassword();
 
         MerchantUser merchant = merchantUserService.findByPhoneNumber(phoneNumber);
 
