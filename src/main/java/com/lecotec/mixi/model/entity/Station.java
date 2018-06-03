@@ -21,15 +21,10 @@ public class Station {
     private boolean isActive = true;
 
     @ApiModelProperty(hidden = true)
-    private Date modifyTime;
+    private Date modifyTime = new Date();
 
     @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
-
-    @ManyToOne
-    @JoinColumn(name = "merchant_id", referencedColumnName = "id")
-    @ApiModelProperty(hidden = true)
-    private Merchant merchant;
 
     public long getId() {
         return id;
@@ -69,13 +64,5 @@ public class Station {
 
     public void setIsActive(boolean active) {
         isActive = active;
-    }
-
-    public Merchant getMerchant() {
-        return merchant;
-    }
-
-    public void setMerchant(Merchant merchant) {
-        this.merchant = merchant;
     }
 }

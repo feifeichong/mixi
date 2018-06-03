@@ -41,7 +41,6 @@
     var goodsPage = {};
     (function (page) {
         var _goodsTypes = null;
-        var _table = null;
 
         function initGoodsType() {
             $.ajax({
@@ -60,6 +59,7 @@
         }
 
         page.refreshTableDatas = function () {
+            $('#tableResult').bootstrapTable("hideLoading");
             $('#tableResult').bootstrapTable("refresh", {silent: true});
         };
 
@@ -84,7 +84,7 @@
                 data: {id: id, isActive: status,},
                 success: function (result) {
                     if (result.status === SUCCESS) {
-                        $("#tableResult").bootstrapTable("refresh", {silent: true});
+                        page.refreshTableDatas();
                     }
                 }
             });
@@ -123,12 +123,8 @@
             });
         }
 
-        page.refreshTableDatas = function () {
-            $('#tableResult').bootstrapTable("refresh", {silent: true});
-        };
-
         function initTableDatas() {
-            _table = $('#tableResult').bootstrapTable({
+            $('#tableResult').bootstrapTable({
                 url: 'api/merchant/goods/searchByParam',
                 method: "get",
                 contentType: "application/x-www-form-urlencoded",
