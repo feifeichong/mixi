@@ -6,9 +6,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -34,13 +38,15 @@ public class FileUploadController {
 
     @PostMapping
     @ApiOperation("文件上传接口")
-    public ResponseObject fileUpload(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseObject fileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws Exception {
         String fileName = file.getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf('.'));
         String newFileName = fileName.substring(0, fileName.lastIndexOf('.') - 1) +
                 String.valueOf(System.currentTimeMillis()) + suffix;
 
+        String contextpath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
         uploadFile(file.getBytes(), env.getProperty("upload.dir"), newFileName);
-        return new SuccessResponse(env.getProperty("upload.server") + "/" + newFileName);
+        return new SuccessResponse(/*env.getProperty("upload.server")*/ contextpath + "/" + newFileName);
     }
 }

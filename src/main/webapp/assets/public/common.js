@@ -33,3 +33,10 @@ $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
             break;
     }
 });
+
+$(document).ajaxSuccess(function (event, jqXHR, ajaxSettings, thrownError) {
+    var jsonRes = jqXHR.responseJSON;
+    if (jsonRes && jsonRes.status === FAIL) {
+        commonModal.showModal(jsonRes.data);
+    }
+});
