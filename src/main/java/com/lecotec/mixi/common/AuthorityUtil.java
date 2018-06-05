@@ -20,7 +20,7 @@ public class AuthorityUtil {
                 produceCookieAndSession(response, session, userParam, RIDER_PHONE_NUMBER, RIDER_TOKEN);
                 break;
             case MERCHANT:
-                produceCookieAndSession(response, session, userParam, MERCHANT_USER_PHONE_NUMBER, MERCHANT_USER_TOKEN);
+                produceCookieAndSession(response, session, userParam, MERCHANT_USER_ACCOUNT, MERCHANT_USER_TOKEN);
                 break;
         }
     }

@@ -36,6 +36,7 @@ public class MerchantUser {
     @ApiModelProperty(hidden = true)
     private MerchantUserType merchantUserType;
 
+    @ApiModelProperty(hidden = true)
     private boolean isActive = true;
 
     @ApiModelProperty(hidden = true)
