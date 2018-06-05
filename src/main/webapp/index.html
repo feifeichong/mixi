@@ -127,10 +127,11 @@
         };
 
         page.logout = function () {
-            $.removeCookie("MERCHANT_USER_PHONE_NUMBER");
+            $.removeCookie("MERCHANT_USER_ACCOUNT");
             $.removeCookie("MERCHANT_USER_NAME");
             $.removeCookie("MERCHANT_USER_TYPE");
             $.removeCookie("MERCHANT_USER_TOKEN");
+            $.removeCookie("MERCHANT_USER_TYPE_PERMISSIONS");
             $.removeCookie("JSESSIONID");
             window.location.href = "login.html";
         };

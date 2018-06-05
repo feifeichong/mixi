@@ -16,27 +16,36 @@ Array.prototype.remove = function (val) {
     }
 })(jQuery);
 
-$(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
-    var jsonRes = jqXHR.responseJSON;
-    switch (jqXHR.status) {
-        case 400:
-            commonModal.showModal(jsonRes.data.join(", <br>"));
-            break;
-        case 401:
-            window.location.href = "/login.html";
-            break;
-        case 404:
-            commonModal.showModal(jsonRes.data.join(", <br>"));
-            break;
-        case 500:
-            commonModal.showModal(jsonRes.data);
-            break;
-    }
-});
+var common = {};
+(function (com) {
+    var successAction = null;
+    com.setSuccessAction = function (action) {
+        successAction = action;
+    };
 
-$(document).ajaxSuccess(function (event, jqXHR, ajaxSettings, thrownError) {
-    var jsonRes = jqXHR.responseJSON;
-    if (jsonRes && jsonRes.status === FAIL) {
-        commonModal.showModal(jsonRes.data);
-    }
-});
+    $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+        var jsonRes = jqXHR.responseJSON;
+        switch (jqXHR.status) {
+            case 400:
+                commonModal.showModal(jsonRes.data.join(", <br>"));
+                break;
+            case 401:
+                window.location.href = "/login.html";
+                break;
+            case 500:
+                commonModal.showModal(jsonRes.data);
+                break;
+        }
+    });
+
+    $(document).ajaxSuccess(function (event, jqXHR, ajaxSettings, thrownError) {
+        var jsonRes = jqXHR.responseJSON;
+        if (jsonRes && jsonRes.status === FAIL) {
+            commonModal.showModal(jsonRes.data);
+            return;
+        }
+        if (jsonRes && jsonRes.status === SUCCESS){
+            successAction();
+        }
+    });
+})(common);

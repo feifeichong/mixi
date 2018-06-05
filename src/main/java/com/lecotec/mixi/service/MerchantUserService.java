@@ -13,8 +13,8 @@ public class MerchantUserService {
     @Autowired
     private MerchantUserRepository merchantUserRepository;
 
-    public MerchantUser findByPhoneNumber(String phoneNumber) {
-        return merchantUserRepository.findByPhoneNumber(phoneNumber);
+    public MerchantUser findByAccount(String phoneNumber) {
+        return merchantUserRepository.findByAccount(phoneNumber);
     }
 
     public boolean updateMerchantUserPassword(String phoneNumber, String newPassword) {

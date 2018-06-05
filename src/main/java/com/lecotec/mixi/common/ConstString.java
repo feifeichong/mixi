@@ -8,9 +8,10 @@ public class ConstString {
     public static final String RIDER = "RIDER";
     public static final String MERCHANT = "MERCHANT";
 
-    public static final String MERCHANT_USER_PHONE_NUMBER = "MERCHANT_USER_PHONE_NUMBER";
+    public static final String MERCHANT_USER_ACCOUNT = "MERCHANT_USER_ACCOUNT";
     public static final String MERCHANT_USER_NAME = "MERCHANT_USER_NAME";
     public static final String MERCHANT_USER_TYPE = "MERCHANT_USER_TYPE";
+    public static final String MERCHANT_USER_TYPE_PERMISSIONS = "MERCHANT_USER_TYPE_PERMISSIONS";
     public static final String MERCHANT_USER_TOKEN = "MERCHANT_USER_TOKEN";
 
     public static final String RIDER_PHONE_NUMBER = "RIDER_PHONE_NUMBER";

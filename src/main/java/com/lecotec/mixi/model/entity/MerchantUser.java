@@ -4,32 +4,39 @@ import com.lecotec.mixi.common.RandomUtil;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "mx_merchant_user")
 public class MerchantUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)
     private long id;
 
-    @Pattern(regexp = "1\\d{10}")
+    @NotBlank
     @Column(unique = true)
-    private String phoneNumber;
+    private String account;
 
-    private String name;
-
-    @Pattern(regexp = "\\w{8,16}", message = "密码是8至16位以上字母、数字组成")
-    @ApiModelProperty(hidden = true)
+    @Pattern(regexp = "\\w{8,16}")
     private String password = RandomUtil.getRandomStringByLength(10);
 
+    @Pattern(regexp = "1\\d{10}")
+    private String phoneNumber;
+
+    @NotBlank
+    private String name;
+
+    @NotBlank
     private String sex;
 
-    @Column(columnDefinition = "VARCHAR(255) NULL COMMENT '用户类型：系统管理员、员工'")
-    @ApiModelProperty("用户类型：系统管理员、员工")
-    private String merchantUserType;
+    @ManyToOne
+    @JoinColumn(name = "merchant_user_type_id", referencedColumnName = "id")
+    @ApiModelProperty(hidden = true)
+    private MerchantUserType merchantUserType;
+
+    private boolean isActive = true;
 
     @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
@@ -42,12 +49,12 @@ public class MerchantUser {
         this.id = id;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getAccount() {
+        return account;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getPassword() {
@@ -58,28 +65,12 @@ public class MerchantUser {
         this.password = password;
     }
 
-    public String getSex() {
-        return sex;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getMerchantUserType() {
-        return merchantUserType;
-    }
-
-    public void setMerchantUserType(String merchantUserType) {
-        this.merchantUserType = merchantUserType;
-    }
-
-    public Date getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(Date creationTime) {
-        this.creationTime = creationTime;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
@@ -88,5 +79,37 @@ public class MerchantUser {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public MerchantUserType getMerchantUserType() {
+        return merchantUserType;
+    }
+
+    public void setMerchantUserType(MerchantUserType merchantUserType) {
+        this.merchantUserType = merchantUserType;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean active) {
+        isActive = active;
+    }
+
+    public Date getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 }

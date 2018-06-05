@@ -17,5 +17,5 @@ public interface MerchantUserRepository extends JpaRepository<MerchantUser, Long
     @Query("update MerchantUser t set t.password = :newPassword where t.phoneNumber=:phoneNumber and t.id <> 0")
     int updateMerchantUserPassword(@Param("phoneNumber") String phoneNumber, @Param("newPassword") String newPassword);
 
-    MerchantUser findByPhoneNumber(String phoneNumber);
+    MerchantUser findByAccount(String phoneNumber);
 }

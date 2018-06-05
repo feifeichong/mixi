@@ -2,15 +2,14 @@ package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.common.RandomUtil;
 import com.lecotec.mixi.model.entity.MerchantUser;
+import com.lecotec.mixi.model.parameter.MerchantUserLoginParam;
 import com.lecotec.mixi.model.parameter.UserParamForChangePassword;
-import com.lecotec.mixi.model.parameter.UserParamWithPassword;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
 import com.lecotec.mixi.service.MerchantUserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,20 +32,20 @@ public class MerchantUserController {
     private MerchantUserService merchantUserService;
 
     @PostMapping("/login/pwdLogin")
-    @ApiOperation("商家登录接口（手机号、密码）")
-    public ResponseObject pwdLogin(@Valid @RequestBody UserParamWithPassword userParamWithPassword, HttpServletResponse response, HttpSession session) throws Exception {
-        String phoneNumber = userParamWithPassword.getPhoneNumber();
-        String password = userParamWithPassword.getPassword();
+    public ResponseObject pwdLogin(@Valid @RequestBody MerchantUserLoginParam merchantUserLoginParam, HttpServletResponse response, HttpSession session) throws Exception {
+        String account = merchantUserLoginParam.getAccount();
+        String password = merchantUserLoginParam.getPassword();
 
-        MerchantUser merchantUser = merchantUserService.findByPhoneNumber(phoneNumber);
+        MerchantUser merchantUser = merchantUserService.findByAccount(account);
 
         if (ObjectUtils.isEmpty(merchantUser) || !StringUtils.equals(password, merchantUser.getPassword())) {
-            return new FailResponse("手机号或者密码错误！");
+            return new FailResponse("帐户名或者密码错误！");
         }
 
-        response.addCookie(produceCookie(MERCHANT_USER_PHONE_NUMBER, merchantUser.getPhoneNumber()));
+        response.addCookie(produceCookie(MERCHANT_USER_ACCOUNT, merchantUser.getAccount()));
         response.addCookie(produceCookie(MERCHANT_USER_NAME, merchantUser.getName()));
-        response.addCookie(produceCookie(MERCHANT_USER_TYPE, merchantUser.getMerchantUserType()));
+        response.addCookie(produceCookie(MERCHANT_USER_TYPE, merchantUser.getMerchantUserType().getName()));
+        response.addCookie(produceCookie(MERCHANT_USER_TYPE_PERMISSIONS, merchantUser.getMerchantUserType().getPermissionJson()));
 
         String token = RandomUtil.getRandomToken();
         response.addCookie(produceCookie(MERCHANT_USER_TOKEN, token));
@@ -68,7 +67,7 @@ public class MerchantUserController {
         String password = userParamForChangePassword.getPassword();
         String newPassword = userParamForChangePassword.getNewPassword();
 
-        MerchantUser merchant = merchantUserService.findByPhoneNumber(phoneNumber);
+        MerchantUser merchant = merchantUserService.findByAccount(phoneNumber);
 
         if (ObjectUtils.isEmpty(merchant) || !StringUtils.equals(password, merchant.getPassword())) {
             return new FailResponse("手机号或者密码错误！");
