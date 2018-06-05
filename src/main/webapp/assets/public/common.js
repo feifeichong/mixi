@@ -40,11 +40,12 @@ var common = {};
 
     $(document).ajaxSuccess(function (event, jqXHR, ajaxSettings, thrownError) {
         var jsonRes = jqXHR.responseJSON;
-        if (jsonRes && jsonRes.status === FAIL) {
-            commonModal.showModal(jsonRes.data);
+        if (!jsonRes)
             return;
-        }
-        if (jsonRes && jsonRes.status === SUCCESS){
+
+        if (jsonRes.status === FAIL) {
+            commonModal.showModal(jsonRes.data);
+        } else if (jsonRes.status === SUCCESS) {
             successAction();
         }
     });
