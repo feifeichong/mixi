@@ -60,8 +60,11 @@
         .table > tbody > tr > td, .table tr td {vertical-align: middle; text-align: center;}
         .table > thead > tr > th, .table tr th {text-align: center;}
         #navbarMenu li {margin-left: 10px;}
-        #navbarMenu li a:hover{background-color: #2F9D32;}
-        #navbarMenu ul .active a{background-color: #2F9D32;}
+        #navbarMenu li a:hover {background-color: #2F9D32;}
+        #navbarMenu ul .active a {background-color: #2F9D32;}
+        #sideBarMenu > ul > li > a {padding: 15px;}
+        #sideBarMenu li a:hover {color: #00a800;}
+        #sideBarMenu li .active {color: #00a800; background-color: #ffffff;}
     </style>
 </head>
 <body>
@@ -94,7 +97,7 @@
                     <script>document.writeln($.cookie("MERCHANT_USER_TYPE"));</script>
                     )
                 </a></li>
-                <li><a href="#">修改密码</a></li>
+                <li><a href="javascript:indexPage.setContentBody('changePwd.html')">修改密码</a></li>
                 <li><a href="javascript:indexPage.logout();">退出登录</a></li>
             </ul>
         </div>
@@ -111,11 +114,8 @@
 <script>
     var indexPage = {};
     (function (page) {
-        var _subMenuIndex = -1;
-
-        page.getSubMenuIndex = function () {
-            return _subMenuIndex;
-        };
+        var subMenus = ["homeSideMenu.html", "marketingSideMenu.html", "orderSideMenu.html", "operationSideMenu.html",
+            "approvalSideMenu.html", "financeSideMenu.html", "systemSettingSideMenu.html"];
 
         page.setContentBody = function (url, action) {
             $("#contentBody").load(url, action);
@@ -126,8 +126,7 @@
             li_list.removeClass("active");
             li_list.eq(index).addClass("active");
 
-            _subMenuIndex = index;
-            $("#sideBarMenu").load("subMenu.html");
+            $("#sideBarMenu").load("sideBarMenu/" + subMenus[index]);
         };
 
         page.logout = function () {

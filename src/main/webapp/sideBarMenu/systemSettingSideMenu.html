@@ -1,0 +1,33 @@
+<ul class="nav nav-sidebar">
+    <li><a class="glyphicon glyphicon-education" onclick="$(this).parent().find('ul').toggle(500);" href="javascript:void(0);">系统账号</a>
+        <ul class="nav nav-sidebar" data-id="menus" style="text-indent: 20px;">
+            <li><a href="javascript:indexPage.setContentBody('indexContent.html')">系统用户管理</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">新增用户</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">系统角色管理</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">新增角色</a></li>
+        </ul>
+    </li>
+    <li><a class="glyphicon glyphicon-education" onclick="$(this).parent().find('ul').toggle(500);" href="javascript:void(0);">配送设置</a>
+        <ul class="nav nav-sidebar" data-id="menus" style="text-indent: 20px;">
+            <li><a href="javascript:indexPage.setContentBody('indexContent.html')">配送费</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">配送费规则</a></li>
+        </ul>
+    </li>
+    <li><a class="glyphicon glyphicon-education" onclick="$(this).parent().find('ul').toggle(500);" href="javascript:void(0);">其它设置</a>
+        <ul class="nav nav-sidebar" data-id="menus" style="text-indent: 20px;">
+            <li><a href="javascript:indexPage.setContentBody('indexContent.html')">协议管理</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">新增协议</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">问卷调查</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">培训视频（骑手端）</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">新增视频</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">培训考试</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">新增题目</a></li>
+        </ul>
+    </li>
+</ul>
+<script>
+    $("ul[data-id='menus'] li a").click(function () {
+        $("ul[data-id='menus'] li a").removeClass("active");
+        $(this).addClass("active");
+    });
+</script>

@@ -1,0 +1,15 @@
+<ul class="nav nav-sidebar">
+    <li><a class="glyphicon glyphicon-education" onclick="$(this).parent().find('ul').toggle(500);" href="javascript:void(0);">审核管理</a>
+        <ul class="nav nav-sidebar" data-id="menus"  style="text-indent: 20px;">
+            <li><a href="javascript:indexPage.setContentBody('indexContent.html')">店铺审核</a></li>
+            <li><a href="javascript:indexPage.setContentBody('changePwd.html')">骑手审核</a></li>
+            <li><a href="javascript:indexPage.setContentBody('indexContent.html')">朋友圈审核</a></li>
+        </ul>
+    </li>
+</ul>
+<script>
+    $("ul[data-id='menus'] li a").click(function () {
+        $("ul[data-id='menus'] li a").removeClass("active");
+        $(this).addClass("active");
+    });
+</script>
