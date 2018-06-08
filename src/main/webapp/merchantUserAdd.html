@@ -53,8 +53,6 @@
             <div class="col-xs-12 col-sm-8 col-md-4 input-group">
                 <span class="input-group-addon">用户角色</span>
                 <select class="form-control" id="userType">
-                    <option value="1">系统管理员</option>
-                    <option value="2">员工</option>
                 </select>
             </div>
         </div>
@@ -71,6 +69,7 @@
 </div>
 <script>
     var merchantUserAddPage = {};
+
     (function (page) {
         page.save = function () {
             var param = {};
@@ -81,7 +80,7 @@
             param.phoneNumber = $("#phoneNumber").val();
             param.merchantUserType = {id: JSON.parse($("#userType").val())};
 
-            if (!param.sex){
+            if (!param.sex) {
                 commonModal.showModal("请选择性别");
                 return;
             }
@@ -114,5 +113,21 @@
 
 
         };
+
+        function initUserTypeSelect() {
+            $.ajax({
+                type: "GET", url: "/api/merchant/merchantUserType/list",
+                data: {pageNumber: 0, pageSize: 100},
+                success: function (result) {
+                    for (var i = 0; i < result.rows.length; i++) {
+                        $("#userType").append('<option value="' + result.rows[i].id + '">' + result.rows[i].name + '</option>');
+                    }
+                }
+            });
+        }
+
+        $(function () {
+            initUserTypeSelect();
+        });
     })(merchantUserAddPage);
 </script>

@@ -2,6 +2,7 @@ package com.lecotec.mixi.aop;
 
 import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,6 +29,12 @@ public class GlobalExceptionHandler {
             }
             return new FailResponse(errorMessages);
         }
+
+        if (exception instanceof DataIntegrityViolationException) {
+            response.setStatus(500);
+            return new FailResponse(((DataIntegrityViolationException) exception).getRootCause().getMessage());
+        }
+
         response.setStatus(500);
         return new FailResponse(exception.getLocalizedMessage());
     }
