@@ -17,11 +17,11 @@ public class MerchantUserService {
         return merchantUserRepository.findByAccount(phoneNumber);
     }
 
-    public boolean updateMerchantUserPassword(String phoneNumber, String newPassword) {
+    public boolean updatePassword(String phoneNumber, String newPassword) {
         return merchantUserRepository.updateMerchantUserPassword(phoneNumber, newPassword) > 0;
     }
 
-    public MerchantUser saveOrUpdateMerchantUser(MerchantUser merchant) {
+    public MerchantUser saveOrUpdate(MerchantUser merchant) {
         return merchantUserRepository.save(merchant);
     }
 
@@ -29,8 +29,12 @@ public class MerchantUserService {
         return merchantUserRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
-    public boolean deleteMerchantUser(long id) {
+    public boolean delete(long id) {
         merchantUserRepository.deleteById(id);
         return true;
+    }
+
+    public boolean changeActiveStatus(long id, boolean isActive) {
+        return merchantUserRepository.changeActiveStatus(id, isActive) > 0;
     }
 }

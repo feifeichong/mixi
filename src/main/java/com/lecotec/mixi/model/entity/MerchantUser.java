@@ -19,10 +19,10 @@ public class MerchantUser {
     @Column(unique = true)
     private String account;
 
-    @Pattern(regexp = "\\w{8,16}")
+    @Pattern(regexp = "\\w{8,16}", message = "密码是8-16位字母、数字组成")
     private String password = RandomUtil.getRandomStringByLength(10);
 
-    @Pattern(regexp = "1\\d{10}")
+    @NotBlank
     private String phoneNumber;
 
     @NotBlank

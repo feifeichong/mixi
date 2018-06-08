@@ -1,12 +1,27 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
-        <h1>更新系统用户</h1>
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('merchantUser.html')" type="button">返回</button>
+        </div>
+        <h1>编辑系统用户</h1>
     </div>
     <form class="form-horizontal" action="javascript:merchantUserUpdatePage.update();">
         <div class="form-group">
             <div class="col-xs-12 col-sm-8 col-md-4 input-group">
                 <span class="input-group-addon">用户账号</span>
-                <input id="phoneNumber" type="text" class="form-control" disabled required/>
+                <input id="account" type="text" class="form-control" readonly/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-8 col-md-4 input-group">
+                <span class="input-group-addon">密码</span>
+                <input id="password" type="password" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-8 col-md-4 input-group">
+                <span class="input-group-addon">确认密码</span>
+                <input id="passwordConfirm" type="password" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
@@ -18,25 +33,38 @@
         <div class="form-group">
             <div class="col-xs-12 col-sm-8 col-md-4 input-group">
                 <span class="input-group-addon">用户性别</span>
-                <input id="sex" type="checkbox" data-on-color="success" data-off-color="danger" data-on-text="男" data-off-text="女"/>
+                <span class="form-control">
+                    <label>
+                        <input name="sex" type="radio" value="男"/>&nbsp;男
+                    </label>&nbsp;
+                    <label>
+                        <input name="sex" type="radio" value="女"/>&nbsp;女
+                    </label>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-8 col-md-4 input-group">
+                <span class="input-group-addon">用户电话</span>
+                <input id="phoneNumber" type="text" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-xs-12 col-sm-8 col-md-4 input-group">
                 <span class="input-group-addon">用户角色</span>
                 <select class="form-control" id="userType">
-                    <option value="系统管理员">系统管理员</option>
-                    <option value="员工">员工</option>
+                    <option value="1">系统管理员</option>
+                    <option value="2">员工</option>
                 </select>
             </div>
         </div>
         <hr>
         <div class="form-group">
             <div class="col-sm-1"></div>
-            <div class="col-sm-4 input-group">
-                <input id="submitBtn" class="btn btn-primary" type="submit" value="更新"/>
+            <div class="col-sm-8 input-group">
+                <input class="btn btn-default" type="button" onclick="indexPage.setContentBody('merchantUser.html')" value="取消"/>
                 &nbsp;&nbsp;
-                <input id="cancelBtn" class="btn btn-default" type="button" value="返回"/>
+                <input class="btn btn-success" type="submit" value="提交"/>
             </div>
         </div>
     </form>
@@ -48,36 +76,41 @@
 
         page.setData = function (data) {
             _data = data;
-            $("#phoneNumber").val(_data.phoneNumber);
+
+            $("#account").val(_data.account);
+            $("#password").val(_data.password);
+            $("#passwordConfirm").val(_data.password);
             $("#name").val(_data.name);
-            $("#sex").bootstrapSwitch("state", _data.sex === "男");
-            $("#userType").val(_data.merchantUserType);
+            $("input[name='sex']").each(function (i, element) {
+                if (element.value === _data.sex){
+                    element.checked = "checked";
+                }
+            });
+            $("#phoneNumber").val(_data.phoneNumber);
+            $("#userType").val(_data.merchantUserType.id);
         };
 
         page.update = function () {
+            _data.account = $("#account").val();
+            _data.password = $("#password").val();
             _data.name = $("#name").val();
-            _data.merchantUserType = $("#userType").val();
+            _data.sex = $("input[name='sex']:checked").val();
+            _data.phoneNumber = $("#phoneNumber").val();
+            _data.merchantUserType = {id: JSON.parse($("#userType").val())};
+
+            if (_data.password !== $("#passwordConfirm").val()) {
+                commonModal.showModal("两次输入的密码不一致");
+                return;
+            }
             $.ajax({
-                type: "POST", url: "api/merchantUser",
+                type: "POST", url: "/api/merchant/merchantUser",
                 contentType: "application/json",
                 data: JSON.stringify(_data),
                 success: function (result) {
                     if (result.status === SUCCESS)
                         indexPage.setContentBody("merchantUser.html");
-                    else
-                        commonModal.showModal(result.data);
                 }
             });
         };
-
-        $(function () {
-            $("#sex").bootstrapSwitch().on("switchChange.bootstrapSwitch", function (event, status) {
-                _data.sex = status ? event.target.getAttribute("data-on-text") : event.target.getAttribute("data-off-text");
-            });
-
-            $("#cancelBtn").click(function () {
-                indexPage.setContentBody("merchantUser.html");
-            });
-        });
     })(merchantUserUpdatePage);
 </script>

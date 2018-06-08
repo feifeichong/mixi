@@ -51,9 +51,9 @@
                 type: "POST", url: "/api/merchant/merchantUser/login/pwdLogin", contentType: "application/json",
                 data: JSON.stringify({account: account, password: password}),
                 success: function (response) {
-                    common.setSuccessAction(function () {
+                    if (response.status === SUCCESS) {
                         window.location.href = "index.html";
-                    });
+                    }
                 }
             });
         }

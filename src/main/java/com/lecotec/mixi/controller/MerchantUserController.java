@@ -57,12 +57,12 @@ public class MerchantUserController {
     }
 
     @PostMapping
-    public ResponseObject saveOrUpdateMerchantUser(@Valid @RequestBody MerchantUser merchantUser) {
-        return new SuccessResponse(merchantUserService.saveOrUpdateMerchantUser(merchantUser));
+    public ResponseObject saveOrUpdate(@Valid @RequestBody MerchantUser merchantUser) {
+        return new SuccessResponse(merchantUserService.saveOrUpdate(merchantUser));
     }
 
-    @PutMapping("/updateMerchantUserPassword")
-    public ResponseObject updateMerchantUserPassword(@Valid @RequestBody UserParamForChangePassword userParamForChangePassword) {
+    @PutMapping("/updatePassword")
+    public ResponseObject updatePassword(@Valid @RequestBody UserParamForChangePassword userParamForChangePassword) {
         String phoneNumber = userParamForChangePassword.getPhoneNumber();
         String password = userParamForChangePassword.getPassword();
         String newPassword = userParamForChangePassword.getNewPassword();
@@ -73,17 +73,27 @@ public class MerchantUserController {
             return new FailResponse("手机号或者密码错误！");
         }
 
-        return new SuccessResponse(merchantUserService.updateMerchantUserPassword(phoneNumber, newPassword));
+        return new SuccessResponse(merchantUserService.updatePassword(phoneNumber, newPassword));
     }
 
-    @GetMapping("all")
-    public BootstrapTableResult<MerchantUser> getMerchantUsers(int pageNumber, int pageSize) {
+    @GetMapping("/list")
+    public BootstrapTableResult<MerchantUser> getAllByPage(int pageNumber, int pageSize) {
         Page<MerchantUser> merchantUsers = merchantUserService.getMerchantUsers(pageNumber, pageSize);
         return new BootstrapTableResult<>(merchantUsers.getTotalElements(), merchantUsers.getContent());
     }
 
+    @GetMapping("/{account}")
+    public ResponseObject findOneByAccount(@PathVariable("account") String account) {
+        return new SuccessResponse(merchantUserService.findByAccount(account));
+    }
+
+    @PutMapping("changeActiveStatus")
+    public ResponseObject changeActiveStatus(long id, boolean isActive) {
+        return new SuccessResponse(merchantUserService.changeActiveStatus(id, isActive));
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseObject deleteMerchantUser(@PathVariable("id") long id) {
-        return new SuccessResponse(merchantUserService.deleteMerchantUser(id));
+    public ResponseObject delete(@PathVariable("id") long id) {
+        return new SuccessResponse(merchantUserService.delete(id));
     }
 }
