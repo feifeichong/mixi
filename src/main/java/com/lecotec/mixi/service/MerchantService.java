@@ -28,24 +28,21 @@ public class MerchantService {
     }
 
     public Page<Merchant> searchForMixiConsole(MerchantSerchParam merchantSerchParam) {
-        return merchantRepository.findAll(new Specification<Merchant>() {
-            @Override
-            public Predicate toPredicate(Root<Merchant> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new ArrayList<>();
+        return merchantRepository.findAll((Specification<Merchant>) (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-                if (!StringUtils.isEmpty(merchantSerchParam.getName())) {
-                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + merchantSerchParam.getName() + "%"));
-                }
-                if (!ObjectUtils.isEmpty(merchantSerchParam.getMerchantType())) {
-                    predicates.add(criteriaBuilder.equal(root.get("merchantType"), merchantSerchParam.getMerchantType()));
-                }
-                if (!ObjectUtils.isEmpty(merchantSerchParam.getApprovalStatus())) {
-                    predicates.add(criteriaBuilder.equal(root.get("approvalStatus"), merchantSerchParam.getApprovalStatus()));
-                }
-
-                query.where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
-                return query.getRestriction();
+            if (!StringUtils.isEmpty(merchantSerchParam.getName())) {
+                predicates.add(criteriaBuilder.like(root.get("name"), "%" + merchantSerchParam.getName() + "%"));
             }
+            if (!ObjectUtils.isEmpty(merchantSerchParam.getMerchantType())) {
+                predicates.add(criteriaBuilder.equal(root.get("merchantType"), merchantSerchParam.getMerchantType()));
+            }
+            if (!ObjectUtils.isEmpty(merchantSerchParam.getApprovalStatus())) {
+                predicates.add(criteriaBuilder.equal(root.get("approvalStatus"), merchantSerchParam.getApprovalStatus()));
+            }
+
+            query.where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
+            return query.getRestriction();
         }, PageRequest.of(merchantSerchParam.getPageNumber(), merchantSerchParam.getPageSize()));
     }
 

@@ -1,0 +1,89 @@
+<style>
+    label {margin: 30px;}
+    table tr td {text-align: left;}
+</style>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('merchantUserType.html')" type="button">返回</button>
+        </div>
+        <h1>新增角色</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:merchantUserTypeAddPage.save();">
+        <h3 class="sub-header">基本信息</h3>
+        <table class="table table-bordered">
+            <tr>
+                <td style="width:20%">角色名称</td>
+                <td><input type="text" class="form-control" id="name" required></td>
+            </tr>
+        </table>
+        <h3 class="sub-header">权限选择</h3>
+        <table class="table table-bordered">
+            <tr>
+                <td style="width:20%">审核管理</td>
+                <td style="text-align: left">
+                    <label><input name="approvalPermission" type="checkbox" value="商家入驻"/>&nbsp;商家入驻</label>
+                    <label><input name="approvalPermission" type="checkbox" value="骑手入驻"/>&nbsp;骑手入驻</label>
+                    <label><input name="approvalPermission" type="checkbox" value="订单"/>&nbsp;订单</label>
+                </td>
+            </tr>
+            <tr>
+                <td>菜单管理</td>
+                <td style="text-align: left">
+                    <label><input name="menuPermission" type="checkbox" value="菜品添加"/>&nbsp;菜品添加</label>
+                    <label><input name="menuPermission" type="checkbox" value="菜品删除"/>&nbsp;菜品删除</label>
+                    <label><input name="menuPermission" type="checkbox" value="菜品修改"/>&nbsp;菜品修改</label>
+                </td>
+            </tr>
+            <tr>
+                <td>评价管理</td>
+                <td style="text-align: left">
+                    <label><input name="commentPermission" type="checkbox" value="评价删除"/>&nbsp;评价删除</label>
+                    <label><input name="commentPermission" type="checkbox" value="评价回复"/>&nbsp;评价回复</label>
+                </td>
+            </tr>
+            <tr>
+                <td>订单管理</td>
+                <td style="text-align: left">
+                    <label><input name="orderPermission" type="checkbox" value="订单添加"/>&nbsp;订单添加</label>
+                    <label><input name="orderPermission" type="checkbox" value="订单删除"/>&nbsp;订单删除</label>
+                    <label><input name="orderPermission" type="checkbox" value="订单修改"/>&nbsp;订单修改</label>
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-8 input-group text-center">
+                <input class="btn btn-default" type="button" onclick="indexPage.setContentBody('merchantUserType.html')" value="取消"/>
+                &nbsp;&nbsp;
+                <input class="btn btn-success" type="submit" value="提交"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var merchantUserTypeAddPage = {};
+    (function (page) {
+        page.save = function () {
+            var param = {};
+            param.name = $("#name").val();
+
+            var permissions = [];
+            $("input:checked").each(function (i, item) {
+                permissions.push(item.value);
+            });
+
+            param.permissionJson = JSON.stringify(permissions);
+
+            $.ajax({
+                type: "POST", url: "/api/merchant/merchantUserType",
+                contentType: "application/json",
+                data: JSON.stringify(param),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("merchantUserType.html");
+                }
+            });
+        };
+    })(merchantUserTypeAddPage);
+</script>

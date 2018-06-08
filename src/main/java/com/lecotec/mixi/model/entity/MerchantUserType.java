@@ -2,10 +2,7 @@ package com.lecotec.mixi.model.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -17,6 +14,7 @@ public class MerchantUserType {
     private long id;
 
     @NotBlank
+    @Column(unique = true)
     private String name;
 
     @NotBlank

@@ -1,0 +1,76 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('merchantUserTypeAdd.html')" type="button">新增</button>
+        </div>
+        <h1>系统角色管理</h1>
+    </div>
+    <div class="table-responsive">
+        <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
+    </div>
+</div>
+<script>
+    var merchantUserTypePage = {};
+    (function (page) {
+        function searchTableDatas() {
+            $('#tableResult').bootstrapTable({
+                url: 'api/merchant/merchantUserType/list',
+                method: "get",
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: function (params) {
+                    return {pageSize: params.limit, pageNumber: params.offset / params.limit};
+                },
+                columns: [
+                    {
+                        title: '序号', align: "center",
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {title: '角色名称', field: 'name'},
+                    {
+                        title: '用户权限', field: 'name',
+                        formatter: function (value, row, index) {
+                            return JSON.parse(row.permissionJson).join("、");
+                        }
+                    },
+                    {
+                        title: '操作', field: 'id', formatter: function (value, row, index) {
+                            var html = '<span style="cursor: pointer;color:#2F9D32;" onclick="merchantUserTypePage.edit(' + value + ');">【修改】</span>';
+                            html += ' <span style="cursor: pointer;color:#2F9D32;" onclick="merchantUserTypePage.delete(' + value + ');">【删除】</span>';
+                            return html;
+                        }
+                    }
+                ]
+            });
+        };
+
+        page.edit = function (id) {
+            var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            indexPage.setContentBody("merchantUserTypeUpdate.html", function (response, status, xhr) {
+                merchantUserTypeUpdatePage.setData(currentData);
+            });
+        };
+
+        page.delete = function (id) {
+            deleteConfirmModal.showModal();
+            deleteConfirmModal.bindDeleteAction(deleteAction, id);
+        };
+
+        function deleteAction(id) {
+            $.ajax({
+                type: "DELETE", url: "/api/merchant/merchantUserType/" + id,
+                data: {},
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        $("#tableResult").bootstrapTable("refresh", {silent: true});
+                }
+            });
+        }
+
+        $(function () {
+            searchTableDatas();
+        });
+    })(merchantUserTypePage);
+</script>

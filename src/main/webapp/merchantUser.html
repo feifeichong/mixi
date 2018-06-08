@@ -56,13 +56,19 @@
             });
         };
 
+        function refreshData(){
+            setTimeout(function () {
+                $("#tableResult").bootstrapTable("refresh", {silent: true});
+            }, 500);
+        }
+
         function changeActiveStatus(id, status) {
             $.ajax({
-                type: "PUT", url: "api/merchant/merchantUser/changeActiveStatus",
+                type: "PUT", url: "/api/merchant/merchantUser/changeActiveStatus",
                 data: {id: id, isActive: status,},
                 success: function (result) {
-                    if (result === SUCCESS)
-                        $("#tableResult").bootstrapTable("refresh", {silent: true});
+                    if (result.status === SUCCESS)
+                        refreshData();
                 }
             });
         }
@@ -76,10 +82,10 @@
 
         page.delete = function (id) {
             deleteConfirmModal.showModal();
-            deleteConfirmModal.bindDeleteAction(deleteMerchantUser, id);
+            deleteConfirmModal.bindDeleteAction(deleteAction, id);
         };
 
-        function deleteMerchantUser(id) {
+        function deleteAction(id) {
             $.ajax({
                 type: "DELETE", url: "/api/merchant/merchantUser/" + id,
                 data: {},
