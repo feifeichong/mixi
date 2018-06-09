@@ -6,39 +6,38 @@
         <div class="form-group">
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">原密码</span>
-                <input id="oldPwd" type="password" class="form-control" required/>
+                <input id="oldPwd" type="password" placeholder="请输入原密码" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">新密码</span>
-                <input id="newPwd" type="password" placeholder="8-16位字母、数字组合" class="form-control" required/>
+                <input id="newPwd" type="password" placeholder="请输入新密码，6-16位字母、数字、字符" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">新密码确认</span>
-                <input id="newPwdRepeated" type="password" placeholder="8-16位字母、数字组合" class="form-control" required/>
+                <input id="newPwdRepeated" type="password" placeholder="请重新输入新密码" class="form-control" required/>
             </div>
         </div>
         <hr>
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
-                <input id="submitBtn" class="btn btn-primary" type="submit" value="提交"/>
+                <input id="cancelBtn" class="btn btn-default" type="reset" value="取消"/>
                 &nbsp;&nbsp;
-                <input id="cancelBtn" class="btn btn-default" type="reset" value="重置"/>
+                <input id="submitBtn" class="btn btn-success" type="submit" value="提交"/>
             </div>
         </div>
     </form>
-    <div id="cmModal"></div>
 </div>
 <script>
     var changePwdPage = {};
     (function (page) {
         var _data = {};
         page.save = function () {
-            _data.phoneNumber = $.cookie("MERCHANT_USER_PHONE_NUMBER");
+            _data.account = $.cookie("MERCHANT_USER_ACCOUNT");
             _data.password = $("#oldPwd").val();
             _data.newPassword = $("#newPwd").val();
             var repeatedPwd = $("#newPwdRepeated").val();
@@ -49,7 +48,7 @@
             }
 
             $.ajax({
-                type: "PUT", url: "/api/merchant/merchantUser/updateMerchantUserPassword",
+                type: "PUT", url: "/api/merchant/merchantUser/updatePassword",
                 contentType: "application/json",
                 data: JSON.stringify(_data),
                 success: function (result) {
@@ -60,9 +59,5 @@
                 }
             });
         };
-
-        $(function () {
-            $("#cmModal").load("commonModal.html");
-        });
     })(changePwdPage);
 </script>

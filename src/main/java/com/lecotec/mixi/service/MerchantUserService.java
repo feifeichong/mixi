@@ -19,8 +19,8 @@ public class MerchantUserService {
         return merchantUserRepository.findByAccount(phoneNumber);
     }
 
-    public boolean updatePassword(String phoneNumber, String newPassword) {
-        return merchantUserRepository.updateMerchantUserPassword(phoneNumber, newPassword) > 0;
+    public boolean updatePassword(String account, String newPassword) {
+        return merchantUserRepository.updateMerchantUserPassword(account, newPassword) > 0;
     }
 
     public MerchantUser saveOrUpdate(MerchantUser merchant) {

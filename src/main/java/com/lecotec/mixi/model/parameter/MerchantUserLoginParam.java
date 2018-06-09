@@ -7,7 +7,7 @@ public class MerchantUserLoginParam {
     @NotBlank(message = "帐户名不能为空")
     private String account;
 
-    @Pattern(regexp = "\\w{8,16}", message = "密码是由8-16位字母、数字组成")
+    @Pattern(regexp = ".{8,16}", message = "密码是8-16位字母、数字和字符组成")
     private String password;
 
     public String getAccount() {

@@ -2,6 +2,7 @@ package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.common.RandomUtil;
 import com.lecotec.mixi.model.entity.MerchantUser;
+import com.lecotec.mixi.model.parameter.MerchantUserChangePwdParam;
 import com.lecotec.mixi.model.parameter.MerchantUserLoginParam;
 import com.lecotec.mixi.model.parameter.UserParamForChangePassword;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
@@ -63,18 +64,18 @@ public class MerchantUserController {
     }
 
     @PutMapping("/updatePassword")
-    public ResponseObject updatePassword(@Valid @RequestBody UserParamForChangePassword userParamForChangePassword) {
-        String phoneNumber = userParamForChangePassword.getPhoneNumber();
-        String password = userParamForChangePassword.getPassword();
-        String newPassword = userParamForChangePassword.getNewPassword();
+    public ResponseObject updatePassword(@Valid @RequestBody MerchantUserChangePwdParam merchantUserChangePwdParam) {
+        String account = merchantUserChangePwdParam.getAccount();
+        String password = merchantUserChangePwdParam.getPassword();
+        String newPassword = merchantUserChangePwdParam.getNewPassword();
 
-        MerchantUser merchant = merchantUserService.findByAccount(phoneNumber);
+        MerchantUser merchant = merchantUserService.findByAccount(account);
 
         if (ObjectUtils.isEmpty(merchant) || !StringUtils.equals(password, merchant.getPassword())) {
             return new FailResponse("手机号或者密码错误！");
         }
 
-        return new SuccessResponse(merchantUserService.updatePassword(phoneNumber, newPassword));
+        return new SuccessResponse(merchantUserService.updatePassword(account, newPassword));
     }
 
     @GetMapping("/list")

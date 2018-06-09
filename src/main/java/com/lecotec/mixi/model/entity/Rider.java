@@ -36,8 +36,8 @@ public class Rider {
     @Column(unique = true)
     private String webo;
 
-    @Pattern(regexp = "\\w{8,16}", message = "密码是8至16位以上字母、数字组成")
-    @ApiModelProperty(required = true, value = "密码是8至16位以上字母、数字和下划线组成")
+    @Pattern(regexp = ".{8,16}", message = "密码是8-16位字母、数字和字符组成")
+    @ApiModelProperty(required = true, value = "密码是8-16位字母、数字和字符组成")
     private String password;
 
     private String name;
