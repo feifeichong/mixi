@@ -1,0 +1,64 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1>问卷调查</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:questionnairePage.save();">
+        <div class="form-group">
+            <div class="col-sm-12 input-group">
+                <textarea id="content" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-12 input-group text-center">
+                <input id="cancelBtn" class="btn btn-default" type="button" onclick="CKEDITOR.instances.content.setData('')" value="取消"/>
+                &nbsp;&nbsp;
+                <input id="submitBtn" class="btn btn-success" type="submit" value="提交"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var questionnairePage = {};
+    (function (page) {
+        var _data = {};
+
+        page.save = function () {
+            /*_data.minOrderPriceCanSend = $("#minOrderPriceCanSend").val();
+            _data.minSendCost = $("#minSendCost").val();
+            _data.minSendRadius = $("#minSendRadius").val();
+
+            $.ajax({
+                type: "POST", url: "/api/merchant/questionnaire",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        commonModal.showModal("修改成功");
+                }
+            });*/
+        };
+
+        function initQuestionnaire() {
+            /*$.ajax({
+                type: "GET", url: "/api/merchant/questionnaire",
+                data: {},
+                success: function (result) {
+                    if (result.status === SUCCESS) {
+                        if (result.data.length > 0) {
+                            _data = result.data[0];
+                            $("#minOrderPriceCanSend").val(_data.minOrderPriceCanSend);
+                            $("#minSendCost").val(_data.minSendCost);
+                            $("#minSendRadius").val(_data.minSendRadius);
+                        }
+                    }
+                }
+            });*/
+        }
+
+        $(function () {
+            initQuestionnaire();
+            CKEDITOR.replace('content');
+        });
+    })(questionnairePage);
+</script>

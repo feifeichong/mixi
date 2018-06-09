@@ -84,7 +84,7 @@
                     },
                     {
                         title: '操作', field: 'id', formatter: function (value, row, index) {
-                            var html = '<span style="cursor: pointer;color:#2F9D32;" onclick="agreementPage.edit(' + value + ');">【查看详情】</span>';
+                            var html = '<span style="cursor: pointer;color:#2F9D32;" onclick="agreementPage.showDetail(' + value + ');">【查看详情】</span>';
                             html += '<span style="cursor: pointer;color:#2F9D32;" onclick="agreementPage.edit(' + value + ');">【修改】</span>';
                             html += ' <span style="cursor: pointer;color:#2F9D32;" onclick="agreementPage.delete(' + value + ');">【删除】</span>';
                             return html;
@@ -119,10 +119,17 @@
             });
         }
 
+        page.showDetail = function (id) {
+            var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            indexPage.setContentBody("agreementUpdate.html", function (response, status, xhr) {
+                agreementUpdatePage.setData(currentData, false);
+            });
+        };
+
         page.edit = function (id) {
             var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
-            indexPage.setContentBody("merchantUserUpdate.html", function (response, status, xhr) {
-                merchantUserUpdatePage.setData(currentData);
+            indexPage.setContentBody("agreementUpdate.html", function (response, status, xhr) {
+                agreementUpdatePage.setData(currentData, true);
             });
         };
 
