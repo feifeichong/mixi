@@ -34,4 +34,9 @@ public class QuestionController {
     public ResponseObject deleteById(@PathVariable("id") long id) {
         return new SuccessResponse(questionService.deleteById(id));
     }
+
+    @PostMapping("/api/merchant/question/deleteBatch")
+    public ResponseObject deleteBatch(@RequestBody long[] ids) {
+        return new SuccessResponse(questionService.deleteBatch(ids));
+    }
 }

@@ -47,4 +47,9 @@ public class QuestionService {
         questionRepository.deleteById(id);
         return true;
     }
+
+    public boolean deleteBatch(long[] ids) {
+        questionRepository.deleteBatch(ids);
+        return true;
+    }
 }
