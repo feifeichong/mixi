@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface MerchantUserRepository extends JpaRepository<MerchantUser, Long> {
@@ -23,4 +24,6 @@ public interface MerchantUserRepository extends JpaRepository<MerchantUser, Long
     @Transactional
     @Query("update MerchantUser t set t.isActive = :isActive where t.id = :id")
     int changeActiveStatus(@Param("id") long id, @Param("isActive") boolean isActive);
+
+    List<MerchantUser> findByMerchantUserTypeId(long userTypeId);
 }

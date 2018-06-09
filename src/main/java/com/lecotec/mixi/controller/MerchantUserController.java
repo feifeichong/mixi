@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,7 @@ public class MerchantUserController {
         response.addCookie(produceCookie(MERCHANT_USER_ACCOUNT, merchantUser.getAccount()));
         response.addCookie(produceCookie(MERCHANT_USER_NAME, merchantUser.getName()));
         response.addCookie(produceCookie(MERCHANT_USER_TYPE, merchantUser.getMerchantUserType().getName()));
-        response.addCookie(produceCookie(MERCHANT_USER_TYPE_PERMISSIONS, merchantUser.getMerchantUserType().getPermissionJson()));
+        response.addCookie(produceCookie(MERCHANT_USER_TYPE_PERMISSIONS, Base64Utils.encodeToString(merchantUser.getMerchantUserType().getPermissionJson().getBytes("utf-8"))));
 
         String token = RandomUtil.getRandomToken();
         response.addCookie(produceCookie(MERCHANT_USER_TOKEN, token));

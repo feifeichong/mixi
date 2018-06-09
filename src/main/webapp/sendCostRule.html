@@ -1,0 +1,106 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1>配送费规则</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:sendCostRulePage.save();">
+        <div class="form-group" id="insertBtnDiv">
+            <div class="col-xs-12 col-sm-8 col-md-4 input-group">
+                <input type="button" class="btn btn-link" onclick="sendCostRulePage.addControl()" value="添加规则，最多5个">
+                <input type="button" class="btn btn-link" onclick="sendCostRulePage.deleteControl()" value="删除">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-8 input-group">
+                <input class="btn btn-default" type="reset" value="取消"/>
+                &nbsp;&nbsp;
+                <input class="btn btn-success" type="submit" value="提交"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var sendCostRulePage = {};
+
+    (function (page) {
+        var ruleCount = 0;
+
+        var template =
+            `<div class="form-group" name="{div}">
+                <div class="col-xs-12 col-sm-8 col-md-4 input-group">
+                    <span class="input-group-addon">订单总额</span>
+                    <input id="{orderPriceBegin}" type="number" step="any" class="form-control" required/>
+                    <span class="input-group-addon">至</span>
+                    <input id="{orderPriceEnd}" type="number" step="any" class="form-control" required/>
+                </div>
+            </div>
+            <div class="form-group" name="{div}">
+                <div class="col-xs-12 col-sm-8 col-md-4 input-group">
+                    <span class="input-group-addon">配送员得</span>
+                    <input id="{senderIncome}" type="number" step="any" class="form-control" required/>
+                </div>
+            </div>`;
+
+        page.save = function () {
+            var params = [];
+            for (var i = 0; i < ruleCount; i++) {
+                var param = {};
+                param.orderPriceBegin = $("#orderPriceBegin" + i).val();
+                param.orderPriceEnd = $("#orderPriceEnd" + i).val();
+                param.senderIncome = $("#senderIncome" + i).val();
+                params.push(param);
+            }
+
+            $.ajax({
+                type: "POST", url: "/api/merchant/sendCostRule",
+                contentType: "application/json",
+                data: JSON.stringify(params),
+                success: function (result) {
+                    if (result.status === SUCCESS) {
+                        commonModal.showModal("修改成功");
+                    }
+                }
+            });
+        };
+
+        page.addControl = function () {
+            if (ruleCount < 5) {
+                var control = template.replace(/\{div\}/g, "div" + ruleCount).replace("{orderPriceBegin}", "orderPriceBegin" + ruleCount)
+                    .replace("{orderPriceEnd}", "orderPriceEnd" + ruleCount).replace("{senderIncome}", "senderIncome" + ruleCount);
+                ruleCount++;
+                $("#insertBtnDiv").before(control);
+            }
+        };
+
+        page.deleteControl = function () {
+            if (ruleCount > 1)
+                $("div[name='div" + (--ruleCount) + "']").remove();
+        };
+
+        function initSendCostRules() {
+            $.ajax({
+                type: "GET", url: "/api/merchant/sendCostRule/list",
+                data: {},
+                success: function (result) {
+                    if (result.status === SUCCESS) {
+                        if (result.data.length > 0) {
+                            var _datas = result.data;
+                            for (var i = 0; i < _datas.length; i++) {
+                                page.addControl();
+                                $("#orderPriceBegin" + i).val(_datas[i].orderPriceBegin);
+                                $("#orderPriceEnd" + i).val(_datas[i].orderPriceEnd);
+                                $("#senderIncome" + i).val(_datas[i].senderIncome);
+                            }
+                        } else {
+                            page.addControl();
+                        }
+                    }
+                }
+            });
+        }
+
+        $(function () {
+            initSendCostRules();
+        });
+    })(sendCostRulePage);
+</script>

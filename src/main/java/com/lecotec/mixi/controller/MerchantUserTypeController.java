@@ -2,8 +2,10 @@ package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.MerchantUserType;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
+import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
+import com.lecotec.mixi.service.MerchantUserService;
 import com.lecotec.mixi.service.MerchantUserTypeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class MerchantUserTypeController {
     @Autowired
     private MerchantUserTypeService merchantUserTypeService;
 
+    @Autowired
+    private MerchantUserService merchantUserService;
+
     @PostMapping
     public ResponseObject saveOrUpdate(@Valid @RequestBody MerchantUserType merchantUserType) {
         return new SuccessResponse(merchantUserTypeService.saveOrUpdate(merchantUserType));
@@ -33,6 +38,9 @@ public class MerchantUserTypeController {
 
     @DeleteMapping("/{id}")
     public ResponseObject delete(@PathVariable("id") long id) {
-        return new SuccessResponse(merchantUserTypeService.delete(id));
+        return merchantUserService.isExistUserByUserTypeId(id)
+                ? new FailResponse("当前角色下面还有用户信息")
+                : new SuccessResponse(merchantUserTypeService.delete(id));
+
     }
 }

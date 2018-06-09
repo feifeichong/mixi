@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MerchantUserService {
 
@@ -36,5 +38,9 @@ public class MerchantUserService {
 
     public boolean changeActiveStatus(long id, boolean isActive) {
         return merchantUserRepository.changeActiveStatus(id, isActive) > 0;
+    }
+
+    public boolean isExistUserByUserTypeId(long userTypeId) {
+        return merchantUserRepository.findByMerchantUserTypeId(userTypeId).size() > 0;
     }
 }
