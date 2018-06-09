@@ -16,4 +16,9 @@ public interface TrainningVideoRepository extends JpaRepository<TrainningVideo, 
     @Transactional
     @Query("update TrainningVideo t set t.isActive = :isActive where t.id = :id")
     int changeActiveStatus(@Param("id") long id, @Param("isActive") boolean isActive);
+
+    @Transactional
+    @Modifying
+    @Query("delete from TrainningVideo t where t.id in :ids")
+    void deleteBatch(@Param("ids") long[] ids);
 }

@@ -1,7 +1,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
         <div id="backBtn" class="right">
-            <button class="btn btn-success" style="display: none;" onclick="indexPage.setContentBody('trainningVideo.html')" type="button">返回</button>
+            <button class="btn btn-success" onclick="indexPage.setContentBody('trainningVideo.html')" type="button">返回</button>
         </div>
         <h1 id="videoTile">编辑上传的视频</h1>
     </div>
@@ -28,9 +28,9 @@
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
-                <input id="submitBtn" class="btn btn-primary" type="submit" value="更新"/>
+                <input id="cancelBtn" class="btn btn-default" onclick="indexPage.setContentBody('trainningVideo.html')" type="button" value="返回"/>
                 &nbsp;&nbsp;
-                <input id="cancelBtn" class="btn btn-default" type="button" value="返回"/>
+                <input id="submitBtn" class="btn btn-success" type="submit" value="提交"/>
             </div>
         </div>
     </form>
@@ -48,7 +48,6 @@
                 $("#submitBtn").hide();
                 $("#cancelBtn").hide();
                 $("#videoTile").html("查看视频详细");
-                $("#backBtn").show();
             }
             _data = data;
             $("#videoName").val(_data.name);
@@ -58,7 +57,7 @@
         function initFileUploadControl() {
             var coverOption = {
                 language: 'zh', uploadUrl: "/api/fileUpload", showUpload: true,
-                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showRemove: true, showPreview: true, dropZoneEnabled: false, browseClass: "btn btn-success",
                 showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
                 allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1,
                 initialPreview: [_data.coverPath], initialPreviewAsData: true
@@ -70,7 +69,7 @@
             });
 
             var videoOption = {
-                language: 'zh', uploadUrl: "/api/fileUpload", showUpload: true,
+                language: 'zh', uploadUrl: "/api/fileUpload", showUpload: true,browseClass: "btn btn-success",
                 showRemove: true, showPreview: true, dropZoneEnabled: false,
                 showCaption: true, maxFileSize: 2000, maxFileCount: 1,
                 initialPreview: [_data.videoPath], initialPreviewAsData: true
@@ -102,11 +101,5 @@
                 }
             });
         };
-
-        $(function () {
-            $("#cancelBtn").click(function () {
-                indexPage.setContentBody("trainningVideo.html");
-            });
-        });
     })(trainningVideoUpdatePage);
 </script>

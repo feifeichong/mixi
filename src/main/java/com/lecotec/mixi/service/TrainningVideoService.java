@@ -51,4 +51,9 @@ public class TrainningVideoService {
         trainningVideoRepository.deleteById(id);
         return true;
     }
+
+    public boolean deleteBatch(long[] ids) {
+        trainningVideoRepository.deleteBatch(ids);
+        return true;
+    }
 }

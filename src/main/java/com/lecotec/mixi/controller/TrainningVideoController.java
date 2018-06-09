@@ -39,4 +39,9 @@ public class TrainningVideoController {
     public ResponseObject deleteById(@PathVariable("id") long id) {
         return new SuccessResponse(trainningVideoService.deleteById(id));
     }
+
+    @PostMapping("/api/merchant/trainningVideo/deleteBatch")
+    public ResponseObject deleteBatch(@RequestBody long[] ids) {
+        return new SuccessResponse(trainningVideoService.deleteBatch(ids));
+    }
 }
