@@ -1,0 +1,181 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <h1>协议设置</h1>
+    </div>
+    <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <div class="input-group">
+                <span class="input-group-addon">协议名称</span>
+                <input id="name" class="form-control"/>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <div class="input-group">
+                <span class="input-group-addon">协议位置</span>
+                <select id="position" class="form-control">
+                    <option value="">全部</option>
+                    <option value="用户端首页">用户端首页</option>
+                    <option value="用户端登陆页">用户端登陆页</option>
+                    <option value="骑手端首页">骑手端首页</option>
+                    <option value="骑手端登陆页">骑手端登陆页</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-5 placeholder">
+            <div class="input-group">
+                <span class="input-group-addon">提交时间</span>
+                <input id="beginTime" type="text" readonly style="cursor: pointer;" class="form-control"/>
+                <span class="input-group-addon">至</span>
+                <input id="endTime" type="text" readonly style="cursor: pointer;" class="form-control"/>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-1 placeholder">
+            <button class="btn btn-success" onclick="agreementPage.refreshData()">查询</button>
+        </div>
+    </div>
+    <h2 class="sub-header">查询结果</h2>
+    <h4 class="left">数据列表</h4>
+    <button class="btn btn-success right" onclick="indexPage.setContentBody('agreementAdd.html')" type="button">新增</button>
+    <button id="batchDeleteBtn" onclick="agreementPage.deleteBatch();" class="btn btn-success right">批量删除</button>
+    <div class="clearfix"></div>
+    <div class="table-responsive">
+        <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
+    </div>
+</div>
+<script>
+    var agreementPage = {};
+    (function (page) {
+        function searchTableDatas() {
+            $('#tableResult').bootstrapTable({
+                url: 'api/merchant/agreement/search',
+                method: "get",
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: function (params) {
+                    return {
+                        pageSize: params.limit, pageNumber: (params.offset / params.limit), name: $("#name").val(),
+                        position: $("#position").val(), beginTime: $("#beginTime").val(), endTime: $("#endTime").val()
+                    };
+                },
+                columns: [
+                    {
+                        field: 'checked',
+                        checkbox: true
+                    },
+                    {
+                        title: '序号', align: "center",
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {title: '协议名称', field: 'name'},
+                    {title: '协议位置', field: 'position'},
+                    {
+                        title: '协议内容', field: '',
+                        formatter: function () {
+                            return "显示不完查看详情...";
+                        }
+                    },
+                    {
+                        title: '上线/下线', field: 'isActive',
+                        formatter: function (value, row, index) {
+                            return '<input id="isActiveChk' + index + '" value="' + row.id + '" type="checkbox" ' + (row.isActive ? "checked" : "") + ' data-on-color="success"/>';
+                        }
+                    },
+                    {
+                        title: '操作', field: 'id', formatter: function (value, row, index) {
+                            var html = '<span style="cursor: pointer;color:#2F9D32;" onclick="agreementPage.edit(' + value + ');">【查看详情】</span>';
+                            html += '<span style="cursor: pointer;color:#2F9D32;" onclick="agreementPage.edit(' + value + ');">【修改】</span>';
+                            html += ' <span style="cursor: pointer;color:#2F9D32;" onclick="agreementPage.delete(' + value + ');">【删除】</span>';
+                            return html;
+                        }
+                    }
+                ],
+                onLoadSuccess: function (data) {
+                    for (var i = 0; i < data.rows.length; i++) {
+                        $("#isActiveChk" + i).bootstrapSwitch('state', data.rows[i].isActive).on("switchChange.bootstrapSwitch", function (event, status) {
+                            changeActiveStatus(event.target.value, status);
+                        });
+                    }
+                }
+            });
+        };
+
+        page.refreshData = function () {
+            $("#tableResult").bootstrapTable("refresh", {silent: true});
+        }
+
+        function changeActiveStatus(id, status) {
+            $.ajax({
+                type: "PUT", url: "/api/merchant/agreement/changeActiveStatus",
+                data: {id: id, isActive: status,},
+                success: function (result) {
+                    if (result.status === SUCCESS) {
+                        setTimeout(function () {
+                            $("#tableResult").bootstrapTable("refresh", {silent: true});
+                        }, 500);
+                    }
+                }
+            });
+        }
+
+        page.edit = function (id) {
+            var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            indexPage.setContentBody("merchantUserUpdate.html", function (response, status, xhr) {
+                merchantUserUpdatePage.setData(currentData);
+            });
+        };
+
+        page.delete = function (id) {
+            deleteConfirmModal.showModal();
+            deleteConfirmModal.bindDeleteAction(deleteAction, id);
+        };
+
+        function deleteAction(id) {
+            $.ajax({
+                type: "DELETE", url: "/api/merchant/agreement/" + id,
+                data: {},
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        page.refreshData();
+                }
+            });
+        }
+
+        page.deleteBatchAction = function (ids) {
+            $.ajax({
+                type: "POST", url: "/api/merchant/agreement/deleteBatch",
+                contentType: "application/json",
+                data: JSON.stringify(ids),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        page.refreshData();
+                }
+            });
+        };
+
+        page.deleteBatch = function () {
+            var selectedRows = $("#tableResult").bootstrapTable('getSelections');
+            if (selectedRows.length === 0) {
+                commonModal.showModal("请勾选数据进行批量删除");
+            } else {
+                var ids = [];
+                for (var i = 0; i < selectedRows.length; i++) {
+                    ids.push(selectedRows[i].id);
+                }
+                deleteConfirmModal.showModal();
+                deleteConfirmModal.bindDeleteAction(page.deleteBatchAction, ids);
+            }
+        };
+
+        $(function () {
+            $('#beginTime').datetimepicker({
+                format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN"
+            });
+            $('#endTime').datetimepicker({
+                format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN"
+            });
+            searchTableDatas();
+        });
+    })(agreementPage);
+</script>
