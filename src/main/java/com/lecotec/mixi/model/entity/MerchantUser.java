@@ -9,6 +9,7 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
+@Table(name = "mx_merchant_user")
 public class MerchantUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

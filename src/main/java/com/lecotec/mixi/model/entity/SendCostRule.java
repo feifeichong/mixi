@@ -7,7 +7,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
 
 @Entity
-@Table
+@Table(name = "mx_send_cost_rule")
 public class SendCostRule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
