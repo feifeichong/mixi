@@ -17,6 +17,14 @@ public class Station {
     @NotBlank
     private String name;
 
+    private String address;
+
+    private String detailedAddress;
+
+    private double longitude;
+
+    private double latitude;
+
     @ApiModelProperty(hidden = true)
     private boolean isActive = true;
 
@@ -64,5 +72,37 @@ public class Station {
 
     public void setIsActive(boolean active) {
         isActive = active;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDetailedAddress() {
+        return detailedAddress;
+    }
+
+    public void setDetailedAddress(String detailedAddress) {
+        this.detailedAddress = detailedAddress;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 }

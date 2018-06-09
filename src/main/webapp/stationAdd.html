@@ -14,26 +14,64 @@
         </div>
         <div class="form-group">
             <div class="col-xs-12 col-sm-8 col-md-4 input-group">
-                <span class="input-group-addon">协议位置</span>
-                <select id="position" class="form-control">
-                    <option value="用户端首页">用户端首页</option>
-                    <option value="用户端登陆页">用户端登陆页</option>
-                    <option value="骑手端首页">骑手端首页</option>
-                    <option value="骑手端登陆页">骑手端登陆页</option>
+                <span class="input-group-addon">站点地址</span>
+                <select id="province" onchange="stationAddPage.getChildPlace();" class="form-control">
+                    <option value="">请选择省份</option>
+                    <option value="重庆市">重庆市</option>
+                    <option value="四川省">四川省</option>
+                    <option value="北京">北京市</option>
+                    <option value="浙江省">浙江省</option>
+                    <option value="天津市">天津市</option>
+                    <option value="安徽省">安徽省</option>
+                    <option value="上海市">上海市</option>
+                    <option value="福建省">福建省</option>
+                    <option value="江西省">江西省</option>
+                    <option value="山东省">山东省</option>
+                    <option value="河南省">河南省</option>
+                    <option value="湖北省">湖北省</option>
+                    <option value="湖南省">湖南省</option>
+                    <option value="广东省">广东省</option>
+                    <option value="海南省">海南省</option>
+                    <option value="山西省">山西省</option>
+                    <option value="青海省">青海省</option>
+                    <option value="江苏省">江苏省</option>
+                    <option value="辽宁省">辽宁省</option>
+                    <option value="吉林省">吉林省</option>
+                    <option value="台湾省">台湾省</option>
+                    <option value="河北省">河北省</option>
+                    <option value="贵州省">贵州省</option>
+                    <option value="云南省">云南省</option>
+                    <option value="陕西省">陕西省</option>
+                    <option value="甘肃省">甘肃省</option>
+                    <option value="黑龙江省">黑龙江省</option>
+                    <option value="香港特别行政区">香港特别行政区</option>
+                    <option value="澳门特别行政区">澳门特别行政区</option>
+                    <option value="广西壮族自治区">广西壮族自治区</option>
+                    <option value="宁夏回族自治区">宁夏回族自治区</option>
+                </select>
+                <span class="input-group-addon"></span>
+                <select id="city" class="form-control">
+                    <option value="">请选择城市</option>
+                    <option value="成都市">成都市</option>
+                </select>
+                <span class="input-group-addon"></span>
+                <select id="area" class="form-control">
+                    <option value="">请选择区</option>
+                    <option value="郫都区">郫都区</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
             <div class="col-xs-12 col-sm-8 col-md-8 input-group">
-                <span class="input-group-addon">协议内容</span>
-                <textarea id="content" class="form-control" required/>
+                <span class="input-group-addon">详细地址</span>
+                <iframe src="amap.html" frameborder="0" width="1000" height="800"></iframe>
             </div>
         </div>
         <hr>
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-8 input-group">
-                <input class="btn btn-default" type="button" onclick="indexPage.setContentBody('agreement.html')" value="取消"/>
+                <input class="btn btn-default" type="button" onclick="indexPage.setContentBody('station.html')" value="取消"/>
                 &nbsp;&nbsp;
                 <input class="btn btn-success" type="submit" value="提交"/>
             </div>
@@ -44,12 +82,24 @@
     var stationAddPage = {};
 
     (function (page) {
+        var AMAP_ADMINISTRATIVE_REGION = 'http://restapi.amap.com/v3/config/district?key=8bb3ba67fc297c062ccaa87e6d68e808&keywords={place}&subdistrict=1&extensions=base';
+
+        page.getChildPlace = function () {
+            var currentPlace = event.target.value;
+            $.ajax({
+                type: "GET", url: AMAP_ADMINISTRATIVE_REGION.replace("{place}", currentPlace),
+                data: {},
+                success: function (result) {
+                }
+            });
+        };
+
+
         page.save = function () {
             var param = {};
             param.name = $("#name").val();
             param.position = $("#position").val();
             param.content = $("#content").val();
-            /*CKEDITOR.instances.content.getData();*/
 
             $.ajax({
                 type: "POST", url: "/api/merchant/agreement",
@@ -61,9 +111,5 @@
                 }
             });
         };
-
-        /*$(function () {
-            CKEDITOR.replace('content');
-        });*/
     })(stationAddPage);
 </script>
