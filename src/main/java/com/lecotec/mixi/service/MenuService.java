@@ -1,7 +1,6 @@
 package com.lecotec.mixi.service;
 
 import com.lecotec.mixi.model.entity.Menu;
-import com.lecotec.mixi.model.entity.Station;
 import com.lecotec.mixi.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,5 +30,9 @@ public class MenuService {
     public boolean deleteMenu(long id) {
         menuRepository.deleteById(id);
         return true;
+    }
+
+    public boolean isExistMenuByStationId(long id) {
+        return menuRepository.findByStationId(id).size() > 0;
     }
 }

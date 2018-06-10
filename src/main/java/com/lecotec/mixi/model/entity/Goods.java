@@ -16,8 +16,6 @@ public class Goods {
     @ApiModelProperty(hidden = true)
     private long id;
 
-    private long goodsTypeId;
-
     @NotBlank
     private String name;
 
@@ -33,8 +31,13 @@ public class Goods {
     @NotBlank
     private String setMealDetail;
 
-    @NotBlank
-    private String tag;
+    @ManyToOne
+    @JoinColumn(name = "goods_type_id", referencedColumnName = "id")
+    private GoodsType goodsType;
+
+    @ManyToOne
+    @JoinColumn(name = "goods_tag_id", referencedColumnName = "id")
+    private GoodsTag goodsTag;
 
     @Column(columnDefinition = "TEXT NULL")
     private String specs;
@@ -58,14 +61,6 @@ public class Goods {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getGoodsTypeId() {
-        return goodsTypeId;
-    }
-
-    public void setGoodsTypeId(long goodsTypeId) {
-        this.goodsTypeId = goodsTypeId;
     }
 
     public String getName() {
@@ -106,14 +101,6 @@ public class Goods {
 
     public void setSetMealDetail(String setMealDetail) {
         this.setMealDetail = setMealDetail;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
     }
 
     public String getSpecs() {
@@ -162,5 +149,21 @@ public class Goods {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public GoodsType getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(GoodsType goodsType) {
+        this.goodsType = goodsType;
+    }
+
+    public GoodsTag getGoodsTag() {
+        return goodsTag;
+    }
+
+    public void setGoodsTag(GoodsTag goodsTag) {
+        this.goodsTag = goodsTag;
     }
 }

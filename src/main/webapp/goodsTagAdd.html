@@ -1,0 +1,45 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('goodsTag.html')" type="button">返回</button>
+        </div>
+        <h1 id="goodsTypeTitle">新增标签</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:goodsTagAddPage.save();">
+        <div class="form-group">
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">标签名称</span>
+                <input id="name" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <input class="btn btn-default" type="button" onclick="indexPage.setContentBody('goodsTag.html')" value="取消"/>
+                &nbsp;&nbsp;
+                <input class="btn btn-success" type="submit" value="提交"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var goodsTagAddPage = {};
+    (function (page) {
+        var _data = {};
+
+        page.save = function () {
+            _data.name = $("#name").val();
+
+            $.ajax({
+                type: "POST", url: "/api/merchant/goodsTag",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("goodsTag.html");
+                }
+            });
+        };
+    })(goodsTagAddPage);
+</script>

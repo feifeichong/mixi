@@ -19,4 +19,8 @@ public interface GoodsRepository extends JpaRepository<Goods, Long>, JpaSpecific
     int changeActiveStatus(@Param("id") long id, @Param("isActive") boolean isActive);
 
     List<Goods> findByIdIn(List<Long> ids);
+
+    List<Goods> findByGoodsTypeId(long goodsTypeId);
+
+    List<Goods> findByGoodsTagId(long goodsTagId);
 }

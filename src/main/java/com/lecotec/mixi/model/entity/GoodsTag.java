@@ -7,8 +7,8 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-@Table(name = "mx_goods_type")
-public class GoodsType {
+@Table(name = "mx_goods_tag")
+public class GoodsTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)
@@ -16,9 +16,6 @@ public class GoodsType {
 
     @NotBlank
     private String name;
-
-    @NotBlank
-    private String imagePath;
 
     private Date modifyTime = new Date();
 
@@ -41,14 +38,6 @@ public class GoodsType {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
     }
 
     public Date getModifyTime() {

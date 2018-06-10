@@ -1,0 +1,76 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('menu.html')" type="button">返回</button>
+        </div>
+        <h1>修改菜单</h1>
+    </div>
+    <form class="form-horizontal" action="javascript:menuUpdatePage.update();">
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-8 col-md-4 input-group">
+                <span class="input-group-addon">菜单名称</span>
+                <input id="name" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-8 col-md-4 input-group">
+                <span class="input-group-addon">所属站点</span>
+                <select id="stationId" class="form-control"></select>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-8 input-group">
+                <input class="btn btn-default" type="button" onclick="indexPage.setContentBody('menu.html')" value="取消"/>
+                &nbsp;&nbsp;
+                <input class="btn btn-success" type="submit" value="提交"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var menuUpdatePage = {};
+
+    (function (page) {
+        var _data = {};
+
+        page.setData = function (data) {
+            _data = data;
+            $("#name").val(_data.name);
+        };
+
+        page.update = function () {
+            _data.name = $("#name").val();
+            _data.station = {id: parseInt($("#stationId").val())};
+
+            $.ajax({
+                type: "POST", url: "api/merchant/menu",
+                data: JSON.stringify(_data), contentType: "application/json",
+                success: function (result) {
+                    if (result.status === SUCCESS) {
+                        indexPage.setContentBody("menu.html");
+                    }
+                }
+            });
+        };
+
+        function initStationSelect() {
+            $.ajax({
+                type: "get", url: "api/merchant/station/all",
+                data: {pageNumber: 0, pageSize: 100},
+                success: function (result) {
+                    var select = $("#stationId");
+                    for (var i = 0; i < result.rows.length; i++) {
+                        select.append('<option value="' + result.rows[i].id + '">' + result.rows[i].name + '</option>');
+                    }
+                    $("#stationId").val(_data.station.id);
+                }
+            });
+        }
+
+        $(function () {
+            initStationSelect();
+        });
+    })(menuUpdatePage);
+</script>

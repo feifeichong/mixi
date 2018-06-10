@@ -19,7 +19,7 @@ public class Menu {
     private boolean isActive = true;
 
     @ApiModelProperty(hidden = true)
-    private Date modifyTime;
+    private Date modifyTime = new Date();
 
     @ApiModelProperty(hidden = true)
     private String goodsList = "[]";

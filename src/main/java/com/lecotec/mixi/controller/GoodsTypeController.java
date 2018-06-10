@@ -2,8 +2,10 @@ package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.GoodsType;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
+import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
+import com.lecotec.mixi.service.GoodsService;
 import com.lecotec.mixi.service.GoodsTypeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class GoodsTypeController {
     @Autowired
     private GoodsTypeService goodsTypeService;
 
+    @Autowired
+    private GoodsService goodsService;
+
     @GetMapping("/{id}")
     public ResponseObject getGoodsType(@PathVariable("id") long id) {
         return new SuccessResponse(goodsTypeService.getGoodsTypeById(id));
@@ -37,12 +42,6 @@ public class GoodsTypeController {
         return new SuccessResponse(goodsTypeService.saveGoodsType(goodsType));
     }
 
-    @PutMapping
-    public ResponseObject updateGoodsType(@Valid @RequestBody GoodsType goodsType) {
-        goodsType.setModifyTime(new Date());
-        return new SuccessResponse(goodsTypeService.updateGoodsType(goodsType));
-    }
-
     @PutMapping("changeActiveStatus")
     public ResponseObject changeActiveStatus(long id, boolean isActive) {
         return new SuccessResponse(goodsTypeService.changeActiveStatus(id, isActive));
@@ -50,6 +49,8 @@ public class GoodsTypeController {
 
     @DeleteMapping("/{id}")
     public ResponseObject deleteGoodsType(@PathVariable("id") long id) {
-        return new SuccessResponse(goodsTypeService.deleteGoodsType(id));
+        return goodsService.isExistGoodsByGoodsTypeId(id)
+                ? new FailResponse("当前菜品类型下面还有菜品信息")
+                : new SuccessResponse(goodsTypeService.deleteGoodsType(id));
     }
 }

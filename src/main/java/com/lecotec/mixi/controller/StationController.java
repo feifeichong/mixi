@@ -2,8 +2,10 @@ package com.lecotec.mixi.controller;
 
 import com.lecotec.mixi.model.entity.Station;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
+import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
+import com.lecotec.mixi.service.MenuService;
 import com.lecotec.mixi.service.StationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ import java.util.Date;
 public class StationController {
     @Autowired
     private StationService stationService;
+
+    @Autowired
+    private MenuService menuService;
 
     @GetMapping("all")
     public BootstrapTableResult<Station> getStations(int pageNumber, int pageSize) {
@@ -38,6 +43,8 @@ public class StationController {
 
     @DeleteMapping("/{id}")
     public ResponseObject deleteStation(@PathVariable("id") long id) {
-        return new SuccessResponse(stationService.deleteStation(id));
+        return menuService.isExistMenuByStationId(id)
+                ? new FailResponse("当前站点下面还有菜单信息")
+                : new SuccessResponse(stationService.deleteStation(id));
     }
 }

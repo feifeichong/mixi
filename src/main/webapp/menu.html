@@ -1,41 +1,13 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
-        <div class="right">
-            <button class="btn btn-success" onclick="menuPage.save();" type="button">添加菜单</button>
-        </div>
-        <h1>菜单查询</h1>
+        <h1>菜单管理</h1>
     </div>
+    <h4 class="left">数据列表</h4>
+    <button class="btn btn-success right" onclick="indexPage.setContentBody('menuAdd.html')" type="button">新增菜单</button>
+    <div class="clearfix"></div>
     <div class="table-responsive">
         <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
                data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
-    </div>
-    <div id="deleteConfimModal"></div>
-    <div class="modal fade" id="menuMaintainModal" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-ux" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">菜单维护</h4>
-                </div>
-                <form action="javascript:menuPage.submit();">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <div class="col-sm-12 input-group">
-                                <span class="input-group-addon">菜单名称</span>
-                                <input id="menuName" type="text" class="form-control" required/>
-                            </div>
-                            <div class="col-sm-12 input-group" style="margin-top: 15px;">
-                                <span class="input-group-addon">菜单所属站点：</span>
-                                <select id="menuStationId" type="text" class="form-control"></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer" style="text-align: center">
-                        <input type="submit" class="btn btn-primary" value="提交"/>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
 </div>
 <script>
@@ -68,14 +40,14 @@
                     {
                         title: '状态', field: 'isActive',
                         formatter: function (value, row, index) {
-                            return '<input id="isActiveChk' + index + '" value="' + row.id + '" type="checkbox" ' + (row.isActive ? "checked" : "") + ' data-on-color="success" data-off-color="danger"/>';
+                            return '<input id="isActiveChk' + index + '" value="' + row.id + '" type="checkbox" ' + (row.isActive ? "checked" : "") + ' data-on-color="success" data-off-color="default"/>';
                         }
                     },
                     {
                         title: '操作', field: 'id', formatter: function (value, row, index) {
-                            var html = '<button type="button" class="btn btn-default" onclick="menuPage.associateGoods(' + value + ');"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> 关联菜品</button>';
-                            html += '<button type="button" class="btn btn-warning" onclick="menuPage.edit(' + value + ');" style="margin-left:5px;"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改</button>';
-                            html += ' <button type="button" class="btn btn-danger" onclick="menuPage.delete(' + value + ');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</button>';
+                            var html = '<span style="cursor: pointer;color:#2F9D32;" onclick="menuPage.associateGoods(' + value + ');">【关联菜品】</span>';
+                            html += '<span style="cursor: pointer;color:#2F9D32;" onclick="menuPage.edit(' + value + ');">【修改】</span>';
+                            html += ' <span style="cursor: pointer;color:#2F9D32;" onclick="menuPage.delete(' + value + ');">【删除】</span>';
                             return html;
                         }
                     }
@@ -90,37 +62,6 @@
             });
         };
 
-        var _stations = [];
-        var _maintainType = "";
-        var _maintainData = {};
-
-        function submitMaintainRequest(param) {
-            $.ajax({
-                type: "POST", url: "api/merchant/menu",
-                data: JSON.stringify(param), contentType: "application/json",
-                success: function (result) {
-                    if (result.status === SUCCESS) {
-                        $("#tableResult").bootstrapTable("refresh", {silent: true});
-                        $("#menuMaintainModal").modal("hide");
-                    }
-                }
-            });
-        }
-
-        page.submit = function () {
-            switch (_maintainType) {
-                case "new":
-                    var param = {name: $("#menuName").val(), stationId: $("#menuStationId").val()};
-                    submitMaintainRequest(param);
-                    break;
-                case "showDetail":
-                    _maintainData.name = $("#menuName").val();
-                    _maintainData.stationId = $("#menuStationId").val();
-                    submitMaintainRequest(_maintainData);
-                    break;
-            }
-        };
-
         page.associateGoods = function (id) {
             var menuData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
             indexPage.setContentBody("menuGoodsSetting.html", function () {
@@ -128,18 +69,11 @@
             });
         };
 
-        page.save = function (id) {
-            $("#menuMaintainModal").modal("show");
-            _maintainType = "new";
-            $("#menuName").val("");
-        };
-
         page.edit = function (id) {
-            _maintainData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
-            $("#menuMaintainModal").modal("show");
-            _maintainType = "showDetail";
-            $("#menuName").val(_maintainData.name);
-            $("#stationSelect").val(_maintainData.stationId);
+            var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            indexPage.setContentBody("menuUpdate.html", function (response, status, xhr) {
+                menuUpdatePage.setData(currentData);
+            });
         };
 
         page.delete = function (id) {
@@ -149,10 +83,11 @@
 
         function deleteMenu(id) {
             $.ajax({
-                type: "DELETE", url: "api/merchant/menu/" + id,
+                type: "DELETE", url: "/api/merchant/menu/" + id,
                 data: {},
                 success: function (result) {
-                    $("#tableResult").bootstrapTable("refresh", {silent: true});
+                    if (result.status === SUCCESS)
+                        $("#tableResult").bootstrapTable("refresh", {silent: true});
                 }
             });
         }
@@ -162,30 +97,14 @@
                 type: "PUT", url: "api/merchant/menu/changeActiveStatus",
                 data: {id: id, isActive: status},
                 success: function (result) {
-                    $("#tableResult").bootstrapTable("refresh", {silent: true});
-                }
-            });
-        }
-
-        function initStationSelect() {
-            $.ajax({
-                type: "get", url: "api/merchant/station/all",
-                data: {pageNumber: 0, pageSize: 100}, async: false,
-                success: function (result) {
-                    _stations = result.rows;
-
-                    var select = $("#menuStationId");
-                    for (var i = 0; i < result.rows.length; i++) {
-                        select.append('<option value="' + result.rows[i].id + '">' + result.rows[i].name + '</option>');
-                    }
+                    if (result.status === SUCCESS)
+                        $("#tableResult").bootstrapTable("refresh", {silent: true});
                 }
             });
         }
 
         $(function () {
-            initStationSelect();
             searchTableDatas();
-            $("#deleteConfimModal").load("deleteConfirmModal.html");
         });
     })(menuPage);
 </script>
