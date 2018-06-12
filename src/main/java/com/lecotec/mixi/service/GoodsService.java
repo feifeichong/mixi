@@ -70,8 +70,4 @@ public class GoodsService {
     public boolean isExistGoodsByGoodsTypeId(long id) {
         return goodsRepository.findByGoodsTypeId(id).size() > 0;
     }
-
-    public boolean isExistGoodsByGoodsTagId(long id) {
-        return goodsRepository.findByGoodsTagId(id).size() > 0;
-    }
 }

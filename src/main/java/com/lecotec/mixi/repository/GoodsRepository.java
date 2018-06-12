@@ -21,6 +21,4 @@ public interface GoodsRepository extends JpaRepository<Goods, Long>, JpaSpecific
     List<Goods> findByIdIn(List<Long> ids);
 
     List<Goods> findByGoodsTypeId(long goodsTypeId);
-
-    List<Goods> findByGoodsTagId(long goodsTagId);
 }

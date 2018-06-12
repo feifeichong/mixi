@@ -7,6 +7,7 @@ import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
 import com.lecotec.mixi.service.GoodsService;
 import com.lecotec.mixi.service.GoodsTagService;
+import com.lecotec.mixi.service.GoodsToTagService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public class GoodsTagController {
     private GoodsTagService goodsTagService;
 
     @Autowired
-    private GoodsService goodsService;
+    private GoodsToTagService goodsToTagService;
 
     @GetMapping("all")
     public BootstrapTableResult<GoodsTag> getAll(int pageNumber, int pageSize) {
@@ -43,7 +44,7 @@ public class GoodsTagController {
 
     @DeleteMapping("/{id}")
     public ResponseObject delete(@PathVariable("id") long id) {
-        return goodsService.isExistGoodsByGoodsTagId(id)
+        return goodsToTagService.isExistGoodsByGoodsTagId(id)
                 ? new FailResponse("当前菜品标签下面还有菜品信息")
                 : new SuccessResponse(goodsTagService.delete(id));
     }

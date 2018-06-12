@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "mx_goods")
@@ -29,15 +28,14 @@ public class Goods {
     private int minPurchaseCount;
 
     @NotBlank
+    private String unit;
+
+    @NotBlank
     private String setMealDetail;
 
     @ManyToOne
     @JoinColumn(name = "goods_type_id", referencedColumnName = "id")
     private GoodsType goodsType;
-
-    @ManyToOne
-    @JoinColumn(name = "goods_tag_id", referencedColumnName = "id")
-    private GoodsTag goodsTag;
 
     @Column(columnDefinition = "TEXT NULL")
     private String specs;
@@ -159,11 +157,11 @@ public class Goods {
         this.goodsType = goodsType;
     }
 
-    public GoodsTag getGoodsTag() {
-        return goodsTag;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setGoodsTag(GoodsTag goodsTag) {
-        this.goodsTag = goodsTag;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

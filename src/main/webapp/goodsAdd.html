@@ -6,7 +6,6 @@
     <div class="title page-header">
         <h1>新增菜品</h1>
     </div>
-
     <form class="form-horizontal" action="javascript:goodsAddPage.save();">
         <div class="form-group">
             <label class="col-sm-1 control-label goodsAddLabel">基本信息</label>
@@ -43,6 +42,13 @@
                 <input id="minPurchaseCountTxt" type="number" class="form-control" required/>
             </div>
         </div>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">商品单位</span>
+                <input id="goodsUnit" type="text" class="form-control" required/>
+            </div>
+        </div>
         <hr>
         <div class="form-group">
             <label class="col-sm-1 control-label goodsAddLabel">套餐设置</label>
@@ -60,12 +66,8 @@
         <hr>
         <div class="form-group">
             <label class="col-sm-1 control-label goodsAddLabel">特色标签</label>
-            <div class="col-sm-4">
-                <div class="checkbox">
-                    <label><input name="specialTag" type="checkbox" data-text="咪嘻推荐" checked>咪嘻推荐</label> &nbsp;&nbsp;&nbsp;
-                    <label><input name="specialTag" type="checkbox" data-text="新品上新">新品上新</label>&nbsp;&nbsp;&nbsp;
-                    <label><input name="specialTag" type="checkbox" data-text="销量第一">销量第一</label>&nbsp;&nbsp;&nbsp;
-                    <label><input name="specialTag" type="checkbox" data-text="招牌菜">招牌菜</label>&nbsp;&nbsp;&nbsp;
+            <div class="col-sm-10">
+                <div class="checkbox" id="goodsTagDiv">
                 </div>
             </div>
         </div>
@@ -85,14 +87,14 @@
                 </div>
                 <div data-repeat="goodsSpecs" class="col-sm-12" style="margin-top: 15px;">
                     <div class="col-sm-1" style="padding-left: 0;">
-                        <input class="form-control" type="text" style="border-radius: 5px;">
+                        <input class="form-control" type="text" style="border-radius: 5px;" required>
                     </div>
                     <div class="col-sm-2 input-group" style="padding-right: 15px; float:left;">
-                        <input class="form-control" type="number">
+                        <input class="form-control" type="number" step="any" required>
                         <div class="input-group-addon">元</div>
                     </div>
                     <div class="col-sm-2 input-group" style="padding-right: 15px; float:left;">
-                        <input class="form-control" type="number">
+                        <input class="form-control" type="number" step="any" required>
                         <div class="input-group-addon">元</div>
                     </div>
                     <div class="col-sm-3 input-group" style="padding-right: 15px; float:left;">
@@ -100,17 +102,17 @@
                             <option value="有限">有限</option>
                             <option value="无限">无限</option>
                         </select>
-                        <input class="form-control" type="number" placeholder="当前库存" style="width:35%">
-                        <input class="form-control" type="number" placeholder="最大库存" style="width:35%">
+                        <input class="form-control" type="number" placeholder="当前库存" style="width:35%" step="any" required>
+                        <input class="form-control" type="number" placeholder="最大库存" style="width:35%" step="any" required>
                     </div>
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1 input-group">
-                        <input class="btn btn-warning" onclick="goodsAddPage.addSpecs();" type="button" value="添加"/>
-                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsAddPage.deleteSpecs();" type="button" value="删除"/>
+                        <input class="btn btn-link" style="color:#2F9D32" onclick="goodsAddPage.deleteSpecs();" type="button" value="移除"/>
                     </div>
                 </div>
+                <div><input class="btn btn-link" style="color:#2F9D32" onclick="goodsAddPage.addSpecs();" type="button" value="添加规格，最多6个"/></div>
             </div>
         </div>
         <hr>
@@ -120,7 +122,7 @@
                 <div class="col-sm-12"><h6>为您的商品添加不同的属性，如：辣度、甜度等。</h6></div>
                 <div class="col-sm-12">
                     <div class="col-sm-1">属性名称</div>
-                    <div class="col-sm-4">属性细分</div>
+                    <div class="col-sm-4">属性细分（至少两个）</div>
                 </div>
                 <div data-repeat="goodsProp" class="col-sm-12" style="margin-top: 15px;">
                     <div class="col-sm-1" style="padding-left: 0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
@@ -129,18 +131,19 @@
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
+                    <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-2 input-group">
-                        <input class="btn btn-warning" style="margin-left: 5px;" onclick="goodsAddPage.addProp();" type="button" value="添加"/>
-                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsAddPage.deleteProp();" type="button" value="删除"/>
+                        <input class="btn btn-link" style="color:#2F9D32" onclick="goodsAddPage.deleteProp();" type="button" value="删除"/>
                     </div>
                 </div>
+                <div><input class="btn btn-link" style="color:#2F9D32" onclick="goodsAddPage.addProp();" type="button" value="添加属性，最多5个"/></div>
             </div>
         </div>
         <hr>
         <div id="goodsMaterial" class="form-group">
             <label class="col-sm-1 control-label goodsAddLabel">商品原料</label>
             <div class="col-sm-11 input-group">
-                <div class="col-sm-12"><h6>为您的商品添加不同的原料，如：土豆、白菜等。</h6></div>
+                <div class="col-sm-12"><h6>为您的商品添加不同的原料，如：土豆、白菜等。（最多10个）</h6></div>
                 <div class="col-sm-12">
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
@@ -190,13 +193,40 @@
                 </div>
             </div>
         </div>
+        <div id="sellingHourHeader" class="form-group" style="display: none;">
+            <label class="col-sm-1 control-label goodsAddLabel"></label>
+            <div class="col-sm-4">
+                <div class="radio">
+                    <label>售卖时间段</label> &nbsp;&nbsp;
+                    <label><input type="radio" name="sellingHourRadio" data-text="全时段售卖" checked>全时段售卖</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="sellingHourRadio" data-text="自定义时间">自定义时间</label>&nbsp;&nbsp;
+                </div>
+            </div>
+        </div>
+        <div id="sellingHour" data-repeat='sellingHourDiv' class="form-group" style="display: none;">
+            <label class="col-sm-1 control-label goodsAddLabel"></label>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2 input-group" style="float:left;margin-left: 15px;">
+                <input name="beginHour" type="text" class="form-control"/>
+                <span class="input-group-addon">至</span>
+                <input name="endHour" type="text" class="form-control"/>
+            </div>
+            <div class="col-sm-2 input-group">
+                <input class="btn btn-link" style="color:#2F9D32" onclick="goodsAddPage.deleteSellingHour();" type="button" value="删除"/>
+            </div>
+        </div>
+        <div id="sellingHourBtn" class="form-group" style="display: none;">
+            <label class="col-sm-2 control-label goodsAddLabel"></label>
+            <div class="col-sm-1"><input class="btn btn-link" style="color:#2F9D32" onclick="goodsAddPage.addSellingHour();" type="button"
+                                         value="添加时间段，最多3个"/></div>
+        </div>
         <hr>
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
-                <input id="submitBtn" class="btn btn-primary" type="submit" value="提交"/>
+                <input id="cancelBtn" class="btn btn-default" type="button" onclick="indexPage.setContentBody('goods.html')" value="取消"/>
                 &nbsp;&nbsp;
-                <input id="cancelBtn" class="btn btn-default" type="reset" value="重置"/>
+                <input id="submitBtn" class="btn btn-success" type="submit" value="提交"/>
             </div>
         </div>
     </form>
@@ -319,9 +349,8 @@
                 commonModal.showModal("至多6种商品规格");
                 return;
             }
-            var copyDom = $(event.target).parent().parent();
-            var container = copyDom.parent();
-            container.append(copyDom.clone());
+            var copyDom = $(event.target).parent().prev();
+            copyDom.after(copyDom.clone());
         };
 
         page.deleteSpecs = function () {
@@ -337,9 +366,8 @@
                 commonModal.showModal("至多5种商品属性");
                 return;
             }
-            var copyDom = $(event.target).parent().parent();
-            var container = copyDom.parent();
-            container.append(copyDom.clone());
+            var copyDom = $(event.target).parent().prev();
+            copyDom.after(copyDom.clone());
         };
 
         page.deleteProp = function () {
@@ -350,9 +378,42 @@
             $(event.target).parent().parent().remove();
         };
 
+        page.addSellingHour = function () {
+            if ($("div[data-repeat='sellingHourDiv']").length >= 3) {
+                commonModal.showModal("至多3个售卖时间段");
+                return;
+            }
+            var copyDom = $(event.target).parent().parent().prev();
+            var clone = copyDom.clone();
+            clone.find("input:text").val("");
+            copyDom.after(clone);
+            initSellingHourPicker();
+        };
+
+        page.deleteSellingHour = function () {
+            if ($("div[data-repeat='sellingHourDiv']").length <= 1) {
+                commonModal.showModal("至少1个售卖时间段");
+                return;
+            }
+            $(event.target).parent().parent().remove();
+        };
+
         function initGoodsType() {
             $.ajax({
                 type: "get", url: "api/merchant/goodsType/all",
+                data: {pageNumber: 0, pageSize: 100},
+                success: function (result) {
+                    for (var i = 0; i < result.rows.length; i++) {
+                        $("#goodsTagDiv").append('<label><input name="specialTag" type="checkbox" data-text="' + result.rows[i].name
+                            + '">' + result.rows[i].name + '</label> &nbsp;&nbsp;&nbsp;');
+                    }
+                }
+            });
+        }
+
+        function initGoodsTag() {
+            $.ajax({
+                type: "get", url: "api/merchant/goodsTag/all",
                 data: {pageNumber: 0, pageSize: 100},
                 success: function (result) {
                     for (var i = 0; i < result.rows.length; i++) {
@@ -365,7 +426,7 @@
         function initFileUploadControl() {
             var option = {
                 language: 'zh', uploadUrl: "/api/fileUpload", showUpload: true,
-                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showRemove: true, showPreview: true, dropZoneEnabled: false, browseClass: "btn btn-success",
                 showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
                 allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1
             };
@@ -395,22 +456,53 @@
             $('#endTime').datetimepicker({
                 format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
             });
+        }
+
+        function initSellingHourPicker() {
+            $('input[name="beginHour"]').datetimepicker({
+                format: 'hh:ii', maxView: 1, startView:1, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
+            });
+            $('input[name="endHour"]').datetimepicker({
+                format: 'hh:ii', maxView: 1, startView:1, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
+            });
+        }
+
+        function initRadioControl() {
             $("input[name='sellingTimeRadio']").change(function (e) {
                 if (e.target.getAttribute("data-text") === "自定义时间") {
                     $("#sellingTime").show();
                     $("#sellingFrequency").show();
+                    $("#sellingHourHeader").show();
                 } else {
                     $("#sellingTime").hide();
                     $("#sellingFrequency").hide();
+                    $("#sellingHourHeader").hide();
+                    $("#sellingHour").hide();
+                    $("#sellingHourBtn").hide();
+                    $("input[name='sellingHourRadio']").eq(0).prop("checked", true);
+                    $("input[name='sellingHourRadio']").eq(1).prop("checked", false);
+                }
+            });
+
+            $("input[name='sellingHourRadio']").change(function (e) {
+                if (e.target.getAttribute("data-text") === "自定义时间") {
+                    $("#sellingHour").show();
+                    $("#sellingHourBtn").show();
+                } else {
+                    $("#sellingHour").hide();
+                    $("#sellingHourBtn").hide();
                 }
             });
         }
 
         $(function () {
             initGoodsType();
+            initGoodsTag();
             initFileUploadControl();
             initSetMealControl();
+            initRadioControl();
             initSellingTimerPicker();
+            initSellingHourPicker();
         });
     })(goodsAddPage);
 </script>
