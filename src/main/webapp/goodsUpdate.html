@@ -1,19 +1,17 @@
 <style>
-    .goodsLabel { font-size: 18px;}
+    .goodsAddLabel { font-size: 18px;}
 </style>
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
         <div class="right">
-            <button id="backBtn" style="display: none;" class="btn btn-default" onclick="indexPage.setContentBody('goods.html')" type="button">返回
-            </button>
+            <button class="btn btn-success" onclick="indexPage.setContentBody('goods.html')" type="button">返回</button>
         </div>
-        <h1 id="goodsUpdatePageTitle">修改菜品</h1>
+        <h1>新增菜品</h1>
     </div>
-
-    <form class="form-horizontal" action="javascript:goodsUpdatePage.update();">
+    <form class="form-horizontal" action="javascript:goodsUpdatePage.save();">
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsLabel">基本信息</label>
+            <label class="col-sm-1 control-label goodsAddLabel">基本信息</label>
             <div class="col-sm-4 input-group">
                 <span class="input-group-addon">商品分类</span>
                 <select id="goodsTypeSelect" class="form-control"/>
@@ -47,9 +45,16 @@
                 <input id="minPurchaseCountTxt" type="number" class="form-control" required/>
             </div>
         </div>
+        <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4 input-group">
+                <span class="input-group-addon">商品单位</span>
+                <input id="goodsUnit" type="text" class="form-control" required/>
+            </div>
+        </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsLabel">套餐设置</label>
+            <label class="col-sm-1 control-label goodsAddLabel">套餐设置</label>
             <div class="col-sm-1" style="width: 11%;">
                 <div class="radio">
                     <label><input type="radio" name="isSetMeal" data-text="非套餐" checked>非套餐</label> &nbsp;&nbsp;
@@ -63,19 +68,15 @@
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsLabel">特色标签</label>
-            <div class="col-sm-4">
-                <div class="checkbox">
-                    <label><input name="specialTag" type="checkbox" data-text="咪嘻推荐" checked>咪嘻推荐</label> &nbsp;&nbsp;&nbsp;
-                    <label><input name="specialTag" type="checkbox" data-text="新品上新">新品上新</label>&nbsp;&nbsp;&nbsp;
-                    <label><input name="specialTag" type="checkbox" data-text="销量第一">销量第一</label>&nbsp;&nbsp;&nbsp;
-                    <label><input name="specialTag" type="checkbox" data-text="招牌菜">招牌菜</label>&nbsp;&nbsp;&nbsp;
+            <label class="col-sm-1 control-label goodsAddLabel">特色标签</label>
+            <div class="col-sm-10">
+                <div class="checkbox" id="goodsTagDiv">
                 </div>
             </div>
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsLabel">商品规格</label>
+            <label class="col-sm-1 control-label goodsAddLabel">商品规格</label>
             <div class="col-sm-11 input-group">
                 <div class="col-sm-12"><h6>为您的商品添加不同的规格，如：大杯、小杯等 <span style="color:red;">至少要留一个规格，不能全部移除</span></h6></div>
                 <div class="col-sm-12">
@@ -87,16 +88,16 @@
                     <div class="col-sm-1">条形码</div>
                     <div class="col-sm-1">SKU码</div>
                 </div>
-                <div data-repeat="goodsSpecs" class="col-sm-12" style="margin-top: 15px;">
+                <div id="goodsSpecsDiv" data-repeat="goodsSpecs" class="col-sm-12" style="margin-top: 15px;">
                     <div class="col-sm-1" style="padding-left: 0;">
-                        <input class="form-control" type="text" style="border-radius: 5px;">
+                        <input class="form-control" type="text" style="border-radius: 5px;" required>
                     </div>
                     <div class="col-sm-2 input-group" style="padding-right: 15px; float:left;">
-                        <input class="form-control" type="number">
+                        <input class="form-control" type="number" step="any" required>
                         <div class="input-group-addon">元</div>
                     </div>
                     <div class="col-sm-2 input-group" style="padding-right: 15px; float:left;">
-                        <input class="form-control" type="number">
+                        <input class="form-control" type="number" step="any" required>
                         <div class="input-group-addon">元</div>
                     </div>
                     <div class="col-sm-3 input-group" style="padding-right: 15px; float:left;">
@@ -104,47 +105,48 @@
                             <option value="有限">有限</option>
                             <option value="无限">无限</option>
                         </select>
-                        <input class="form-control" type="number" placeholder="当前库存" style="width:35%">
-                        <input class="form-control" type="number" placeholder="最大库存" style="width:35%">
+                        <input class="form-control" type="number" placeholder="当前库存" style="width:35%" step="any" required>
+                        <input class="form-control" type="number" placeholder="最大库存" style="width:35%" step="any" required>
                     </div>
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1 input-group">
-                        <input class="btn btn-warning" onclick="goodsUpdatePage.addSpecs();" type="button" value="添加"/>
-                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsUpdatePage.deleteSpecs();" type="button" value="删除"/>
+                        <input class="btn btn-link" style="color:#2F9D32" onclick="goodsUpdatePage.deleteSpecs();" type="button" value="移除"/>
                     </div>
                 </div>
+                <div><input class="btn btn-link" style="color:#2F9D32" onclick="goodsUpdatePage.addSpecs();" type="button" value="添加规格，最多6个"/></div>
             </div>
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsLabel">商品属性</label>
+            <label class="col-sm-1 control-label goodsAddLabel">商品属性</label>
             <div class="col-sm-11 input-group">
                 <div class="col-sm-12"><h6>为您的商品添加不同的属性，如：辣度、甜度等。</h6></div>
                 <div class="col-sm-12">
                     <div class="col-sm-1">属性名称</div>
-                    <div class="col-sm-4">属性细分</div>
+                    <div class="col-sm-4">属性细分（至少两个）</div>
                 </div>
-                <div data-repeat="goodsProp" class="col-sm-12" style="margin-top: 15px;">
-                    <div class="col-sm-1" style="padding-left: 0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
-                    <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
+                <div id="goodsPropDiv" data-repeat="goodsProp" class="col-sm-12" style="margin-top: 15px;">
+                    <div class="col-sm-1" style="padding-left: 0;"><input class="form-control" type="text" style="border-radius: 5px;" required></div>
+                    <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;" required></div>
+                    <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;" required></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-2 input-group">
-                        <input class="btn btn-warning" style="margin-left: 5px;" onclick="goodsUpdatePage.addProp();" type="button" value="添加"/>
-                        <input class="btn btn-danger" style="margin-left: 5px;" onclick="goodsUpdatePage.deleteProp();" type="button" value="删除"/>
+                        <input class="btn btn-link" style="color:#2F9D32" onclick="goodsUpdatePage.deleteProp();" type="button" value="删除"/>
                     </div>
                 </div>
+                <div><input class="btn btn-link" style="color:#2F9D32" onclick="goodsUpdatePage.addProp();" type="button" value="添加属性，最多5个"/></div>
             </div>
         </div>
         <hr>
         <div id="goodsMaterial" class="form-group">
-            <label class="col-sm-1 control-label goodsLabel">商品原料</label>
+            <label class="col-sm-1 control-label goodsAddLabel">商品原料</label>
             <div class="col-sm-11 input-group">
-                <div class="col-sm-12"><h6>为您的商品添加不同的原料，如：土豆、白菜等。</h6></div>
+                <div class="col-sm-12"><h6>为您的商品添加不同的原料，如：土豆、白菜等。（最多10个）</h6></div>
                 <div class="col-sm-12">
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
@@ -161,7 +163,7 @@
         </div>
         <hr>
         <div class="form-group">
-            <label class="col-sm-1 control-label goodsLabel">售卖时间</label>
+            <label class="col-sm-1 control-label goodsAddLabel">售卖时间</label>
             <div class="col-sm-4">
                 <div class="radio">
                     <label><input type="radio" name="sellingTimeRadio" data-text="全时段售卖" checked>全时段售卖</label> &nbsp;&nbsp;
@@ -170,7 +172,7 @@
             </div>
         </div>
         <div id="sellingTime" class="form-group" style="display: none;">
-            <label class="col-sm-1 control-label goodsLabel"></label>
+            <label class="col-sm-1 control-label goodsAddLabel"></label>
             <div class="col-sm-2 input-group" style="float:left;margin-left: 15px;">
                 <span class="input-group-addon">开始时间</span>
                 <input id="beginTime" type="text" class="form-control"/>
@@ -181,7 +183,7 @@
             </div>
         </div>
         <div id="sellingFrequency" class="form-group" style="display: none;">
-            <label class="col-sm-1 control-label goodsLabel"></label>
+            <label class="col-sm-1 control-label goodsAddLabel"></label>
             <div class="col-sm-4 input-group" style="float:left;margin-left: 15px;">
                 <div class="checkbox">
                     <label><input name="sellingDay" type="checkbox" data-text="周一">周一</label> &nbsp;&nbsp;&nbsp;
@@ -194,13 +196,40 @@
                 </div>
             </div>
         </div>
+        <div id="sellingHourHeader" class="form-group" style="display: none;">
+            <label class="col-sm-1 control-label goodsAddLabel"></label>
+            <div class="col-sm-4">
+                <div class="radio">
+                    <label>售卖时间段</label> &nbsp;&nbsp;
+                    <label><input type="radio" name="sellingHourRadio" data-text="全时段售卖" checked>全时段售卖</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="sellingHourRadio" data-text="自定义时间">自定义时间</label>&nbsp;&nbsp;
+                </div>
+            </div>
+        </div>
+        <div id="sellingHour" data-repeat='sellingHourDiv' class="form-group" style="display: none;">
+            <label class="col-sm-1 control-label goodsAddLabel"></label>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2 input-group" style="float:left;margin-left: 15px;">
+                <input name="beginHour" type="text" class="form-control"/>
+                <span class="input-group-addon">至</span>
+                <input name="endHour" type="text" class="form-control"/>
+            </div>
+            <div class="col-sm-2 input-group">
+                <input class="btn btn-link" style="color:#2F9D32" onclick="goodsUpdatePage.deleteSellingHour();" type="button" value="删除"/>
+            </div>
+        </div>
+        <div id="sellingHourBtn" class="form-group" style="display: none;">
+            <label class="col-sm-2 control-label goodsAddLabel"></label>
+            <div class="col-sm-1"><input class="btn btn-link" style="color:#2F9D32" onclick="goodsUpdatePage.addSellingHour();" type="button"
+                                         value="添加时间段，最多3个"/></div>
+        </div>
         <hr>
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
-                <input id="submitBtn" class="btn btn-primary" type="submit" value="更新"/>
+                <input id="cancelBtn" class="btn btn-default" type="button" onclick="indexPage.setContentBody('goods.html')" value="取消"/>
                 &nbsp;&nbsp;
-                <input id="cancelBtn" class="btn btn-default" onclick="indexPage.setContentBody('goods.html')" type="button" value="返回"/>
+                <input id="submitBtn" class="btn btn-success" type="submit" value="提交"/>
             </div>
         </div>
     </form>
@@ -210,35 +239,235 @@
     (function (page) {
         var _data = {};
 
-        page.isEditing = function (isEdit) {
-            if (!isEdit) {
-                $("input").attr("disabled", !isEdit);
-                $("select").attr("disabled", !isEdit);
-                $("textarea").attr("disabled", !isEdit);
-                $("#submitBtn").hide();
-                $("#cancelBtn").hide();
-                $("#goodsUpdatePageTitle").html("查看菜品");
-                $("#backBtn").show();
-            }
+        page.setData = function (data) {
+            _data = data;
+            $("#goodsName").val(_data.name);
+            $("#goodsDescription").val(_data.description);
+            $("#minPurchaseCountTxt").val(_data.minPurchaseCount);
+            $("#goodsUnit").val(_data.unit);
+
+            initGoodsType();
+            initGoodsTag();
+            initFileUploadControl();
+            initSetMealControl();
+            initRadioControl();
+            initSellingTimerPicker();
+            initSpecs();
+            initProperties();
+            initMaterial();
+            initSellingConfig();
         };
 
-        function initGoodsTags() {
-            var tags = JSON.parse(_data.tag);
+        function prepareMealDetails() {
+            var mealDetails = [];
+            $.each($("input[name='isSetMeal']"), function () {
+                if (this.checked) {
+                    mealDetails.push(this.getAttribute("data-text"));
+                    if (this.getAttribute("data-text") === "套餐") {
+                        mealDetails.push($("#setMealPersonCountTxt").val());
+                    }
+                }
+            });
+            _data.setMealDetail = JSON.stringify(mealDetails);
+        }
+
+        function prepareTags() {
+            var tags = [];
             $.each($("input[name='specialTag']"), function () {
-                if (tags.includes(this.getAttribute("data-text")))
-                    $(this).attr("checked", true);
+                if (this.checked) {
+                    tags.push(this.getAttribute("data-text"));
+                }
+            });
+            _data.goodsTagIds = tags;
+        }
+
+        function prepareSpecs() {
+            var specs = [];
+            $("div[data-repeat='goodsSpecs']").each(function (i, dom) {
+                var select = $(dom).find("select");
+                var inputs = $(dom).find("input");
+                specs.push({
+                    name: inputs[0].value,
+                    price: parseFloat(inputs[1].value),
+                    mealBoxPrice: parseFloat(inputs[2].value),
+                    repertoryType: select.val(),
+                    currentRepertory: parseFloat(inputs[3].value),
+                    maxRepertory: parseFloat(inputs[4].value),
+                    weight: inputs[5].value,
+                    barCode: inputs[6].value,
+                    SKUCode: inputs[7].value
+                });
+            });
+            _data.specs = JSON.stringify(specs);
+        }
+
+        function prepareProps() {
+            var properties = [];
+            $("div[data-repeat='goodsProp']").each(function (i, dom) {
+                var inputs = $(dom).find("input");
+                properties.push({
+                    name: inputs[0].value,
+                    subdivision: [inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value, inputs[5].value, inputs[6].value]
+                });
+            });
+            _data.properties = JSON.stringify(properties);
+        }
+
+        function prepareMatials() {
+            var inputs = $("#goodsMaterial input");
+            var materials = [];
+            for (var i = 0; i < inputs.length; i++) {
+                materials.push(inputs[i].value);
+            }
+            _data.material = JSON.stringify(materials);
+        }
+
+        function prepareSellingConfig() {
+            var weekDays = [];
+            $("#sellingFrequency input:checked").each(function (index, dom) {
+                    weekDays.push(dom.getAttribute("data-text"));
+                }
+            );
+
+            var hourIntervals = [];
+            var beginHours = $("#sellingHour input[name=beginHour]");
+            var endHours = $("#sellingHour input[name=endHour]");
+            for (var i = 0; i < beginHours.length; i++) {
+                var interval = {};
+                interval.beginHour = beginHours.eq(i).val();
+                interval.endHour = endHours.eq(i).val();
+                hourIntervals.push(interval);
+            }
+
+            _data.sellingConfig = JSON.stringify({
+                sellingConfigType: $("input[name=sellingTimeRadio]:checked").attr("data-text"),
+                beginTime: $("#beginTime").val(),
+                endTime: $("#endTime").val(),
+                sellingFrequency: weekDays,
+                sellingHourConfigType: $("input[name=sellingHourRadio]:checked").attr("data-text"),
+                sellingInterval: hourIntervals
+            });
+        }
+
+        page.save = function () {
+            _data.goodsTypeId = parseInt($("#goodsTypeSelect").val());
+            _data.name = $("#goodsName").val();
+            _data.description = $("#goodsDescription").val();
+            _data.minPurchaseCount = parseInt($("#minPurchaseCountTxt").val());
+            _data.unit = $("#goodsUnit").val();
+
+            prepareMealDetails();
+            prepareTags();
+
+            if (_data.goodsTagIds.length === 0) {
+                commonModal.showModal("请选择特色标签");
+                return false;
+            }
+
+            if (!_data.imagePath) {
+                commonModal.showModal("请选择图片并上传");
+                return false;
+            }
+
+            prepareSpecs();
+            prepareProps();
+            prepareMatials();
+            prepareSellingConfig();
+
+            $.ajax({
+                type: "POST", url: "/api/merchant/goods",
+                contentType: "application/json",
+                data: JSON.stringify(_data),
+                success: function (result) {
+                    if (result.status === SUCCESS)
+                        indexPage.setContentBody("goods.html");
+                    else
+                        commonModal.showModal(result.data);
+                }
+            });
+        };
+
+        page.addSpecs = function () {
+            if ($("div[data-repeat='goodsSpecs']").length >= 6) {
+                commonModal.showModal("至多6种商品规格");
+                return;
+            }
+            var copyDom = $(event.target).parent().prev();
+            copyDom.after(copyDom.clone());
+        };
+
+        page.deleteSpecs = function () {
+            if ($("div[data-repeat='goodsSpecs']").length <= 1) {
+                commonModal.showModal("至少1种商品规格");
+                return;
+            }
+            $(event.target).parent().parent().remove();
+        };
+
+        page.addProp = function () {
+            if ($("div[data-repeat='goodsProp']").length >= 5) {
+                commonModal.showModal("至多5种商品属性");
+                return;
+            }
+            var copyDom = $(event.target).parent().prev();
+            copyDom.after(copyDom.clone());
+        };
+
+        page.deleteProp = function () {
+            if ($("div[data-repeat='goodsProp']").length <= 1) {
+                commonModal.showModal("至少1种商品属性");
+                return;
+            }
+            $(event.target).parent().parent().remove();
+        };
+
+        page.addSellingHour = function () {
+            if ($("div[data-repeat='sellingHourDiv']").length >= 3) {
+                commonModal.showModal("至多3个售卖时间段");
+                return;
+            }
+            var copyDom = $(event.target).parent().parent().prev();
+            var clone = copyDom.clone();
+            clone.find("input:text").val("");
+            copyDom.after(clone);
+            initSellingHourPicker();
+        };
+
+        page.deleteSellingHour = function () {
+            if ($("div[data-repeat='sellingHourDiv']").length <= 1) {
+                commonModal.showModal("至少1个售卖时间段");
+                return;
+            }
+            $(event.target).parent().parent().remove();
+        };
+
+        function initGoodsTag() {
+            $.ajax({
+                type: "get", url: "api/merchant/goodsTag/all",
+                data: {pageNumber: 0, pageSize: 100},
+                success: function (result) {
+                    for (var i = 0; i < result.rows.length; i++) {
+                        $("#goodsTagDiv").append('<label><input name="specialTag" type="checkbox" data-text="' + result.rows[i].id
+                            + '">' + result.rows[i].name + '</label> &nbsp;&nbsp;&nbsp;');
+                    }
+                    var tags = Enumerable.from(_data.goodsTags).select(n => n.id.toString()).toArray();
+                    $.each($("input[name='specialTag']"), function () {
+                        if (tags.includes(this.getAttribute("data-text")))
+                            $(this).attr("checked", true);
+                    });
+                }
             });
         }
 
         function initGoodsType() {
             $.ajax({
                 type: "get", url: "api/merchant/goodsType/all",
-                data: {pageNumber: 0, pageSize: 100}, async: false,
+                data: {pageNumber: 0, pageSize: 100},
                 success: function (result) {
                     for (var i = 0; i < result.rows.length; i++) {
                         $("#goodsTypeSelect").append('<option value="' + result.rows[i].id + '">' + result.rows[i].name + '</option>');
                     }
-                    $("#goodsTypeSelect").val(_data.goodsTypeId);
+                    $("#goodsTypeSelect").val(_data.goodsType.id);
                 }
             });
         }
@@ -246,7 +475,7 @@
         function initFileUploadControl() {
             var option = {
                 language: 'zh', uploadUrl: "/api/fileUpload", showUpload: true,
-                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showRemove: true, showPreview: true, dropZoneEnabled: false, browseClass: "btn btn-success",
                 showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
                 allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1,
                 initialPreview: [_data.imagePath], initialPreviewAsData: true
@@ -285,9 +514,8 @@
         function initSpecs() {
             var specs = JSON.parse(_data.specs);
             for (var i = 0; i < specs.length - 1; i++) {
-                var copyDom = $("div[data-repeat='goodsSpecs']");
-                var container = copyDom.parent();
-                container.append(copyDom.clone());
+                var copyDom = $("#goodsSpecsDiv");
+                copyDom.after(copyDom.clone());
             }
             $("div[data-repeat='goodsSpecs']").each(function (i, dom) {
                 var select = $(dom).find("select");
@@ -307,9 +535,8 @@
         function initProperties() {
             var properties = JSON.parse(_data.properties);
             for (var i = 0; i < properties.length - 1; i++) {
-                var copyDom = $("div[data-repeat='goodsProp']");
-                var container = copyDom.parent();
-                container.append(copyDom.clone());
+                var copyDom = $("#goodsPropDiv");
+                copyDom.after(copyDom.clone());
             }
             $("div[data-repeat='goodsProp']").each(function (i, dom) {
                 var inputs = $(dom).find("input");
@@ -319,6 +546,7 @@
                 inputs[3].value = properties[i].subdivision[2];
                 inputs[4].value = properties[i].subdivision[3];
                 inputs[5].value = properties[i].subdivision[4];
+                inputs[6].value = properties[i].subdivision[5];
             });
         }
 
@@ -347,6 +575,7 @@
                 sellingTimeRadios.eq(1).attr("checked", true);
                 $("#sellingTime").show();
                 $("#sellingFrequency").show();
+                $("#sellingHourHeader").show();
                 $("#beginTime").val(sellingConfig.beginTime);
                 $("#endTime").val(sellingConfig.endTime);
                 $("#sellingFrequency input").each(function (index, dom) {
@@ -354,189 +583,76 @@
                         $(dom).attr("checked", true);
                     }
                 });
-            }
-        }
 
-        page.setData = function (data) {
-            _data = data;
-            $("#goodsName").val(_data.name);
-            $("#goodsDescription").val(_data.description);
-            $("#minPurchaseCountTxt").val(_data.minPurchaseCount);
+                var sellingHourRadios = $("input[name='sellingHourRadio']");
+                if (sellingConfig.sellingHourConfigType === "全时段售卖") {
+                    sellingHourRadios.eq(0).attr("checked", true);
+                } else if (sellingConfig.sellingHourConfigType === "自定义时间") {
+                    sellingHourRadios.eq(1).attr("checked", true);
+                    $("#sellingHour").show();
+                    $("#sellingHourBtn").show();
 
-            initGoodsType();
-            initFileUploadControl();
-            initSetMealControl();
-            initGoodsTags();
-            initSpecs();
-            initProperties();
-            initMaterial();
-            initSellingConfig();
-        };
+                    for (var i = 1; i < sellingConfig.sellingInterval.length; i++) {
+                        var hourDom = $("#sellingHour");
+                        hourDom.after(hourDom.clone());
+                    }
 
-        function prepareMealDetails() {
-            var mealDetails = [];
-            $.each($("input[name='isSetMeal']"), function () {
-                if (this.checked) {
-                    mealDetails.push(this.getAttribute("data-text"));
-                    if (this.getAttribute("data-text") === "套餐") {
-                        mealDetails.push($("#setMealPersonCountTxt").val() + "人套餐");
+                    initSellingHourPicker();
+
+                    var beginHours = $("#sellingHour input[name='beginHour']");
+                    var endHours = $("#sellingHour input[name='endHour']");
+                    for (var i = 0; i < sellingConfig.sellingInterval.length; i++) {
+                        beginHours.eq(i).val(sellingConfig.sellingInterval[i].beginHour);
+                        endHours.eq(i).val(sellingConfig.sellingInterval[i].endHour);
                     }
                 }
-            });
-            _data.setMealDetail = JSON.stringify(mealDetails);
-        }
-
-        function prepareTags() {
-            var tags = [];
-            $.each($("input[name='specialTag']"), function () {
-                if (this.checked) {
-                    tags.push(this.getAttribute("data-text"));
-                }
-            });
-            _data.tag = JSON.stringify(tags);
-        }
-
-        function prepareSpecs() {
-            var specs = [];
-            $("div[data-repeat='goodsSpecs']").each(function (i, dom) {
-                var select = $(dom).find("select");
-                var inputs = $(dom).find("input");
-                specs.push({
-                    name: inputs[0].value,
-                    price: inputs[1].value,
-                    mealBoxPrice: inputs[2].value,
-                    repertoryType: select.val(),
-                    currentRepertory: inputs[3].value,
-                    maxRepertory: inputs[4].value,
-                    weight: inputs[5].value,
-                    barCode: inputs[6].value,
-                    SKUCode: inputs[7].value
-                });
-            });
-            _data.specs = JSON.stringify(specs);
-        }
-
-        function prepareProps() {
-            var properties = [];
-            $("div[data-repeat='goodsProp']").each(function (i, dom) {
-                var inputs = $(dom).find("input");
-                properties.push({
-                    name: inputs[0].value,
-                    subdivision: [inputs[1].value, inputs[2].value,
-                        inputs[3].value, inputs[4].value, inputs[5].value]
-                });
-            });
-            _data.properties = JSON.stringify(properties);
-        }
-
-        function prepareMatials() {
-            var inputs = $("#goodsMaterial input");
-            _data.material = JSON.stringify([inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value,
-                inputs[5].value, inputs[6].value, inputs[7].value, inputs[8].value, inputs[9].value]);
-        }
-
-        function prepareSellingConfig() {
-            var weekDays = [];
-            $("#sellingFrequency input:checked").each(function (index, dom) {
-                    weekDays.push(dom.getAttribute("data-text"));
-                }
-            );
-            _data.sellingConfig = JSON.stringify({
-                sellingConfigType: $("input[name=sellingTimeRadio]:checked").attr("data-text"),
-                beginTime: $("#beginTime").val(),
-                endTime: $("#endTime").val(),
-                sellingFrequency: weekDays
-            });
-        }
-
-        page.update = function () {
-            _data.goodsTypeId = parseInt($("#goodsTypeSelect").val());
-            _data.name = $("#goodsName").val();
-            _data.description = $("#goodsDescription").val();
-            _data.minPurchaseCount = parseInt($("#minPurchaseCountTxt").val());
-
-            prepareMealDetails();
-            prepareTags();
-
-            if (!_data.imagePath) {
-                commonModal.showModal("请选择图片并上传");
-                return false;
             }
+        }
 
-            prepareSpecs();
-            prepareProps();
-            prepareMatials();
-            prepareSellingConfig();
-
-            $.ajax({
-                type: "POST", url: "/api/merchant/goods",
-                contentType: "application/json",
-                data: JSON.stringify(_data),
-                success: function (result) {
-                    if (result.status === SUCCESS)
-                        indexPage.setContentBody("goods.html");
-                    else
-                        commonModal.showModal(result.data);
-                }
-            });
-        };
-
-        page.addSpecs = function () {
-            if ($("div[data-repeat='goodsSpecs']").length >= 6) {
-                commonModal.showModal("至多6种商品规格");
-                return;
-            }
-            var copyDom = $(event.target).parent().parent();
-            var container = copyDom.parent();
-            container.append(copyDom.clone());
-        };
-
-        page.deleteSpecs = function () {
-            if ($("div[data-repeat='goodsSpecs']").length <= 1) {
-                commonModal.showModal("至少1种商品规格");
-                return;
-            }
-            $(event.target).parent().parent().remove();
-        };
-
-        page.addProp = function () {
-            if ($("div[data-repeat='goodsProp']").length >= 5) {
-                commonModal.showModal("至多5种商品属性");
-                return;
-            }
-            var copyDom = $(event.target).parent().parent();
-            var container = copyDom.parent();
-            container.append(copyDom.clone());
-        };
-
-        page.deleteProp = function () {
-            if ($("div[data-repeat='goodsProp']").length <= 1) {
-                commonModal.showModal("至少1种商品属性");
-                return;
-            }
-            $(event.target).parent().parent().remove();
-        };
-
-        function initSellingTimerPickerControls() {
+        function initSellingTimerPicker() {
             $('#beginTime').datetimepicker({
                 format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
             });
             $('#endTime').datetimepicker({
                 format: 'yyyy-mm-dd', minView: 2, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
             });
+        }
+
+        function initSellingHourPicker() {
+            $('input[name="beginHour"]').datetimepicker({
+                format: 'hh:ii', maxView: 1, startView: 1, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
+            });
+            $('input[name="endHour"]').datetimepicker({
+                format: 'hh:ii', maxView: 1, startView: 1, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
+            });
+        }
+
+        function initRadioControl() {
             $("input[name='sellingTimeRadio']").change(function (e) {
                 if (e.target.getAttribute("data-text") === "自定义时间") {
                     $("#sellingTime").show();
                     $("#sellingFrequency").show();
+                    $("#sellingHourHeader").show();
                 } else {
                     $("#sellingTime").hide();
                     $("#sellingFrequency").hide();
+                    $("#sellingHourHeader").hide();
+                    $("div[data-repeat='sellingHourDiv']").hide();
+                    $("#sellingHourBtn").hide();
+                    $("input[name='sellingHourRadio']").eq(0).prop("checked", true);
+                    $("input[name='sellingHourRadio']").eq(1).prop("checked", false);
+                }
+            });
+
+            $("input[name='sellingHourRadio']").change(function (e) {
+                if (e.target.getAttribute("data-text") === "自定义时间") {
+                    $("div[data-repeat='sellingHourDiv']").show();
+                    $("#sellingHourBtn").show();
+                } else {
+                    $("div[data-repeat='sellingHourDiv']").hide();
+                    $("#sellingHourBtn").hide();
                 }
             });
         }
-
-        $(function () {
-            initSellingTimerPickerControls();
-        });
     })(goodsUpdatePage);
 </script>

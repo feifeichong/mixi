@@ -21,4 +21,9 @@ public interface GoodsRepository extends JpaRepository<Goods, Long>, JpaSpecific
     List<Goods> findByIdIn(List<Long> ids);
 
     List<Goods> findByGoodsTypeId(long goodsTypeId);
+
+    @Transactional
+    @Modifying
+    @Query("delete from Goods t where t.id in :ids")
+    void deleteBatch(@Param("ids") long[] ids);
 }

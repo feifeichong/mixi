@@ -4,6 +4,9 @@
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('goods.html')" type="button">返回</button>
+        </div>
         <h1>新增菜品</h1>
     </div>
     <form class="form-horizontal" action="javascript:goodsAddPage.save();">
@@ -125,9 +128,9 @@
                     <div class="col-sm-4">属性细分（至少两个）</div>
                 </div>
                 <div data-repeat="goodsProp" class="col-sm-12" style="margin-top: 15px;">
-                    <div class="col-sm-1" style="padding-left: 0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
-                    <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
-                    <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
+                    <div class="col-sm-1" style="padding-left: 0;"><input class="form-control" type="text" style="border-radius: 5px;" required></div>
+                    <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;" required></div>
+                    <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;" required></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
                     <div class="col-sm-1" style="padding:0;"><input class="form-control" type="text" style="border-radius: 5px;"></div>
@@ -256,7 +259,7 @@
                     tags.push(this.getAttribute("data-text"));
                 }
             });
-            _data.tag = JSON.stringify(tags);
+            _data.goodsTagIds = tags;
         }
 
         function prepareSpecs() {
@@ -266,11 +269,11 @@
                 var inputs = $(dom).find("input");
                 specs.push({
                     name: inputs[0].value,
-                    price: inputs[1].value,
-                    mealBoxPrice: inputs[2].value,
+                    price: parseFloat(inputs[1].value),
+                    mealBoxPrice: parseFloat(inputs[2].value),
                     repertoryType: select.val(),
-                    currentRepertory: inputs[3].value,
-                    maxRepertory: inputs[4].value,
+                    currentRepertory: parseFloat(inputs[3].value),
+                    maxRepertory: parseFloat(inputs[4].value),
                     weight: inputs[5].value,
                     barCode: inputs[6].value,
                     SKUCode: inputs[7].value
@@ -285,8 +288,7 @@
                 var inputs = $(dom).find("input");
                 properties.push({
                     name: inputs[0].value,
-                    subdivision: [inputs[1].value, inputs[2].value,
-                        inputs[3].value, inputs[4].value, inputs[5].value]
+                    subdivision: [inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value, inputs[5].value, inputs[6].value]
                 });
             });
             _data.properties = JSON.stringify(properties);
@@ -294,8 +296,13 @@
 
         function prepareMatials() {
             var inputs = $("#goodsMaterial input");
-            _data.material = JSON.stringify([inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value,
-                inputs[5].value, inputs[6].value, inputs[7].value, inputs[8].value, inputs[9].value]);
+            var materials = [];
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value) {
+                    materials.push(inputs[i].value);
+                }
+            }
+            _data.material = JSON.stringify(materials);
         }
 
         function prepareSellingConfig() {
@@ -304,11 +311,24 @@
                     weekDays.push(dom.getAttribute("data-text"));
                 }
             );
+
+            var hourIntervals = [];
+            var beginHours = $("#sellingHour input[name=beginHour]");
+            var endHours = $("#sellingHour input[name=endHour]");
+            for (var i = 0; i < beginHours.length; i++) {
+                var interval = {};
+                interval.beginHour = beginHours.eq(i).val();
+                interval.endHour = endHours.eq(i).val();
+                hourIntervals.push(interval);
+            }
+
             _data.sellingConfig = JSON.stringify({
                 sellingConfigType: $("input[name=sellingTimeRadio]:checked").attr("data-text"),
                 beginTime: $("#beginTime").val(),
                 endTime: $("#endTime").val(),
-                sellingFrequency: weekDays
+                sellingFrequency: weekDays,
+                sellingHourConfigType: $("input[name=sellingHourRadio]:checked").attr("data-text"),
+                sellingInterval: hourIntervals
             });
         }
 
@@ -317,9 +337,15 @@
             _data.name = $("#goodsName").val();
             _data.description = $("#goodsDescription").val();
             _data.minPurchaseCount = parseInt($("#minPurchaseCountTxt").val());
+            _data.unit = $("#goodsUnit").val();
 
             prepareMealDetails();
             prepareTags();
+
+            if (_data.goodsTagIds.length === 0) {
+                commonModal.showModal("请选择特色标签");
+                return false;
+            }
 
             if (!_data.imagePath) {
                 commonModal.showModal("请选择图片并上传");
@@ -398,22 +424,22 @@
             $(event.target).parent().parent().remove();
         };
 
-        function initGoodsType() {
+        function initGoodsTag() {
             $.ajax({
-                type: "get", url: "api/merchant/goodsType/all",
+                type: "get", url: "api/merchant/goodsTag/all",
                 data: {pageNumber: 0, pageSize: 100},
                 success: function (result) {
                     for (var i = 0; i < result.rows.length; i++) {
-                        $("#goodsTagDiv").append('<label><input name="specialTag" type="checkbox" data-text="' + result.rows[i].name
+                        $("#goodsTagDiv").append('<label><input name="specialTag" type="checkbox" data-text="' + result.rows[i].id
                             + '">' + result.rows[i].name + '</label> &nbsp;&nbsp;&nbsp;');
                     }
                 }
             });
         }
 
-        function initGoodsTag() {
+        function initGoodsType() {
             $.ajax({
-                type: "get", url: "api/merchant/goodsTag/all",
+                type: "get", url: "api/merchant/goodsType/all",
                 data: {pageNumber: 0, pageSize: 100},
                 success: function (result) {
                     for (var i = 0; i < result.rows.length; i++) {
@@ -460,10 +486,10 @@
 
         function initSellingHourPicker() {
             $('input[name="beginHour"]').datetimepicker({
-                format: 'hh:ii', maxView: 1, startView:1, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
+                format: 'hh:ii', maxView: 1, startView: 1, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
             });
             $('input[name="endHour"]').datetimepicker({
-                format: 'hh:ii', maxView: 1, startView:1, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
+                format: 'hh:ii', maxView: 1, startView: 1, autoclose: true, todayBtn: true, language: "zh-CN", pickerPosition: "top-right"
             });
         }
 
@@ -477,7 +503,7 @@
                     $("#sellingTime").hide();
                     $("#sellingFrequency").hide();
                     $("#sellingHourHeader").hide();
-                    $("#sellingHour").hide();
+                    $("div[data-repeat='sellingHourDiv']").hide();
                     $("#sellingHourBtn").hide();
                     $("input[name='sellingHourRadio']").eq(0).prop("checked", true);
                     $("input[name='sellingHourRadio']").eq(1).prop("checked", false);
@@ -486,10 +512,10 @@
 
             $("input[name='sellingHourRadio']").change(function (e) {
                 if (e.target.getAttribute("data-text") === "自定义时间") {
-                    $("#sellingHour").show();
+                    $("div[data-repeat='sellingHourDiv']").show();
                     $("#sellingHourBtn").show();
                 } else {
-                    $("#sellingHour").hide();
+                    $("div[data-repeat='sellingHourDiv']").hide();
                     $("#sellingHourBtn").hide();
                 }
             });

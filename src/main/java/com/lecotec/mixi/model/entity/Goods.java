@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "mx_goods")
@@ -36,6 +37,12 @@ public class Goods {
     @ManyToOne
     @JoinColumn(name = "goods_type_id", referencedColumnName = "id")
     private GoodsType goodsType;
+
+    @ManyToMany
+    @JoinTable(name = "mx_goods_to_tag", joinColumns = {
+            @JoinColumn(name = "goods_id", referencedColumnName = "id")}, inverseJoinColumns = {
+            @JoinColumn(name = "goods_tag_id", referencedColumnName = "id")})
+    private List<GoodsTag> goodsTags;
 
     @Column(columnDefinition = "TEXT NULL")
     private String specs;
@@ -163,5 +170,13 @@ public class Goods {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public List<GoodsTag> getGoodsTags() {
+        return goodsTags;
+    }
+
+    public void setGoodsTags(List<GoodsTag> goodsTags) {
+        this.goodsTags = goodsTags;
     }
 }

@@ -1,21 +1,26 @@
 package com.lecotec.mixi.service;
 
 import com.lecotec.mixi.model.entity.Goods;
+import com.lecotec.mixi.model.parameter.GoodsParamForSave;
 import com.lecotec.mixi.model.parameter.GoodsSearchParam;
 import com.lecotec.mixi.model.parameter.IdsParam;
 import com.lecotec.mixi.repository.GoodsRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -24,8 +29,11 @@ public class GoodsService {
     @Autowired
     private GoodsRepository goodsRepository;
 
-    public Goods saveGoods(Goods goods) {
-        return goodsRepository.save(goods);
+    public Goods saveGoods(GoodsParamForSave goodsParamForSave) {
+        Goods goods = new Goods();
+        BeanUtils.copyProperties(goodsParamForSave, goods);
+        Goods goodsAddedInfo = goodsRepository.save(goods);
+        return goodsAddedInfo;
     }
 
     public Page<Goods> searchByParam(GoodsSearchParam goodsSearchParam) {
@@ -36,7 +44,7 @@ public class GoodsService {
                 predicates.add(criteriaBuilder.like(root.get("name"), "%" + goodsSearchParam.getName() + "%"));
             }
             if (!ObjectUtils.isEmpty(goodsSearchParam.getGoodsTypeId())) {
-                predicates.add(criteriaBuilder.equal(root.get("goodsTypeId"), goodsSearchParam.getGoodsTypeId()));
+                predicates.add(criteriaBuilder.equal(root.get("goodsType"), goodsSearchParam.getGoodsTypeId()));
             }
             if (!ObjectUtils.isEmpty(goodsSearchParam.getIsActive())) {
                 predicates.add(criteriaBuilder.equal(root.get("isActive"), goodsSearchParam.getIsActive()));
@@ -69,5 +77,21 @@ public class GoodsService {
 
     public boolean isExistGoodsByGoodsTypeId(long id) {
         return goodsRepository.findByGoodsTypeId(id).size() > 0;
+    }
+
+    public Map<String, Long> getGoodsCount() {
+        long activeCount = goodsRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("isActive"), true)).getRestriction());
+        long inActiveCount = goodsRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("isActive"), false)).getRestriction());
+        Map<String, Long> result = new HashMap<>();
+        result.put("activeCount", activeCount);
+        result.put("inActiveCount", inActiveCount);
+        result.put("totalCount", activeCount + inActiveCount);
+        return result;
+    }
+
+    @Transactional
+    public boolean deleteBatch(long[] ids) {
+        goodsRepository.deleteBatch(ids);
+        return true;
     }
 }
