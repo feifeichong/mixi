@@ -1,6 +1,6 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
-        <h1>评论查询</h1>
+        <h1>评论管理</h1>
     </div>
     <div class="table-responsive">
         <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
@@ -25,6 +25,7 @@
                             return index + 1;
                         }
                     },
+                    {title: '店铺名称', field: '咪嘻自营'},
                     {title: '订单号', field: 'order.serialNumber'},
                     {title: '用户昵称', field: 'customer.nickname'},
                     {title: '评论时间', field: 'creationTime'},
