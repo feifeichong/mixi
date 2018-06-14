@@ -497,7 +497,7 @@
                 $("#setMealPersonCountTxt").val(setMealDetail[1]);
             } else if (setMealDetail[0] === "非套餐") {
                 setMealRadios.eq(0).attr("checked", true);
-                $("#setMealPersonCountTxt").hide();
+                $("#setMealPersonCount").hide();
             }
 
             setMealRadios.click(function (e) {
@@ -648,6 +648,7 @@
                 if (e.target.getAttribute("data-text") === "自定义时间") {
                     $("div[data-repeat='sellingHourDiv']").show();
                     $("#sellingHourBtn").show();
+                    initSellingHourPicker();
                 } else {
                     $("div[data-repeat='sellingHourDiv']").hide();
                     $("#sellingHourBtn").hide();

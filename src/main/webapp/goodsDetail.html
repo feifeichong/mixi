@@ -1,0 +1,126 @@
+<div id="goodsDetailDiv" v-if="goodsInfo" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="title page-header">
+        <div class="right">
+            <button class="btn btn-success" onclick="indexPage.setContentBody('goods.html');" type="button">返回</button>
+            <button class="btn btn-success" @click="edit()" type="button">修改</button>
+        </div>
+        <h1>菜品详情</h1>
+    </div>
+    <h3 class="sub-header">商品基本信息</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>商品编号</th>
+            <th>商品分类</th>
+            <th>商品名称</th>
+            <th>菜品描述</th>
+        </tr>
+        <tr>
+            <td>{{goodsInfo.id}}</td>
+            <td>{{goodsInfo.goodsType.name}}</td>
+            <td>{{goodsInfo.name}}</td>
+            <td>{{goodsInfo.description}}</td>
+        </tr>
+        <tr>
+            <th>商品图片</th>
+            <th>最小购买量</th>
+            <th>商品单位</th>
+            <th>套餐设置</th>
+        </tr>
+        <tr>
+            <td><img :src="goodsInfo.imagePath" alt="" width="100" height="100"></td>
+            <td>{{goodsInfo.minPurchaseCount}}</td>
+            <td>{{goodsInfo.unit}}</td>
+            <td>{{goodsSetMealDetail}}</td>
+        </tr>
+        <tr>
+            <th>特色标签</th>
+            <th>商品属性</th>
+            <th>商品原料</th>
+            <th>售卖时间</th>
+        </tr>
+        <tr>
+            <td>{{goodsTagsInfo}}</td>
+            <td v-html="goodsPropertiesInfo"></td>
+            <td>{{goodsmaterial}}</td>
+            <td v-html="goodsSellingConfig"></td>
+        </tr>
+    </table>
+    <h3 class="sub-header">商品规格信息</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>规格名</th>
+            <th>价格</th>
+            <th>餐盒费</th>
+            <th>当前库存/最大库存</th>
+            <th>重量</th>
+            <th>条形码</th>
+            <th>SKU码</th>
+        </tr>
+        <tr v-for="spec in JSON.parse(goodsInfo.specs)">
+            <td>{{spec.name}}</td>
+            <td>{{spec.price}}</td>
+            <td>{{spec.mealBoxPrice}}</td>
+            <td>{{spec.currentRepertory}}/{{spec.maxRepertory}}</td>
+            <td>{{spec.weight}}</td>
+            <td>{{spec.barCode}}</td>
+            <td>{{spec.SKUCode}}</td>
+        </tr>
+    </table>
+</div>
+<script>
+    var goodsDetailPage = new Vue({
+        el: '#goodsDetailDiv',
+        data: {
+            goodsInfo: null
+        },
+        methods: {
+            initData: function (goods) {
+                this.goodsInfo = goods;
+            },
+            edit: function () {
+                var that = this;
+                indexPage.setContentBody("goodsUpdate.html", function (response, status, xhr) {
+                    goodsUpdatePage.setData(that.goodsInfo);
+                });
+            }
+        },
+        computed: {
+            goodsTagsInfo: function () {
+                return Enumerable.from(this.goodsInfo.goodsTags).select(n => n.name).toArray().join("、");
+            },
+            goodsSetMealDetail: function () {
+                var setMealDetail = JSON.parse(this.goodsInfo.setMealDetail);
+                return setMealDetail.length === 1 ? setMealDetail[0] : setMealDetail[0] + "，" + setMealDetail[1] + "人套餐";
+            },
+            goodsPropertiesInfo: function () {
+                var properties = JSON.parse(this.goodsInfo.properties);
+                var result = [];
+                for (var property of properties) {
+                    var str = property.name + "：" + Enumerable.from(property.subdivision).where(n => n.length > 0).toArray().join("、");
+                    result.push(str);
+                }
+                return result.join("；<br>");
+            },
+            goodsmaterial: function () {
+                return Enumerable.from(JSON.parse(this.goodsInfo.material)).where(n => n.length > 0).toArray().join("、");
+            },
+            goodsSellingConfig: function () {
+                var sellingConfig = JSON.parse(this.goodsInfo.sellingConfig);
+                if (sellingConfig.sellingConfigType === "全时段售卖") {
+                    return "全时段售卖";
+                }
+                var result = "";
+                result += sellingConfig.sellingConfigType + "<br>";
+                result += "开始日期：" + sellingConfig.beginTime + "，" + "结束日期：" + sellingConfig.endTime + "<br>";
+                result += "每" + sellingConfig.sellingFrequency.join("、") + "售卖<br>";
+                result += sellingConfig.sellingHourConfigType + "<br>";
+                if (sellingConfig.sellingHourConfigType === "自定义时间") {
+                    for (var i = 0; i < sellingConfig.sellingInterval.length; i++) {
+                        result += "开始时间：" + sellingConfig.sellingInterval[i].beginHour + "，" + "结束时间：" + sellingConfig.sellingInterval[i].endHour + "<br>";
+                    }
+                }
+                return result;
+            }
+        }
+    });
+</script>

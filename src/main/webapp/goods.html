@@ -106,11 +106,10 @@
         }
 
         page.showDetail = function (id) {
-            /*var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
-            indexPage.setContentBody("goodsUpdate.html", function (response, status, xhr) {
-                goodsUpdatePage.isEditing(false);
-                goodsUpdatePage.setData(currentData);
-            });*/
+            var currentData = $("#tableResult").bootstrapTable("getRowByUniqueId", id);
+            indexPage.setContentBody("goodsDetail.html", function (response, status, xhr) {
+                goodsDetailPage.initData(currentData);
+            });
         };
 
         page.edit = function (id) {
