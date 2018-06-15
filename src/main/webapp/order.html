@@ -1,33 +1,36 @@
+<style>
+    #activeSelect li.active a {color: #fff; background-color: #2F9D32}
+</style>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
-        <h1>订单查询</h1>
+        <h1>订单</h1>
     </div>
     <div class="row placeholders">
         <div class="col-xs-12 col-sm-12 placeholder">
             <ul id="activeSelect" class="nav nav-pills">
                 <li role="presentation" class="active" data-value="">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus();">全部订单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(0);">全部订单<span class="badge"></span></a>
                 </li>
                 <li role="presentation" data-value="新订单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus();">新订单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(1);">新订单<span class="badge"></span></a>
                 </li>
                 <li role="presentation" data-value="进行中" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus();">进行中<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(2);">进行中<span class="badge"></span></a>
                 </li>
                 <li role="presentation" data-value="已完成" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus();">已完成<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(3);">已完成<span class="badge"></span></a>
                 </li>
                 <li role="presentation" data-value="配送异常" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus();">配送异常<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(4);">配送异常<span class="badge"></span></a>
                 </li>
                 <li role="presentation" data-value="催单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus();">催单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(5);">催单<span class="badge"></span></a>
                 </li>
                 <li role="presentation" data-value="取消订单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus();">取消订单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(6);">取消订单<span class="badge"></span></a>
                 </li>
                 <li role="presentation" data-value="退单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus();">退单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(7);">退单<span class="badge"></span></a>
                 </li>
             </ul>
         </div>
@@ -73,7 +76,6 @@
 <script>
     var orderPage = {};
     (function (page) {
-        var _stations = null;
         var _currentNewOrder = {};
 
         function initStations() {
@@ -81,8 +83,6 @@
                 type: "get", url: "api/merchant/station/all",
                 data: {pageNumber: 0, pageSize: 100}, async: false,
                 success: function (result) {
-                    _stations = result.rows;
-
                     var select = $("#stationSelect");
                     select.append('<option value="">全部</option>');
                     for (var i = 0; i < result.rows.length; i++) {
@@ -92,6 +92,10 @@
             });
         }
 
+        page.setStatusIndex = function(index){
+            page.selectOrderStatus(index);
+        };
+
         page.onEnterKeyPress = function () {
             var code = event.charCode || event.keyCode;
             if (code == 13) {
@@ -99,11 +103,10 @@
             }
         };
 
-        page.selectOrderStatus = function () {
-            $(event.target).parent().parent().find("li").each(function (index, dom) {
-                $(dom).removeClass("active");
-            });
-            $(event.target).parent().addClass("active");
+        page.selectOrderStatus = function (index) {
+            var activeSelects = $("#activeSelect li");
+            activeSelects.removeClass("active");
+            activeSelects.eq(index).addClass("active");
             page.refreshTableDatas();
         };
 
@@ -214,14 +217,14 @@
                             return index + 1;
                         }
                     },
-                    {title: '订单编号', field: 'serialNumber',},
+                    {title: '订单编号', field: 'serialNumber'},
                     {title: '站点', field: 'station.name'},
                     {title: '配送员', field: 'rider.name'},
                     {title: '配送员电话', field: 'rider.phoneNumber'},
                     {title: '收货人姓名', field: 'receiverName'},
                     {title: '收货人电话', field: 'receiverPhoneNumber'},
-                    {title: '订单金额', field: 'realPrice'},
-                    {title: '状态', field: 'status'},
+                    {title: '订单金额', field: 'paymentPrice'},
+                    {title: '订单状态', field: 'status'},
                     {
                         title: '操作', field: 'id', formatter: function (value, row, index) {
                             var html = "";

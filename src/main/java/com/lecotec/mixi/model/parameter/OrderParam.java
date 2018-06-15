@@ -1,23 +1,32 @@
 package com.lecotec.mixi.model.parameter;
 
-import com.alibaba.fastjson.JSON;
 import com.lecotec.mixi.model.entity.Customer;
+import com.lecotec.mixi.model.entity.Goods;
 import com.lecotec.mixi.model.entity.Order;
 import com.lecotec.mixi.model.entity.Rider;
-import com.lecotec.mixi.model.entity.Station;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderParam extends Order {
-    private GoodsList[] goodsList;
     private long customerId;
     private long riderId;
 
-    public GoodsList[] getGoodsList() {
-        return goodsList;
+    private long[] goodsIds;
+
+    public long[] getGoodsIds() {
+        return goodsIds;
     }
 
-    public void setGoodsList(GoodsList[] goodsList) {
-        this.goodsList = goodsList;
-        super.setGoodsJsonList(JSON.toJSONString(this.goodsList));
+    public void setGoodsIds(long[] goodsIds) {
+        this.goodsIds = goodsIds;
+        List<Goods> goodsList = new ArrayList<>();
+        for (long goodsId : goodsIds) {
+            Goods goods = new Goods();
+            goods.setId(goodsId);
+            goodsList.add(goods);
+        }
+        super.setGoodsList(goodsList);
     }
 
     public long getCustomerId() {
@@ -44,35 +53,5 @@ public class OrderParam extends Order {
                 setId(riderId);
             }
         });
-    }
-
-    private static class GoodsList {
-        private long goodsId;
-        private int count;
-        private double price;
-
-        public int getCount() {
-            return count;
-        }
-
-        public void setCount(int count) {
-            this.count = count;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
-
-        public long getGoodsId() {
-            return goodsId;
-        }
-
-        public void setGoodsId(long goodsId) {
-            this.goodsId = goodsId;
-        }
     }
 }

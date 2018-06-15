@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -17,10 +18,6 @@ public class Order implements Serializable {
 
     @ApiModelProperty(hidden = true)
     private String serialNumber = UUID.randomUUID().toString();
-
-    private double originalPrice;
-
-    private double realPrice;
 
     private String status;
 
@@ -35,9 +32,15 @@ public class Order implements Serializable {
     @ApiModelProperty(hidden = true)
     private Date completeTime;
 
-    @Column(columnDefinition = "TEXT NULL")
     @ApiModelProperty(hidden = true)
-    private String goodsJsonList = "[]";
+    private Date creationTime = new Date();
+
+    @ManyToMany
+    @JoinTable(name = "mx_order_to_goods", joinColumns = {
+            @JoinColumn(name = "order_id", referencedColumnName = "id")}, inverseJoinColumns = {
+            @JoinColumn(name = "goods_id", referencedColumnName = "id")})
+    @ApiModelProperty(hidden = true)
+    private List<Goods> goodsList;
 
     @ManyToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
@@ -74,12 +77,9 @@ public class Order implements Serializable {
 
     private double sendPrice;
 
-    private double totalOrderPrice;
+    private double originalPrice;
 
-    private double realOrderPrice;
-
-    @ApiModelProperty(hidden = true)
-    private Date creationTime = new Date();
+    private double paymentPrice;
 
     public long getId() {
         return id;
@@ -105,12 +105,12 @@ public class Order implements Serializable {
         this.originalPrice = originalPrice;
     }
 
-    public double getRealPrice() {
-        return realPrice;
+    public double getPaymentPrice() {
+        return paymentPrice;
     }
 
-    public void setRealPrice(double realPrice) {
-        this.realPrice = realPrice;
+    public void setPaymentPrice(double paymentPrice) {
+        this.paymentPrice = paymentPrice;
     }
 
     public String getStatus() {
@@ -249,30 +249,6 @@ public class Order implements Serializable {
         this.sendPrice = sendPrice;
     }
 
-    public double getTotalOrderPrice() {
-        return totalOrderPrice;
-    }
-
-    public void setTotalOrderPrice(double totalOrderPrice) {
-        this.totalOrderPrice = totalOrderPrice;
-    }
-
-    public double getRealOrderPrice() {
-        return realOrderPrice;
-    }
-
-    public void setRealOrderPrice(double realOrderPrice) {
-        this.realOrderPrice = realOrderPrice;
-    }
-
-    public String getGoodsJsonList() {
-        return goodsJsonList;
-    }
-
-    public void setGoodsJsonList(String goodsJsonList) {
-        this.goodsJsonList = goodsJsonList;
-    }
-
     public String getReceiverRemark() {
         return receiverRemark;
     }
@@ -287,5 +263,13 @@ public class Order implements Serializable {
 
     public void setStation(Station station) {
         this.station = station;
+    }
+
+    public List<Goods> getGoodsList() {
+        return goodsList;
+    }
+
+    public void setGoodsList(List<Goods> goodsList) {
+        this.goodsList = goodsList;
     }
 }
