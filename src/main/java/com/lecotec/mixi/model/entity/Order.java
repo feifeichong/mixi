@@ -35,13 +35,6 @@ public class Order implements Serializable {
     @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
 
-    @ManyToMany
-    @JoinTable(name = "mx_order_to_goods", joinColumns = {
-            @JoinColumn(name = "order_id", referencedColumnName = "id")}, inverseJoinColumns = {
-            @JoinColumn(name = "goods_id", referencedColumnName = "id")})
-    @ApiModelProperty(hidden = true)
-    private List<Goods> goodsList;
-
     @ManyToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     @ApiModelProperty(hidden = true)
@@ -263,13 +256,5 @@ public class Order implements Serializable {
 
     public void setStation(Station station) {
         this.station = station;
-    }
-
-    public List<Goods> getGoodsList() {
-        return goodsList;
-    }
-
-    public void setGoodsList(List<Goods> goodsList) {
-        this.goodsList = goodsList;
     }
 }

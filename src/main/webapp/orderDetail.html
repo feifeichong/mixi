@@ -21,7 +21,7 @@
             <td>{{orderInfo.station.name}}</td>
             <td>{{orderInfo.customer.phoneNumber}}</td>
             <td>{{orderInfo.originalPrice}}</td>
-            <td>{{orderInfo.realPrice}}</td>
+            <td>{{orderInfo.paymentPrice}}</td>
             <td>{{orderInfo.status}}</td>
             <td>{{orderInfo.paymentType}}</td>
         </tr>
@@ -49,14 +49,14 @@
             <th>数量</th>
             <th>小计（元）</th>
         </tr>
-        <tr v-for="goods in orderInfo.goodsJsonList">
-            <td>{{goods.goodsId}}</td>
-            <td>{{goods.goodsTypeId}}</td>
+        <tr v-for="goods in orderInfo.goodsList">
+            <td>{{goods.id}}</td>
+            <td>{{goods.goodsType.name}}</td>
             <td>{{goods.name}}</td>
             <td><img :src="goods.imagePath" alt="" width="100" height="100"></td>
             <td>{{JSON.parse(goods.specs)[0].name}}</td>
-            <td>{{goods.count}}</td>
-            <td>{{goods.price}}</td>
+            <td>{{goods.name}}</td>
+            <td>{{goods.name}}</td>
         </tr>
     </table>
     <h3 class="sub-header">收货人信息</h3>
@@ -112,39 +112,21 @@
         <tr>
             <td>{{orderInfo.mealBoxPrice}}</td>
             <td>{{orderInfo.sendPrice}}</td>
-            <td>{{orderInfo.totalOrderPrice}}</td>
-            <td>{{orderInfo.realOrderPrice}}</td>
+            <td>{{orderInfo.originalPrice}}</td>
+            <td>{{orderInfo.paymentPrice}}</td>
         </tr>
     </table>
 </div>
 <script>
     var orderDetailPage = new Vue({
-            el: '#orderDetailDiv',
-            data: {
-                orderInfo: null
-            },
-            methods: {
-                initData: function (order) {
-                    var goodsList = JSON.parse(order.goodsJsonList);
-                    var goodsIds = [];
-
-                    for (var i = 0; i < goodsList.length; i++) {
-                        goodsIds.push(goodsList[i].goodsId);
-                    }
-
-                    this.$http.post("/api/merchant/goods/getGoodsByIds", {ids: goodsIds, pageNumber: 0, pageSize: 10000})
-                        .then(function (res) {
-                            for (var i = 0; i < goodsList.length; i++) {
-                                Object.assign(goodsList[i], res.data.rows[i]);
-                            }
-                            this.orderInfo = order;
-                            this.orderInfo.goodsJsonList = goodsList;
-                        })
-                        .catch(function (err) {
-                            console.log(err)
-                        });
-                }
+        el: '#orderDetailDiv',
+        data: {
+            orderInfo: null
+        },
+        methods: {
+            initData: function (order) {
+                this.orderInfo = order;
             }
-        })
-    ;
+        }
+    });
 </script>

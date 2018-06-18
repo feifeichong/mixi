@@ -1,5 +1,8 @@
 <style>
-    #activeSelect li.active a {color: #fff; background-color: #2F9D32}
+    #activeSelect li.active a {
+        color: #fff;
+        background-color: #2F9D32
+    }
 </style>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="title page-header">
@@ -9,28 +12,36 @@
         <div class="col-xs-12 col-sm-12 placeholder">
             <ul id="activeSelect" class="nav nav-pills">
                 <li role="presentation" class="active" data-value="">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(0);">全部订单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(0);">全部订单(<span
+                            id="totalCount"></span>)</a>
                 </li>
                 <li role="presentation" data-value="新订单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(1);">新订单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(1);">新订单(<span
+                            id="newCount"></span>)</a>
                 </li>
                 <li role="presentation" data-value="进行中" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(2);">进行中<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(2);">进行中(<span
+                            id="onGoingCount"></span>)</a>
                 </li>
                 <li role="presentation" data-value="已完成" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(3);">已完成<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(3);">已完成(<span
+                            id="completedCount"></span>)</a>
                 </li>
                 <li role="presentation" data-value="配送异常" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(4);">配送异常<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(4);">配送异常(<span
+                            id="exceptionCount"></span>)</a>
                 </li>
                 <li role="presentation" data-value="催单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(5);">催单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(5);">催单(<span
+                            id="pressedCount"></span>)</a>
                 </li>
                 <li role="presentation" data-value="取消订单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(6);">取消订单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(6);">取消订单(<span
+                            id="cancelCount"></span>)</a>
                 </li>
                 <li role="presentation" data-value="退单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(7);">退单<span class="badge"></span></a>
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(7);">退单(<span
+                            id="returnedCount"></span>)</a>
                 </li>
             </ul>
         </div>
@@ -38,13 +49,15 @@
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
                 <span class="input-group-addon">订单编号</span>
-                <input id="searchKeyword" onkeyup="orderPage.onEnterKeyPress()" class="form-control" data-toggle="tooltip" data-placement="bottom"
+                <input id="searchKeyword" onkeyup="orderPage.onEnterKeyPress()" class="form-control"
+                       data-toggle="tooltip" data-placement="bottom"
                        title="输入内容，点击键盘Enter查询"/>
             </div>
         </div>
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
-                <span class="input-group-addon">站点</span><select id="stationSelect" onchange="orderPage.refreshTableDatas();"
+                <span class="input-group-addon">站点</span><select id="stationSelect"
+                                                                 onchange="orderPage.refreshTableDatas();"
                                                                  class="form-control"></select>
             </div>
         </div>
@@ -52,20 +65,24 @@
 
     <h2 class="sub-header">查询结果</h2>
     <div class="table-responsive">
-        <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
+        <table id="tableResult" data-pagination="true" data-side-pagination="server" data-striped="true"
+               data-cache="false"
                data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
     </div>
     <div class="modal fade" id="dispatchModal" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">订单派发【当前站点：<span id="currentStation"></span>】</h4>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table id="stationRiderResult" data-pagination="true" data-side-pagination="server" data-striped="true" data-cache="false"
-                               data-unique-id="id" data-pagination-pre-text="上一页" data-pagination-next-text="下一页"></table>
+                        <table id="stationRiderResult" data-pagination="true" data-side-pagination="server"
+                               data-striped="true" data-cache="false"
+                               data-unique-id="id" data-pagination-pre-text="上一页"
+                               data-pagination-next-text="下一页"></table>
                     </div>
                     <div id="dispatchMsg" style="display: none;" class="alert alert-danger" role="alert"></div>
                 </div>
@@ -92,7 +109,7 @@
             });
         }
 
-        page.setStatusIndex = function(index){
+        page.setStatusIndex = function (index) {
             page.selectOrderStatus(index);
         };
 
@@ -142,7 +159,9 @@
                 contentType: "application/x-www-form-urlencoded",
                 queryParams: function (params) {
                     return {
-                        pageSize: params.limit, pageNumber: (params.offset / params.limit), stationId: _currentNewOrder.station.id
+                        pageSize: params.limit,
+                        pageNumber: (params.offset / params.limit),
+                        stationId: _currentNewOrder.station.id
                     };
                 },
                 columns: [
@@ -229,10 +248,10 @@
                         title: '操作', field: 'id', formatter: function (value, row, index) {
                             var html = "";
                             if (row.status === "新订单") {
-                                html += '<button type="button" class="btn btn-success" onclick="orderPage.dispatch(' + value + ');"><span class="glyphicon glyphicon-send" aria-hidden="true">派单</span></button>&nbsp;';
+                                html = '<span style="cursor: pointer;color:#2F9D32;" onclick="orderPage.dispatch(' + value + ');">【派单】</span>';
                             }
-                            html += '<button type="button" class="btn btn-default" onclick="orderPage.showDetail(' + value + ');"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>查看详情</button>&nbsp;';
-                            html += '<button type="button" class="btn btn-danger" onclick="orderPage.delete(' + value + ');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</button>&nbsp;';
+                            html += '<span style="cursor: pointer;color:#2F9D32;" onclick="orderPage.showDetail(' + value + ');">【查看详情】</span>';
+                            html += ' <span style="cursor: pointer;color:#2F9D32;" onclick="orderPage.delete(' + value + ');">【删除订单】</span>';
                             return html;
                         }
                     }
@@ -240,10 +259,28 @@
             });
         };
 
+        function initOrderCount() {
+            $.ajax({
+                type: "get", url: "api/merchant/order/orderCount",
+                data: {},
+                success: function (result) {
+                    $("#newCount").html(result.newCount);
+                    $("#onGoingCount").html(result.onGoingCount);
+                    $("#completedCount").html(result.completedCount);
+                    $("#exceptionCount").html(result.exceptionCount);
+                    $("#pressedCount").html(result.pressedCount);
+                    $("#cancelCount").html(result.cancelCount);
+                    $("#returnedCount").html(result.returnedCount);
+                    $("#totalCount").html(result.totalCount);
+                }
+            });
+        }
+
         $(function () {
             $("#searchKeyword").tooltip();
             initStations();
             initTableDatas();
+            initOrderCount();
         });
     })(orderPage);
 </script>

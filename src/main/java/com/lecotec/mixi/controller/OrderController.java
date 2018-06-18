@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @Api(tags = "订单数据接口")
@@ -42,5 +43,10 @@ public class OrderController {
     @PutMapping("api/merchant/order/dispatchToRider")
     public ResponseObject dispatchToRider(long orderId, long riderId) {
         return orderService.dispatchToRider(orderId, riderId);
+    }
+
+    @GetMapping("api/merchant/order/orderCount")
+    public Map<String, Long> getOrderCount() {
+        return orderService.getOrderCount();
     }
 }

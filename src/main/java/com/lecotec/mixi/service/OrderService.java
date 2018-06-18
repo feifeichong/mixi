@@ -17,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -62,11 +60,32 @@ public class OrderService {
         orderRepository.dispatchToRider(orderId, riderId, new Date());
         Rider rider = riderRepository.getOne(riderId);
         JSONArray orderIds = JSONArray.parseArray(rider.getOrderIdsJson());
-        if (!orderIds.contains(orderId)){
+        if (!orderIds.contains(orderId)) {
             orderIds.add(orderId);
             rider.setOrderIdsJson(orderIds.toJSONString());
             riderRepository.save(rider);
         }
         return new SuccessResponse();
+    }
+
+    public Map<String, Long> getOrderCount() {
+        long newCount = orderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("status"), "新订单")).getRestriction());
+        long onGoingCount = orderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("status"), "进行中")).getRestriction());
+        long completedCount = orderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("status"), "已完成")).getRestriction());
+        long exceptionCount = orderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("status"), "配送异常")).getRestriction());
+        long pressedCount = orderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("status"), "催单")).getRestriction());
+        long cancelCount = orderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("status"), "取消订单")).getRestriction());
+        long returnedCount = orderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("status"), "退单")).getRestriction());
+        Map<String, Long> result = new HashMap<>();
+        result.put("newCount", newCount);
+        result.put("onGoingCount", onGoingCount);
+        result.put("completedCount", completedCount);
+        result.put("exceptionCount", exceptionCount);
+        result.put("pressedCount", pressedCount);
+        result.put("cancelCount", cancelCount);
+        result.put("returnedCount", returnedCount);
+        result.put("totalCount", newCount + onGoingCount + completedCount + exceptionCount + pressedCount + cancelCount + returnedCount);
+
+        return result;
     }
 }
