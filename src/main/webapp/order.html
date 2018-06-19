@@ -128,6 +128,7 @@
             $("#currentStation").html(_currentNewOrder.station.name);
             $("#dispatchModal").modal("show");
             initStationRiderTableDatas();
+            $('#stationRiderResult').bootstrapTable("refresh", {silent: true});
         };
 
         page.dispatchToRider = function (riderId) {
@@ -170,8 +171,8 @@
                     {title: '骑手姓名', field: 'name',},
                     {title: '骑手手机号码', field: 'phoneNumber'},
                     {
-                        title: '在途订单数量', field: 'orderIdsJson', formatter: function (value, row, index) {
-                            return JSON.parse(row.orderIdsJson).length;
+                        title: '在途订单数量', field: 'orders', formatter: function (value, row, index) {
+                            return row.orders.length;
                         }
                     },
                     {

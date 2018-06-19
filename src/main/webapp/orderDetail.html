@@ -82,7 +82,7 @@
             <th>配送范围</th>
             <th>职称</th>
         </tr>
-        <tr>
+        <tr v-if="orderInfo.rider">
             <td>{{orderInfo.rider.name}}</td>
             <td>{{orderInfo.rider.phoneNumber}}</td>
             <td>{{orderInfo.rider.station.name}}</td>

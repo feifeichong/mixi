@@ -1,11 +1,13 @@
 package com.lecotec.mixi.controller;
 
+import com.lecotec.mixi.model.dto.RiderVO;
 import com.lecotec.mixi.model.entity.Rider;
 import com.lecotec.mixi.model.parameter.*;
 import com.lecotec.mixi.model.response.BootstrapTableResult;
 import com.lecotec.mixi.model.response.FailResponse;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
+import com.lecotec.mixi.service.OrderService;
 import com.lecotec.mixi.service.RiderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.lecotec.mixi.common.AuthorityUtil.produceCookieAndSession;
 import static com.lecotec.mixi.common.ConstString.*;
 
@@ -29,6 +34,9 @@ public class RiderController {
 
     @Autowired
     private RiderService riderService;
+
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/api/rider/login/shortMsgCodeLogin")
     @ApiOperation("骑手登录接口（手机号、短信验证码）")
@@ -112,8 +120,15 @@ public class RiderController {
     }
 
     @GetMapping("/api/merchant/rider/getRiderByStationId")
-    public BootstrapTableResult<Rider> getRiderByStationId(long stationId, int pageNumber, int pageSize) {
+    public BootstrapTableResult<RiderVO> getRiderByStationId(long stationId, int pageNumber, int pageSize) {
         Page<Rider> result = riderService.getRiderByStationId(stationId, pageNumber, pageSize);
-        return new BootstrapTableResult<>(result.getTotalElements(), result.getContent());
+        List<RiderVO> riderVOS = new ArrayList<>();
+        for (Rider rider : result.getContent()) {
+            RiderVO vo = new RiderVO();
+            BeanUtils.copyProperties(rider, vo);
+            vo.setOrders(orderService.getOrdersByRiderIdAndStatus(rider.getId(), "进行中"));
+            riderVOS.add(vo);
+        }
+        return new BootstrapTableResult<>(result.getTotalElements(), riderVOS);
     }
 }

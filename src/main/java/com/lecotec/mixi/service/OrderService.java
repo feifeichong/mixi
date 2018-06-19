@@ -24,9 +24,6 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private RiderRepository riderRepository;
-
     public Order saveOrUpdateOrder(Order order) {
         return orderRepository.save(order);
     }
@@ -58,13 +55,6 @@ public class OrderService {
     @Transactional
     public ResponseObject dispatchToRider(long orderId, long riderId) {
         orderRepository.dispatchToRider(orderId, riderId, new Date());
-        Rider rider = riderRepository.getOne(riderId);
-        JSONArray orderIds = JSONArray.parseArray(rider.getOrderIdsJson());
-        if (!orderIds.contains(orderId)) {
-            orderIds.add(orderId);
-            rider.setOrderIdsJson(orderIds.toJSONString());
-            riderRepository.save(rider);
-        }
         return new SuccessResponse();
     }
 
@@ -87,5 +77,9 @@ public class OrderService {
         result.put("totalCount", newCount + onGoingCount + completedCount + exceptionCount + pressedCount + cancelCount + returnedCount);
 
         return result;
+    }
+
+    public List<Order> getOrdersByRiderIdAndStatus(long riderId, String status) {
+        return orderRepository.findByRiderIdAndStatus(riderId, status);
     }
 }

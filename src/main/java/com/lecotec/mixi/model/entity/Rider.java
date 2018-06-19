@@ -85,9 +85,6 @@ public class Rider {
     @ApiModelProperty(hidden = true)
     private Station station;
 
-    @Column(columnDefinition = "TEXT NULL")
-    private String orderIdsJson = "[]";
-
     @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
 
@@ -289,13 +286,5 @@ public class Rider {
 
     public void setStation(Station station) {
         this.station = station;
-    }
-
-    public String getOrderIdsJson() {
-        return orderIdsJson;
-    }
-
-    public void setOrderIdsJson(String orderIdsJson) {
-        this.orderIdsJson = orderIdsJson;
     }
 }
