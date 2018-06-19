@@ -34,4 +34,9 @@ public class PushedMessageController {
         Page<PushedMessage> result = pushedMessageService.searchForConsole(PushedMessageSearchParam);
         return new BootstrapTableResult<>(result.getTotalElements(), result.getContent());
     }
+
+    @PostMapping("/api/merchant/pushedMessage/deleteBatch")
+    public ResponseObject deleteBatch(@RequestBody long[] ids) {
+        return new SuccessResponse(pushedMessageService.deleteBatch(ids));
+    }
 }

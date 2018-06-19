@@ -50,4 +50,9 @@ public class PushedMessageService {
             return query.getRestriction();
         }, PageRequest.of(pushedMessageSearchParam.getPageNumber(), pushedMessageSearchParam.getPageSize()));
     }
+
+    public boolean deleteBatch(long[] ids) {
+        pushedMessageRepository.deleteBatch(ids);
+        return true;
+    }
 }

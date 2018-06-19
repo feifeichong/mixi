@@ -33,9 +33,9 @@
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
-                <input id="submitBtn" class="btn btn-primary" type="submit" value="提交"/>
+                <input class="btn btn-default" type="button" onclick="indexPage.setContentBody('pushedMessage.html')" value="取消"/>
                 &nbsp;&nbsp;
-                <input id="cancelBtn" class="btn btn-default" type="reset" value="重置"/>
+                <input class="btn btn-success" type="submit" value="提交"/>
             </div>
         </div>
     </form>
@@ -48,7 +48,7 @@
             _data.title = $("#messageTitle").val();
             _data.content = $("#messageContent").val();
             _data.userTypePushed = $("#userTypePushed").val();
-            _data.publishUser = $.cookie("MERCHANT_PHONE_NUMBER");
+            _data.publishUser = $.cookie("MERCHANT_USER_ACCOUNT");
 
             $.ajax({
                 type: "POST", url: "api/merchant/pushedMessage",
