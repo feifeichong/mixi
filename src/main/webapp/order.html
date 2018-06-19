@@ -12,35 +12,35 @@
         <div class="col-xs-12 col-sm-12 placeholder">
             <ul id="activeSelect" class="nav nav-pills">
                 <li role="presentation" class="active" data-value="">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(0);">全部订单(<span
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(0);">全部订单&nbsp;(<span
                             id="totalCount"></span>)</a>
                 </li>
-                <li role="presentation" data-value="新订单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(1);">新订单(<span
+                <li role="presentation" data-value="新订单" style="margin-left: 5px;">
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(1);">新订单&nbsp;(<span
                             id="newCount"></span>)</a>
                 </li>
-                <li role="presentation" data-value="进行中" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(2);">进行中(<span
+                <li role="presentation" data-value="进行中" style="margin-left: 5px;">
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(2);">进行中&nbsp;(<span
                             id="onGoingCount"></span>)</a>
                 </li>
-                <li role="presentation" data-value="已完成" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(3);">已完成(<span
+                <li role="presentation" data-value="已完成" style="margin-left: 5px;">
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(3);">已完成&nbsp;(<span
                             id="completedCount"></span>)</a>
                 </li>
-                <li role="presentation" data-value="配送异常" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(4);">配送异常(<span
+                <li role="presentation" data-value="配送异常" style="margin-left: 5px;">
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(4);">配送异常&nbsp;(<span
                             id="exceptionCount"></span>)</a>
                 </li>
-                <li role="presentation" data-value="催单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(5);">催单(<span
+                <li role="presentation" data-value="催单" style="margin-left: 5px;">
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(5);">催单&nbsp;(<span
                             id="pressedCount"></span>)</a>
                 </li>
-                <li role="presentation" data-value="取消订单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(6);">取消订单(<span
+                <li role="presentation" data-value="取消订单" style="margin-left: 5px;">
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(6);">取消订单&nbsp;(<span
                             id="cancelCount"></span>)</a>
                 </li>
-                <li role="presentation" data-value="退单" style="margin-left: 15px;">
-                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(7);">退单(<span
+                <li role="presentation" data-value="退单" style="margin-left: 5px;">
+                    <a href="javascript:void(0);" onclick="orderPage.selectOrderStatus(7);">退单&nbsp;(<span
                             id="returnedCount"></span>)</a>
                 </li>
             </ul>
@@ -56,9 +56,8 @@
         </div>
         <div class="col-xs-6 col-sm-4 placeholder">
             <div class="input-group">
-                <span class="input-group-addon">站点</span><select id="stationSelect"
-                                                                 onchange="orderPage.refreshTableDatas();"
-                                                                 class="form-control"></select>
+                <span class="input-group-addon">站点</span>
+                <select id="stationSelect" onchange="orderPage.refreshTableDatas();" class="form-control"></select>
             </div>
         </div>
     </div>

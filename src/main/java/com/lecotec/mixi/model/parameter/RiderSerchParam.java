@@ -2,7 +2,7 @@ package com.lecotec.mixi.model.parameter;
 
 public class RiderSerchParam extends PageParam {
     private String name;
-    private String jobTitle;
+    private Long stationId;
     private String approvalStatus;
 
     public String getName() {
@@ -13,19 +13,19 @@ public class RiderSerchParam extends PageParam {
         this.name = name;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
-    }
-
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
-    }
-
     public String getApprovalStatus() {
         return approvalStatus;
     }
 
     public void setApprovalStatus(String approvalStatus) {
         this.approvalStatus = approvalStatus;
+    }
+
+    public Long getStationId() {
+        return stationId;
+    }
+
+    public void setStationId(Long stationId) {
+        this.stationId = stationId;
     }
 }

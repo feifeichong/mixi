@@ -24,6 +24,7 @@ import javax.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.lecotec.mixi.common.AuthorityUtil.produceCookieAndSession;
 import static com.lecotec.mixi.common.ConstString.*;
@@ -130,5 +131,15 @@ public class RiderController {
             riderVOS.add(vo);
         }
         return new BootstrapTableResult<>(result.getTotalElements(), riderVOS);
+    }
+
+    @GetMapping("/api/merchant/rider/riderCount")
+    public Map<String, Long> getRiderCount() {
+        return riderService.getRiderCount();
+    }
+
+    @PutMapping("/api/merchant/rider/changeActiveStatus")
+    public ResponseObject changeActiveStatus(long id, boolean isActive) {
+        return new SuccessResponse(riderService.changeActiveStatus(id, isActive));
     }
 }

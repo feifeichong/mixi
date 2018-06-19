@@ -80,6 +80,9 @@ public class Rider {
     @Column(columnDefinition = "VARCHAR(255) NULL COMMENT '骑手工作类型：全职、兼职'")
     private String jobTitle;
 
+    @ApiModelProperty(hidden = true)
+    private boolean isActive = true;
+
     @ManyToOne
     @JoinColumn(name = "station_id", referencedColumnName = "id")
     @ApiModelProperty(hidden = true)
@@ -256,11 +259,11 @@ public class Rider {
         this.approvalStatus = approvalStatus;
     }
 
-    public boolean isStartWorking() {
+    public boolean getIsStartWorking() {
         return isStartWorking;
     }
 
-    public void setStartWorking(boolean startWorking) {
+    public void setIsStartWorking(boolean startWorking) {
         isStartWorking = startWorking;
     }
 
@@ -286,5 +289,13 @@ public class Rider {
 
     public void setStation(Station station) {
         this.station = station;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = (isActive);
     }
 }

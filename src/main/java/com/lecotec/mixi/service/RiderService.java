@@ -13,7 +13,9 @@ import org.springframework.util.ObjectUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RiderService {
@@ -43,8 +45,8 @@ public class RiderService {
             if (!StringUtils.isEmpty(riderSerchParam.getName())) {
                 predicates.add(criteriaBuilder.like(root.get("name"), "%" + riderSerchParam.getName() + "%"));
             }
-            if (!ObjectUtils.isEmpty(riderSerchParam.getJobTitle())) {
-                predicates.add(criteriaBuilder.equal(root.get("jobTitle"), riderSerchParam.getJobTitle()));
+            if (!ObjectUtils.isEmpty(riderSerchParam.getStationId())) {
+                predicates.add(criteriaBuilder.equal(root.get("station"), riderSerchParam.getStationId()));
             }
             if (!ObjectUtils.isEmpty(riderSerchParam.getApprovalStatus())) {
                 predicates.add(criteriaBuilder.equal(root.get("approvalStatus"), riderSerchParam.getApprovalStatus()));
@@ -69,5 +71,21 @@ public class RiderService {
             query.where(criteriaBuilder.and(predicates));
             return query.getRestriction();
         }, PageRequest.of(pageNumber, pageSize));
+    }
+
+    public Map<String, Long> getRiderCount() {
+        long noApprovalRiderCount = riderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("approvalStatus"), "未审核")).getRestriction());
+        long approvaledRiderCount = riderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("approvalStatus"), "审核通过")).getRestriction());
+        long notPassedRiderCount = riderRepository.count((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("approvalStatus"), "审核未通过")).getRestriction());
+        Map<String, Long> result = new HashMap<>();
+        result.put("noApprovalRiderCount", noApprovalRiderCount);
+        result.put("approvaledRiderCount", approvaledRiderCount);
+        result.put("notPassedRiderCount", notPassedRiderCount);
+        result.put("totalRiderCount", noApprovalRiderCount + approvaledRiderCount + notPassedRiderCount);
+        return result;
+    }
+
+    public boolean changeActiveStatus(long id, boolean isActive) {
+        return riderRepository.changeActiveStatus(id, isActive) > 0;
     }
 }

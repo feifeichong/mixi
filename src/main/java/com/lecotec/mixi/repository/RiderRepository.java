@@ -26,4 +26,9 @@ public interface RiderRepository extends JpaRepository<Rider, Long>, JpaSpecific
     @Transactional
     @Query("update Rider t set t.depositAmount=:depositAmount, t.hasPaidDeposit=true where t.phoneNumber=:phoneNumber and t.id <> ''")
     int payedDeposit(@Param("phoneNumber") String phoneNumber, @Param("depositAmount") double depositAmount);
+
+    @Transactional
+    @Modifying
+    @Query("update Rider t set t.isActive = :isActive where t.id = :id")
+    int changeActiveStatus(@Param("id") long id, @Param("isActive") boolean isActive);
 }
