@@ -2,10 +2,10 @@
     <li><a class="glyphicon glyphicon-education" onclick="$(this).parent().find('ul').toggle(500);" href="javascript:void(0);">自营订单管理</a>
         <ul class="nav nav-sidebar" data-id="menus" style="text-indent: 20px;">
             <li><a href="javascript:indexPage.setContentBody('order.html')">全部订单</a></li>
-            <li><a href="javascript:indexPage.setContentBody('notOpen.html')">已完成</a></li>
-            <li><a href="javascript:indexPage.setContentBody('notOpen.html')">配送异常</a></li>
-            <li><a href="javascript:indexPage.setContentBody('notOpen.html')">催单</a></li>
-            <li><a href="javascript:indexPage.setContentBody('notOpen.html')">取消订单</a></li>
+            <li><a href="javascript:void(0)" onclick="orderSideMenuPage.setOrderPageStatus(3)">已完成</a></li>
+            <li><a href="javascript:void(0)" onclick="orderSideMenuPage.setOrderPageStatus(4)">配送异常</a></li>
+            <li><a href="javascript:void(0)" onclick="orderSideMenuPage.setOrderPageStatus(5)">催单</a></li>
+            <li><a href="javascript:void(0)" onclick="orderSideMenuPage.setOrderPageStatus(6)">取消订单</a></li>
         </ul>
     </li>
     <li><a class="glyphicon glyphicon-education" onclick="$(this).parent().find('ul').toggle(500);" href="javascript:void(0);">霸王餐订单管理</a>
@@ -31,4 +31,11 @@
         $("ul[data-id='menus'] li a").removeClass("active");
         $(this).addClass("active");
     });
+
+    var orderSideMenuPage = {};
+    orderSideMenuPage.setOrderPageStatus = function (index) {
+        indexPage.setContentBody("order.html", function () {
+            orderPage.selectOrderStatus(index);
+        });
+    };
 </script>

@@ -49,14 +49,14 @@
             <th>数量</th>
             <th>小计（元）</th>
         </tr>
-        <tr v-for="goods in orderInfo.goodsList">
-            <td>{{goods.id}}</td>
-            <td>{{goods.goodsType.name}}</td>
-            <td>{{goods.name}}</td>
-            <td><img :src="goods.imagePath" alt="" width="100" height="100"></td>
-            <td>{{JSON.parse(goods.specs)[0].name}}</td>
-            <td>{{goods.name}}</td>
-            <td>{{goods.name}}</td>
+        <tr v-for="data in goodsJsonList">
+            <td>{{data.goods.id}}</td>
+            <td>{{data.goods.goodsType.name}}</td>
+            <td>{{data.goods.name}}</td>
+            <td><img :src="data.goods.imagePath" alt="" width="100" height="100"></td>
+            <td>{{data.specName}}</td>
+            <td>{{data.count}}</td>
+            <td>{{data.cost}}</td>
         </tr>
     </table>
     <h3 class="sub-header">收货人信息</h3>
@@ -121,11 +121,21 @@
     var orderDetailPage = new Vue({
         el: '#orderDetailDiv',
         data: {
-            orderInfo: null
+            orderInfo: null,
+            goodsJsonList: null
         },
         methods: {
             initData: function (order) {
                 this.orderInfo = order;
+                this.$http.get("/api/merchant/orderToGoods/getGoodsListByOrderId/" + this.orderInfo.id)
+                    .then(function (res) {
+                        if (res.data.status === SUCCESS) {
+                            this.goodsJsonList = res.data.data;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
             }
         }
     });
