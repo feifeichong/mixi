@@ -16,4 +16,9 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
     @Modifying
     @Query("update Advertisement t set t.isActive = :isActive where t.id = :id")
     int changeActiveStatus(@Param("id") long id, @Param("isActive") boolean isActive);
+
+    @Transactional
+    @Modifying
+    @Query("delete from Advertisement t where t.id in :ids")
+    void deleteBatch(@Param("ids") long[] ids);
 }

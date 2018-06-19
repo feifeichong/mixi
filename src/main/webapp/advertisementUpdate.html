@@ -54,9 +54,9 @@
         <div class="form-group">
             <div class="col-sm-1"></div>
             <div class="col-sm-4 input-group">
-                <input id="submitBtn" class="btn btn-primary" type="submit" value="提交"/>
+                <input id="cancelBtn" class="btn btn-default" onclick="indexPage.setContentBody('advertisement.html')" type="button" value="取消"/>
                 &nbsp;&nbsp;
-                <input id="cancelBtn" class="btn btn-default" type="reset" value="重置"/>
+                <input id="submitBtn" class="btn btn-success" type="submit" value="提交"/>
             </div>
         </div>
     </form>
@@ -78,7 +78,7 @@
             });
             var option = {
                 language: 'zh', uploadUrl: "/api/fileUpload", showUpload: true,
-                showRemove: true, showPreview: true, dropZoneEnabled: false,
+                showRemove: true, showPreview: true, dropZoneEnabled: false, browseClass: "btn btn-success",
                 showCaption: true, allowedPreviewTypes: ['image'], allowedFileTypes: ['image'],
                 allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], maxFileSize: 2000, maxFileCount: 1,
                 initialPreview: [_data.imagePath], initialPreviewAsData: true

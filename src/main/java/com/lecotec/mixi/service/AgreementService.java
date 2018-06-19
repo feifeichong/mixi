@@ -56,7 +56,6 @@ public class AgreementService {
         return true;
     }
 
-    @Transactional
     public boolean deleteBatch(long[] ids) {
         agreementRepository.deleteBatch(ids);
         return true;

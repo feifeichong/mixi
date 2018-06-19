@@ -40,4 +40,9 @@ public class AdvertisementController {
     public ResponseObject deleteById(@PathVariable("id") long id) {
         return new SuccessResponse(advertisementService.deleteById(id));
     }
+
+    @PostMapping("/api/merchant/advertisement/deleteBatch")
+    public ResponseObject deleteBatch(@RequestBody long[] ids) {
+        return new SuccessResponse(advertisementService.deleteBatch(ids));
+    }
 }

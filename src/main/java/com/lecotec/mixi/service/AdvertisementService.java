@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.criteria.Predicate;
@@ -53,5 +54,10 @@ public class AdvertisementService {
 
     public boolean changeActiveStatus(long id, boolean isActive) {
         return advertisementRepository.changeActiveStatus(id, isActive) > 0;
+    }
+
+    public boolean deleteBatch(long[] ids) {
+        advertisementRepository.deleteBatch(ids);
+        return true;
     }
 }
