@@ -1,13 +1,10 @@
 package com.lecotec.mixi.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.lecotec.mixi.model.entity.Order;
-import com.lecotec.mixi.model.entity.Rider;
 import com.lecotec.mixi.model.parameter.OrderSearchParam;
 import com.lecotec.mixi.model.response.ResponseObject;
 import com.lecotec.mixi.model.response.SuccessResponse;
 import com.lecotec.mixi.repository.OrderRepository;
-import com.lecotec.mixi.repository.RiderRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -81,5 +78,13 @@ public class OrderService {
 
     public List<Order> getOrdersByRiderIdAndStatus(long riderId, String status) {
         return orderRepository.findByRiderIdAndStatus(riderId, status);
+    }
+
+    public List<Order> getOrdersByCustomerId(long customerId) {
+        return orderRepository.findByCustomerId(customerId);
+    }
+
+    public Page<Order> searchByCustomerId(long customerId, int pageNumber, int pageSize) {
+        return orderRepository.findAll((root, query, criteriaBuilder) -> query.where(criteriaBuilder.equal(root.get("customerId"), customerId)).getRestriction(), PageRequest.of(pageNumber, pageSize));
     }
 }

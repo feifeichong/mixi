@@ -18,4 +18,6 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     void dispatchToRider(@Param("orderId") long orderId, @Param("riderId") long riderId, @Param("dispatchTime") Date dispatchTime);
 
     List<Order> findByRiderIdAndStatus(long riderId, String status);
+
+    List<Order> findByCustomerId(long customerId);
 }

@@ -17,4 +17,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSp
     @Transactional
     @Query("update Customer t set t.password=:newPassword where t.phoneNumber=:phoneNumber and t.id <> ''")
     int updateCustomerPassword(@Param("phoneNumber") String phoneNumber, @Param("newPassword") String newPassword);
+
+    @Transactional
+    @Modifying
+    @Query("update Customer t set t.isActive = :isActive where t.id = :id")
+    int changeActiveStatus(@Param("id") long id, @Param("isActive") boolean isActive);
 }

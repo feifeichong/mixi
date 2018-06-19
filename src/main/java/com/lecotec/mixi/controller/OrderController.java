@@ -35,6 +35,12 @@ public class OrderController {
         return new BootstrapTableResult<>(orderPage.getTotalElements(), orderPage.getContent());
     }
 
+    @GetMapping("/api/merchant/order/searchByCustomerId")
+    public BootstrapTableResult<Order> searchByCustomerId(long customerId, int pageNumber, int pageSize) {
+        Page<Order> orderPage = orderService.searchByCustomerId(customerId, pageNumber, pageSize);
+        return new BootstrapTableResult<>(orderPage.getTotalElements(), orderPage.getContent());
+    }
+
     @DeleteMapping("/api/merchant/order/{id}")
     public ResponseObject deleteOrder(@PathVariable("id") long id) {
         return new SuccessResponse(orderService.deleteOrder(id));

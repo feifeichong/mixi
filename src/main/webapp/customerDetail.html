@@ -17,7 +17,7 @@
             <th>注册时间</th>
         </tr>
         <tr>
-            <td><img :src="customerInfo.headPortrait" width="100" height="100" alt=""></td>
+            <td><img :src="customerInfo.headImage" width="100" height="100" alt=""></td>
             <td>{{customerInfo.phoneNumber}}</td>
             <td>{{customerInfo.nickname}}</td>
             <td>{{customerInfo.birthday}}</td>
@@ -25,17 +25,104 @@
             <td>{{customerInfo.qq}}</td>
             <td>{{customerInfo.creationTime}}</td>
         </tr>
+        <tr>
+            <th>QQ</th>
+            <th>芝麻信用分数</th>
+            <th>注册时间</th>
+        </tr>
+        <tr>
+            <td>{{customerInfo.qq}}</td>
+            <td>{{customerInfo.zhimaCredit}}</td>
+            <td>{{customerInfo.creationTime}}</td>
+        </tr>
+    </table>
+    <h3 class="sub-header">用户消费信息</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>消费金额</th>
+            <th>订单数量</th>
+            <th>优惠券</th>
+            <th>商品评价</th>
+            <th>文章评价</th>
+            <th>退货记录</th>
+            <th>登陆次数</th>
+            <th>收藏商品</th>
+            <th>收藏商铺</th>
+        </tr>
+        <tr>
+            <td>{{totalPaymentPrice}}</td>
+            <td>{{customerInfo.orders.length}}</td>
+            <td>{{100}}</td>
+            <td>{{10}}</td>
+            <td>{{10}}</td>
+            <td>{{5}}</td>
+            <td>{{20}}</td>
+            <td>{{30}}</td>
+            <td>{{30}}</td>
+        </tr>
+    </table>
+    <h3 class="sub-header">收货地址</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>姓名</th>
+            <th>电话</th>
+            <th>地址</th>
+        </tr>
+        <tr v-for="receiver in receiversJson">
+            <td>{{receiver.name}}</td>
+            <td>{{receiver.phoneNumber}}</td>
+            <td>{{receiver.address}}</td>
+        </tr>
+    </table>
+    <h3 class="sub-header">订单记录</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>序号</th>
+            <th>订单编号</th>
+            <th>站点</th>
+            <th>配送员</th>
+            <th>收货人姓名</th>
+            <th>收货人电话</th>
+            <th>订单金额</th>
+            <th>订单状态</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="(order, index) in customerInfo.orders">
+            <td>{{index + 1}}</td>
+            <td>{{order.serialNumber}}</td>
+            <td>{{order.station.name}}</td>
+            <td>{{order.rider ? order.rider.name : ""}}</td>
+            <td>{{order.receiverName}}</td>
+            <td>{{order.receiverPhoneNumber}}</td>
+            <td>{{order.paymentPrice}}</td>
+            <td>{{order.status}}</td>
+            <td>
+                <span style="cursor: pointer;color:#2F9D32;" @click="showDetail(order)">【查看详情】</span>
+            </td>
+        </tr>
     </table>
 </div>
 <script>
     var customerDetailPage = new Vue({
         el: '#customerDetailDiv',
         data: {
-            customerInfo: null
+            customerInfo: null,
+            receiversJson: null
         },
         methods: {
             initData: function (data) {
                 this.customerInfo = data;
+                this.receiversJson = JSON.parse(this.customerInfo.receiversJson);
+            },
+            showDetail: function (order) {
+                indexPage.setContentBody("orderDetail.html", function (response, status, xhr) {
+                    orderDetailPage.initData(order);
+                });
+            }
+        },
+        computed: {
+            totalPaymentPrice: function () {
+                return Enumerable.from(this.customerInfo.orders).sum(n => n.paymentPrice);
             }
         }
     });

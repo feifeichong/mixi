@@ -51,6 +51,11 @@ public class Customer {
     private String receiversJson = "[]";
 
     @ApiModelProperty(hidden = true)
+    private boolean isActive = true;
+
+    private double zhimaCredit;
+
+    @ApiModelProperty(hidden = true)
     private Date creationTime = new Date();
 
     public long getId() {
@@ -155,5 +160,21 @@ public class Customer {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = (isActive);
+    }
+
+    public double getZhimaCredit() {
+        return zhimaCredit;
+    }
+
+    public void setZhimaCredit(double zhimaCredit) {
+        this.zhimaCredit = zhimaCredit;
     }
 }

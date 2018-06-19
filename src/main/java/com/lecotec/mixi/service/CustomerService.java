@@ -53,4 +53,8 @@ public class CustomerService {
             return query.getRestriction();
         }, PageRequest.of(customerSearchParam.getPageNumber(), customerSearchParam.getPageSize()));
     }
+
+    public boolean changeActiveStatus(long id, boolean isActive) {
+        return customerRepository.changeActiveStatus(id, isActive) > 0;
+    }
 }
