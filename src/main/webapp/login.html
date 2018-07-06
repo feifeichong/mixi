@@ -55,6 +55,8 @@
                 success: function (response) {
                     if (response.status === SUCCESS) {
                         window.location.href = "/";
+                    } else {
+                        $("#password").val("");
                     }
                 }
             });
